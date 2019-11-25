@@ -18,6 +18,6 @@ class MediaItem(
     val artworkUrl30: String?,
     val artworkUrl60: String?,
     val artworkUrl100: String?,
-    val genreIds: String?,
-    val genres: List<String?>
+    val genreIds: List<String>?,
+    val genres: List<String>?
 )

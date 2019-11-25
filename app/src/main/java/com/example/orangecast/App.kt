@@ -1,15 +1,37 @@
 package com.example.orangecast
 
 import android.app.Application
-import com.example.orangecast.di.appModules
+import android.content.Context
+import com.example.orangecast.di.*
+import com.example.orangecast.network.Api
 import com.facebook.stetho.Stetho
-import org.koin.android.ext.android.startKoin
 
 class App : Application() {
 
+    private var appComponent: AppComponent? = null
+
     override fun onCreate() {
         super.onCreate()
-        startKoin(this, appModules)
         Stetho.initializeWithDefaults(this)
+        initDagger()
+    }
+
+    private fun initDagger() {
+        appComponent = DaggerAppComponent
+            .builder()
+            .appModule(AppModule(this))
+            .apiModule(ApiModule())
+            .build()
+
+        appComponent?.inject(this)
+    }
+
+    companion object {
+        var api: Api? = null
+
+        @JvmStatic
+        fun appComponent(context: Context?): AppComponent? {
+            return (context?.applicationContext as? App)?.appComponent
+        }
     }
 }
