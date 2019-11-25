@@ -1,21 +1,19 @@
 package com.example.orangecast.view.list
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.orangecast.BaseViewModel
 import com.example.orangecast.data.Parameters
 import com.example.orangecast.data.SearchResult
+import com.example.orangecast.network.Event
 import com.example.orangecast.network.repository.Repository
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel : BaseViewModel() {
 
     @Inject
     lateinit var repository: Repository
     var searchingText: String? = null
 
-    private val disposable = CompositeDisposable()
     private val parameters = mutableMapOf<String, String>()
     private val searchResult = MutableLiveData<SearchResult>()
 
@@ -29,13 +27,14 @@ class SearchViewModel : ViewModel() {
     private fun startSearching() {
         disposable.add(
             repository.search(parameters)
-                .subscribe(
-                    {
-                    Log.e("SUCCESS", it.toString())
-                },
-                    {
-Log.e("ERROR", it.localizedMessage)
-                    })
+                .subscribe { event ->
+                        manageEvents(event)
+                    when (event) {
+                        is Event.Success -> {
+                            searchResult.apply { this.value = event.data }
+                        }
+                    }
+                    }
         )
     }
 

@@ -14,6 +14,7 @@ class MediaItemsAdapter: RecyclerView.Adapter<MediaItemsAdapter.ViewHolder>() {
 
     fun setItems(items: List<MediaItem?>) {
         this.items = items
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
