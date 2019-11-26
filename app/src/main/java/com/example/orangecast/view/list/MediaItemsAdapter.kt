@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.R
 import com.example.orangecast.data.MediaItem
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_media_item.view.*
 
 class MediaItemsAdapter: RecyclerView.Adapter<MediaItemsAdapter.ViewHolder>() {
@@ -27,10 +28,15 @@ class MediaItemsAdapter: RecyclerView.Adapter<MediaItemsAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
+        private val icon = view.item_icon
         private val title = view.item_title
+        private val genre = view.item_genre
 
         fun bind(position: Int) {
-            title?.text = items[position]?.artistName
+            val mediaItem = items[position]
+            Picasso.get().load(mediaItem?.artworkUrl100).into(icon)
+            title?.text = mediaItem?.artistName
+            genre?.text = mediaItem?.primaryGenreName
         }
     }
 }

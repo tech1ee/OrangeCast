@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : Fragment() {
 
     private var searchViewModel: SearchViewModel? = null
-    private var adapter: MediaItemsAdapter? = null
+    private var adapter = MediaItemsAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,12 +40,11 @@ class HomeFragment : Fragment() {
         searchViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         App.appComponent(context)?.inject(searchViewModel)
         searchViewModel?.getSearchResult()?.observe(viewLifecycleOwner, Observer { event ->
-            adapter?.setItems(event?.results ?: listOf())
+            adapter.setItems(event?.results ?: listOf())
         })
     }
 
     private fun initView() {
-        adapter = MediaItemsAdapter()
         list_rv?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         list_rv?.adapter = adapter
         search_view?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
