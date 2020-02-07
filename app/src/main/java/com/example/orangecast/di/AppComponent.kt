@@ -1,7 +1,8 @@
 package com.example.orangecast.di
 
 import com.example.orangecast.App
-import com.example.orangecast.view.list.SearchViewModel
+import com.example.orangecast.view.SearchViewModel
+import com.example.orangecast.view.discover.DiscoverFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -11,5 +12,5 @@ interface AppComponent {
 
     fun inject(app: App)
 
-    fun inject(viewModel: SearchViewModel?)
+    fun inject(discoverFragment: DiscoverFragment)
 }

@@ -4,11 +4,12 @@ import com.example.orangecast.data.SearchResult
 import com.example.orangecast.network.Api
 import com.example.orangecast.network.Event
 import io.reactivex.Observable
+import io.reactivex.Single
 
-class Repository(val api: Api): BaseRepository() {
+class Repository(private val api: Api): BaseRepository() {
 
-    fun search(parameters: Map<String, String>): Observable<Event<SearchResult>> {
-        return api.search(parameters).subscribeWithMapToEvent()
+    fun search(parameters: Map<String, String>): Single<SearchResult> {
+        return api.search(parameters).subscribeToResponse()
     }
 
 }

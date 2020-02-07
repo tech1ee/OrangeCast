@@ -11,7 +11,7 @@ open class BaseViewModel : ViewModel() {
     protected val progressEvent = MutableLiveData<Event.Progress>()
     protected val errorEvent = MutableLiveData<Event.Error>()
 
-    protected fun <T>manageEvents(event: Event<T>) {
+    protected fun manageEvents(event: Event) {
         when (event) {
             is Event.Progress -> progressEvent.apply { this.value = event }
             is Event.Error -> errorEvent.apply { this.value = event }

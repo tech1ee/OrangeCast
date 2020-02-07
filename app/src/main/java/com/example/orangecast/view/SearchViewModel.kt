@@ -1,4 +1,4 @@
-package com.example.orangecast.view.list
+package com.example.orangecast.view
 
 import androidx.lifecycle.MutableLiveData
 import com.example.orangecast.BaseViewModel
@@ -25,17 +25,17 @@ class SearchViewModel : BaseViewModel() {
     }
 
     private fun startSearching() {
-        disposable.add(
-            repository.search(parameters)
-                .subscribe { event ->
-                        manageEvents(event)
-                    when (event) {
-                        is Event.Success -> {
-                            searchResult.apply { this.value = event.data }
-                        }
-                    }
-                    }
-        )
+//        disposable.add(
+//            repository.search(parameters)
+//                .subscribe { event ->
+//                        manageEvents(event)
+//                    when (event) {
+//                        is Event.Data -> {
+//                            searchResult.apply { this.value = event.data }
+//                        }
+//                    }
+//                    }
+//        )
     }
 
     private fun checkBaseParameters() {

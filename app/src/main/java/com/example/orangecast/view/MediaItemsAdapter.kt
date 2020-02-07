@@ -1,4 +1,4 @@
-package com.example.orangecast.view.list
+package com.example.orangecast.view
 
 import android.view.LayoutInflater
 import android.view.View

@@ -11,10 +11,12 @@ sealed class Parameters {
             const val ENTITY = "entity"
             const val ATTRIBUTE = "attribute"
             const val LANGUAGE = "lang"
+            const val LIMIT = "limit"
         }
 
         object Value {
             const val PODCAST = "podcast"
+            const val MAX_LIMIT = "200"
         }
     }
 }
