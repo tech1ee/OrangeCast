@@ -1,4 +1,4 @@
-package com.example.orangecast.view
+package com.example.orangecast.view.discover
 
 import android.graphics.Color
 import android.graphics.LinearGradient
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.item_author.view.*
 import kotlinx.android.synthetic.main.item_horizontal_list_genre_title.view.*
 
 
-class GenresAdapter : RecyclerView.Adapter<GenresAdapter.ViewHolder>() {
+class DiscoverAdapter : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
     private var list = listOf<ArtistsByGenre>()
 

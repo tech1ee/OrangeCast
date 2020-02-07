@@ -10,11 +10,11 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class DiscoverInteractor(
+class GenresInteractor(
     private val repository: Repository
 ) {
 
-    fun fetchGenres(): Observable<List<ArtistsByGenre>> {
+    fun fetchAllGenres(): Observable<List<ArtistsByGenre>> {
         val parameters = mutableMapOf<String, String>()
         parameters[Parameters.Search.Key.TERM] = Parameters.Search.Value.PODCAST
         parameters[Parameters.Search.Key.MEDIA] = Parameters.Search.Value.PODCAST
@@ -40,7 +40,7 @@ class DiscoverInteractor(
                 }
             }
         }
-        genres.removeAll { it.list.isEmpty() || it.title?.toLowerCase() == "podcasts"}
+        genres.removeAll { it.list.isEmpty() || it.title?.toLowerCase() == "podcasts" }
         return genres.sortedByDescending { it.list.size }
     }
 }

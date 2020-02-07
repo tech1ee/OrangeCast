@@ -14,8 +14,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/author_image_card"
-            android:layout_width="123dp"
-            android:layout_height="123dp"
+            android:layout_width="126dp"
+            android:layout_height="126dp"
             android:elevation="0dp"
             android:layout_gravity="center"
             app:cardCornerRadius="107dp"
@@ -24,8 +24,8 @@
 
             <ImageView
                 android:id="@+id/author_image"
-                android:layout_width="123dp"
-                android:layout_height="123dp" />
+                android:layout_width="126dp"
+                android:layout_height="126dp" />
         </androidx.cardview.widget.CardView>
     </FrameLayout>
 

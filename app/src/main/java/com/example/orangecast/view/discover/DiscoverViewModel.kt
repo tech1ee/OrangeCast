@@ -3,19 +3,20 @@ package com.example.orangecast.view.discover
 import androidx.lifecycle.MutableLiveData
 import com.example.orangecast.BaseViewModel
 import com.example.orangecast.data.ArtistsByGenre
-import com.example.orangecast.interactor.DiscoverInteractor
+import com.example.orangecast.interactor.GenresInteractor
 
 class DiscoverViewModel(
-    private val interactor: DiscoverInteractor
+    private val interactor: GenresInteractor
 ) : BaseViewModel() {
 
+    var searchText = ""
     private val discoverLiveData = MutableLiveData<List<ArtistsByGenre>>()
 
     fun getDiscoverLiveData() = discoverLiveData
 
     fun discover() {
         disposable.add(
-            interactor.fetchGenres()
+            interactor.fetchAllGenres()
                 .subscribe(
                     {
                         discoverLiveData.apply { this.value = it }
@@ -25,5 +26,11 @@ class DiscoverViewModel(
                     })
         )
     }
+
+    fun search() {
+
+    }
+
+
 
 }
