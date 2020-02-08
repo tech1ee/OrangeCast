@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/logo_background"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/logo_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/logo_leaf"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/logo_leaf"
+        app:layout_constraintStart_toStartOf="@id/logo_background"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/logo_play"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/logo_play"
+        app:layout_constraintStart_toStartOf="@id/logo_background"
+        app:layout_constraintTop_toTopOf="@id/logo_background"
+        app:layout_constraintEnd_toEndOf="@id/logo_background"
+        app:layout_constraintBottom_toBottomOf="@id/logo_background"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

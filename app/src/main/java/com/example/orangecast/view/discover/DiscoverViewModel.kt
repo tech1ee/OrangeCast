@@ -10,27 +10,16 @@ class DiscoverViewModel(
 ) : BaseViewModel() {
 
     var searchText = ""
-    private val discoverLiveData = MutableLiveData<List<ArtistsByGenre>>()
 
-    fun getDiscoverLiveData() = discoverLiveData
+    fun getDiscoverLiveData() = eventLiveData
 
     fun discover() {
-        disposable.add(
-            interactor.fetchAllGenres()
-                .subscribe(
-                    {
-                        discoverLiveData.apply { this.value = it }
-                    },
-                    {
-
-                    })
-        )
+        interactor.fetchAllGenres().subscribeWithMapToEvent()
     }
 
     fun search() {
 
     }
-
 
 
 }

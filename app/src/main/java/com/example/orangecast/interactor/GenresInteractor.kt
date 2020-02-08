@@ -5,25 +5,25 @@ import androidx.collection.arraySetOf
 import com.example.orangecast.data.ArtistsByGenre
 import com.example.orangecast.data.MediaItem
 import com.example.orangecast.data.Parameters
+import com.example.orangecast.data.SearchResult
+import com.example.orangecast.network.Event
 import com.example.orangecast.network.repository.Repository
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class GenresInteractor(
     private val repository: Repository
-) {
+): BaseInteractor() {
 
-    fun fetchAllGenres(): Observable<List<ArtistsByGenre>> {
+    fun fetchAllGenres(): Single<List<ArtistsByGenre>> {
         val parameters = mutableMapOf<String, String>()
         parameters[Parameters.Search.Key.TERM] = Parameters.Search.Value.PODCAST
         parameters[Parameters.Search.Key.MEDIA] = Parameters.Search.Value.PODCAST
         parameters[Parameters.Search.Key.LIMIT] = Parameters.Search.Value.MAX_LIMIT
         return repository.search(parameters)
-            .subscribeOn(Schedulers.io())
             .map { sortGenres(it.results) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .toObservable()
     }
 
     private fun sortGenres(results: List<MediaItem>): List<ArtistsByGenre> {

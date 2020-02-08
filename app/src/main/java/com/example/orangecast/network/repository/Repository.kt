@@ -2,8 +2,6 @@ package com.example.orangecast.network.repository
 
 import com.example.orangecast.data.SearchResult
 import com.example.orangecast.network.Api
-import com.example.orangecast.network.Event
-import io.reactivex.Observable
 import io.reactivex.Single
 
 class Repository(private val api: Api): BaseRepository() {
