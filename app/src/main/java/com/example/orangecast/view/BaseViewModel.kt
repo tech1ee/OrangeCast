@@ -1,14 +1,12 @@
-package com.example.orangecast
+package com.example.orangecast.view
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.orangecast.network.Event
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 
 open class BaseViewModel : ViewModel() {
 
@@ -19,8 +17,6 @@ open class BaseViewModel : ViewModel() {
         eventLiveData.apply { this.value = Event.Progress(true) }
         disposable.add(
             this
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { data ->
                         eventLiveData.apply { this.value = Event.Data(data) }

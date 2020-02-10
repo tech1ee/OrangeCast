@@ -1,30 +1,33 @@
-package com.example.orangecast
+package com.example.orangecast.view
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.example.orangecast.R
 import com.example.orangecast.network.Event
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.CompositeDisposable
 
+
 abstract class BaseFragment: Fragment() {
 
     protected val disposable = CompositeDisposable()
-    private var progressAlert: AlertDialog.Builder? = null
-    private var progressDialog: Dialog? = null
+    private var progressView: View? = null
     private var isProgressShowingRequired = true
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         inject()
-        progressAlert = AlertDialog.Builder(context!!)
-        progressAlert?.setView(R.layout.view_progress_fullscreen)
-        progressDialog = progressAlert?.create()
+        val rootView: ViewGroup? = activity?.findViewById(android.R.id.content)
+        progressView = LayoutInflater.from(context)
+            .inflate(R.layout.view_progress_fullscreen, rootView, false)
+        progressView?.visibility = View.GONE
+        rootView?.addView(progressView)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,8 +63,8 @@ abstract class BaseFragment: Fragment() {
     open fun showData(data: Any?) {}
 
     private fun showProgress(show: Boolean) {
-        if (show && isProgressShowingRequired) progressDialog?.show()
-        else progressDialog?.dismiss()
+        if (show && isProgressShowingRequired) progressView?.visibility = View.VISIBLE
+        else progressView?.visibility = View.GONE
     }
 
     private fun showError(message: String) {

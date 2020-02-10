@@ -8,7 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
-import com.example.orangecast.BaseFragment
+import com.example.orangecast.view.BaseFragment
 import com.example.orangecast.R
 import com.example.orangecast.data.ArtistsByGenre
 import kotlinx.android.synthetic.main.fragment_discover.*

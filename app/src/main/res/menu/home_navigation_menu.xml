@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/navigation_item_discover"
+        android:icon="@drawable/ic_discover"
+        android:title="@string/discover"/>
+
+    <item android:id="@+id/navigation_item_library"
+        android:icon="@drawable/ic_library"
+        android:title="@string/my_library"/>
+
+    <item android:id="@+id/navigation_item_new_episodes"
+        android:icon="@drawable/ic_new_episodes"
+        android:title="@string/new_episodes"/>
+
+</menu>
