@@ -5,14 +5,26 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/image_shadow"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_margin="20dp"
+        android:fitsSystemWindows="true"
+        android:src="@drawable/circle_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
         android:id="@+id/logo_background"
         android:layout_width="160dp"
         android:layout_height="160dp"
-        android:layout_marginTop="20dp"
         android:src="@drawable/logo_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/image_shadow"
+        app:layout_constraintStart_toStartOf="@id/image_shadow"
+        app:layout_constraintEnd_toEndOf="@id/image_shadow"
+        app:layout_constraintBottom_toBottomOf="@id/image_shadow"/>
 
     <ImageView
         android:id="@+id/logo_leaf"

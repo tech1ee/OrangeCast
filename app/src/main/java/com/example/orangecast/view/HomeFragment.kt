@@ -18,20 +18,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initBottomNavigationBar() {
-        home_navigation_bar?.setOnNavigationItemSelectedListener {
-            when (it.itemId) {
-                R.id.navigation_item_discover -> {
-                    true
-                }
-                R.id.navigation_item_library -> {
-                    true
-                }
-                R.id.navigation_item_new_episodes -> {
-                    true
-                }
-                else -> false
-            }
-        }
+
     }
 
     private fun showFragment(fragment: Fragment) {

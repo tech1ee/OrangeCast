@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/discoverFragment">
 
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.orangecast.view.splash.SplashFragment"
         android:label="@string/app_name">
-
-        <action
-            android:id="@+id/action_open_home__screen"
-            app:destination="@id/homeFragment"/>
     </fragment>
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/discoverFragment"
         android:name="com.example.orangecast.view.discover.DiscoverFragment"
-        android:label="HomeFragment">
+        android:label="DiscoverFragment">
+
+        <action
+            android:id="@+id/show_splash_screen"
+            app:destination="@id/discoverFragment"/>
     </fragment>
 
 

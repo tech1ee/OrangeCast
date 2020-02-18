@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -42,6 +43,15 @@ abstract class BaseFragment: Fragment() {
 
     protected fun disableProgress() {
         isProgressShowingRequired = false
+    }
+
+    protected fun enableBackButton(enabled: Boolean) {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(enabled) {
+                override fun handleOnBackPressed() {
+                    if (enabled) requireActivity().onBackPressed()
+                }
+            })
     }
 
     protected fun LiveData<Event>.subscribeToEvent() {
