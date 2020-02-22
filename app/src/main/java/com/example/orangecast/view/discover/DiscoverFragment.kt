@@ -16,6 +16,7 @@ import com.example.orangecast.App
 import com.example.orangecast.view.BaseFragment
 import com.example.orangecast.R
 import com.example.orangecast.data.ArtistsByGenre
+import com.example.orangecast.data.MediaItem
 import io.reactivex.Completable
 import kotlinx.android.synthetic.main.fragment_discover.*
 import kotlinx.android.synthetic.main.view_logo.*
@@ -26,8 +27,12 @@ class DiscoverFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: DiscoverViewModel
-    private var adapter = DiscoverAdapter()
     private var splashScreen: Dialog? = null
+    private var adapter = DiscoverAdapter(object : DiscoverAdapter.Listener {
+        override fun onItemClicked(item: MediaItem) {
+
+        }
+    })
 
     override fun inject() {
         App.appComponent(context)?.inject(this)

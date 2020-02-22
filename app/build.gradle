@@ -74,4 +74,7 @@ dependencies {
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // RSS Parser
+    implementation 'com.prof.rssparser:rssparser:1.4.4'
 }

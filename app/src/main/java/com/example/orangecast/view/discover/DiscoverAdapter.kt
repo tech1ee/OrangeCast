@@ -16,7 +16,9 @@ import kotlinx.android.synthetic.main.item_author.view.*
 import kotlinx.android.synthetic.main.item_horizontal_list_genre_title.view.*
 
 
-class DiscoverAdapter : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
+class DiscoverAdapter(
+    private val listener: Listener
+) : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
     private var list = listOf<ArtistsByGenre>()
 
@@ -34,6 +36,10 @@ class DiscoverAdapter : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
     fun setList(list: List<ArtistsByGenre>) {
         this.list = list
         notifyDataSetChanged()
+    }
+
+    interface Listener{
+        fun onItemClicked(item: MediaItem)
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -86,6 +92,8 @@ class DiscoverAdapter : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
                 authorTitle?.text = item.trackName
                 authorName?.text = item.artistName
+
+                itemView?.setOnClickListener { listener.onItemClicked(item) }
             }
         }
     }

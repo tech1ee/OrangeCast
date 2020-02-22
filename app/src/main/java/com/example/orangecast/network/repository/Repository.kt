@@ -9,5 +9,4 @@ class Repository(private val api: Api): BaseRepository() {
     fun search(parameters: Map<String, String>): Single<SearchResult> {
         return api.search(parameters).subscribeToResponse()
     }
-
 }
