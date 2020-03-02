@@ -1,41 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <ImageView
-        android:id="@+id/item_icon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/item_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        tools:text="The Joe Rogan Experience"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/item_icon"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/item_genre"
+        android:id="@+id/episode_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textStyle="italic"
-        tools:text="Comedy"
-        app:layout_constraintTop_toBottomOf="@id/item_title"
-        app:layout_constraintStart_toStartOf="@id/item_title"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1234" />
+
+    <ImageView
+        android:id="@+id/text_dot_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_dot_text_divider"
+        app:layout_constraintBottom_toBottomOf="@id/episode_number"
+        app:layout_constraintStart_toEndOf="@id/episode_number"
+        app:layout_constraintTop_toTopOf="@id/episode_number" />
+
+    <TextView
+        android:id="@+id/publishing_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="12.02.2020"
+        app:layout_constraintBottom_toBottomOf="@id/episode_number"
+        app:layout_constraintStart_toEndOf="@id/text_dot_divider"
+        app:layout_constraintTop_toTopOf="@id/episode_number" />
+
+    <TextView
+        android:id="@+id/episode_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:lines="2"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/play_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/publishing_date"
+        tools:text="The Joe Rogan Experience" />
+
+    <TextView
+        android:id="@+id/episode_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/episode_title"
+        app:layout_constraintTop_toBottomOf="@id/episode_title"
+        tools:text="02:59:51" />
+
+    <LinearLayout
+        android:id="@+id/listening_progress_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/episode_duration"
+        app:layout_constraintStart_toEndOf="@id/episode_duration"
+        app:layout_constraintTop_toTopOf="@id/episode_duration">
+
+        <ImageView
+            android:id="@+id/text_dot_divider_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_dot_text_divider" />
+
+        <TextView
+            android:id="@+id/listening_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/colorAccent"
+            tools:text="24%" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/play_button"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:background="@drawable/ic_play_item"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@drawable/line_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
