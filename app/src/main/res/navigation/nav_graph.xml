@@ -6,19 +6,22 @@
     app:startDestination="@id/discoverFragment">
 
     <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.example.orangecast.view.splash.SplashFragment"
-        android:label="@string/app_name">
-    </fragment>
-
-    <fragment
         android:id="@+id/discoverFragment"
         android:name="com.example.orangecast.view.discover.DiscoverFragment"
         android:label="DiscoverFragment">
 
         <action
-            android:id="@+id/show_splash_screen"
-            app:destination="@id/discoverFragment"/>
+            android:id="@+id/gotoChannelDetails"
+            app:destination="@id/channelDetails" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/channelDetails"
+        android:name="com.example.orangecast.view.channeldetails.ChannelDetailsFragment">
+
+        <argument
+            android:name="artistId"
+            app:argType="string"/>
     </fragment>
 
 

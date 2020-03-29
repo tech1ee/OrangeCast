@@ -10,6 +10,7 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
@@ -17,6 +18,7 @@ import com.example.orangecast.view.BaseFragment
 import com.example.orangecast.R
 import com.example.orangecast.data.ArtistsByGenre
 import com.example.orangecast.data.MediaItem
+import com.example.orangecast.view.channeldetails.ChannelDetailsFragment
 import io.reactivex.Completable
 import kotlinx.android.synthetic.main.fragment_discover.*
 import kotlinx.android.synthetic.main.view_logo.*
@@ -89,6 +91,11 @@ class DiscoverFragment : BaseFragment() {
         splashScreen?.setContentView(R.layout.fragment_splash)
         splashScreen?.logo_background?.startAnimation(rotate)
         splashScreen?.show()
+    }
+
+    private fun gotoChannelDetails(item: MediaItem) {
+        val artistFeedUrl = item.feedUrl
+//        findNavController().navigate(action)
     }
 
     private fun hideSplash() {

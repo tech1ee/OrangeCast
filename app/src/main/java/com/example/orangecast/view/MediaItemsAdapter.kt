@@ -28,15 +28,12 @@ class MediaItemsAdapter: RecyclerView.Adapter<MediaItemsAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
-        private val icon = view.item_icon
-        private val title = view.item_title
-        private val genre = view.item_genre
+        private val title = view.episode_title
 
         fun bind(position: Int) {
             val mediaItem = items[position]
-            Picasso.get().load(mediaItem?.artworkUrl100).into(icon)
             title?.text = mediaItem?.artistName
-            genre?.text = mediaItem?.primaryGenreName
+
         }
     }
 }
