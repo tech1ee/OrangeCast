@@ -1,5 +1,6 @@
 package com.example.orangecast.view
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.orangecast.network.Event
@@ -12,6 +13,10 @@ open class BaseViewModel : ViewModel() {
 
     protected val eventLiveData = MutableLiveData<Event>()
     private val disposable = CompositeDisposable()
+
+    fun getEventLiveData(): LiveData<Event> {
+        return eventLiveData
+    }
 
     protected fun <T> Single<T>.subscribeWithMapToEvent() {
         eventLiveData.apply { this.value = Event.Progress(true) }

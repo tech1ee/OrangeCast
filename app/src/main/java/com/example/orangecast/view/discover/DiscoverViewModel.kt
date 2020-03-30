@@ -9,8 +9,6 @@ class DiscoverViewModel(
 
     var searchText = ""
 
-    fun getDiscoverLiveData() = eventLiveData
-
     fun discover() {
         interactor.fetchAllGenres().subscribeWithMapToEvent()
     }

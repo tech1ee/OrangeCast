@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.R
+import com.example.orangecast.data.Episode
 import com.example.orangecast.data.MediaItem
 import kotlinx.android.synthetic.main.item_media_item.view.*
 
@@ -12,7 +13,12 @@ class EpisodesAdapter(
     private val listener: Listener
 ): RecyclerView.Adapter<EpisodesAdapter.ViewHolder>() {
 
-    private val list = arrayListOf<MediaItem>()
+    private var list = arrayListOf<Episode>()
+
+    fun setList(list: List<Episode>) {
+        this.list = list as ArrayList<Episode>
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_media_item, parent, false))
@@ -34,6 +40,8 @@ class EpisodesAdapter(
 
         fun bind(position: Int) {
             val item = list[position]
+
+            episodeTitle?.text = item.title
 
         }
     }

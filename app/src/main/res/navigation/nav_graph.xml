@@ -20,7 +20,7 @@
         android:name="com.example.orangecast.view.channeldetails.ChannelDetailsFragment">
 
         <argument
-            android:name="artistId"
+            android:name="artistFeedUrl"
             app:argType="string"/>
     </fragment>
 

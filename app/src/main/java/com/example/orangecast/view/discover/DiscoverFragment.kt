@@ -19,6 +19,7 @@ import com.example.orangecast.R
 import com.example.orangecast.data.ArtistsByGenre
 import com.example.orangecast.data.MediaItem
 import com.example.orangecast.view.channeldetails.ChannelDetailsFragment
+import com.example.orangecast.view.channeldetails.ChannelDetailsFragmentArgs
 import io.reactivex.Completable
 import kotlinx.android.synthetic.main.fragment_discover.*
 import kotlinx.android.synthetic.main.view_logo.*
@@ -32,7 +33,7 @@ class DiscoverFragment : BaseFragment() {
     private var splashScreen: Dialog? = null
     private var adapter = DiscoverAdapter(object : DiscoverAdapter.Listener {
         override fun onItemClicked(item: MediaItem) {
-
+            gotoChannelDetails(item)
         }
     })
 
@@ -70,7 +71,7 @@ class DiscoverFragment : BaseFragment() {
         list_rv?.adapter = adapter
 
         initSearch()
-        viewModel.getDiscoverLiveData().subscribeToEvent()
+        viewModel.getEventLiveData().subscribeToEvent()
         viewModel.discover()
     }
 
@@ -94,8 +95,9 @@ class DiscoverFragment : BaseFragment() {
     }
 
     private fun gotoChannelDetails(item: MediaItem) {
-        val artistFeedUrl = item.feedUrl
-//        findNavController().navigate(action)
+        val artistFeedUrl = item.feedUrl ?: return
+        val action = DiscoverFragmentDirections.gotoChannelDetails(artistFeedUrl)
+        findNavController().navigate(action)
     }
 
     private fun hideSplash() {
