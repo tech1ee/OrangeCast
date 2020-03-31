@@ -3,8 +3,8 @@ package com.example.orangecast.di
 import com.example.orangecast.App
 import com.example.orangecast.interactor.GenresInteractor
 import com.example.orangecast.interactor.RSSInteractor
-import com.example.orangecast.network.Api
-import com.example.orangecast.network.repository.Repository
+import com.example.orangecast.data.network.Api
+import com.example.orangecast.data.Repository
 import com.example.orangecast.view.channeldetails.ChannelDetailsViewModel
 import com.example.orangecast.view.discover.DiscoverViewModel
 import dagger.Module
@@ -34,8 +34,8 @@ class AppModule(val app: App) {
 
     @Singleton
     @Provides
-    fun providesRSSInteractor(): RSSInteractor {
-        return RSSInteractor()
+    fun providesRSSInteractor(repository: Repository): RSSInteractor {
+        return RSSInteractor(repository)
     }
 
     @Singleton

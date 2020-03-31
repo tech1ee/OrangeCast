@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.R
-import com.example.orangecast.data.Episode
+import com.example.orangecast.entity.Episode
 import com.example.orangecast.view.BaseFragment
 import com.example.orangecast.view.episodes.EpisodesAdapter
 import kotlinx.android.synthetic.main.fragment_channel_details.*

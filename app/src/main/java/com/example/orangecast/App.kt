@@ -3,7 +3,7 @@ package com.example.orangecast
 import android.app.Application
 import android.content.Context
 import com.example.orangecast.di.*
-import com.example.orangecast.network.Api
+import com.example.orangecast.data.network.Api
 import com.facebook.stetho.Stetho
 
 class App : Application() {

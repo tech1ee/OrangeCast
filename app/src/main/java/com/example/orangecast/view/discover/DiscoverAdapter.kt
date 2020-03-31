@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.R
-import com.example.orangecast.data.ArtistsByGenre
-import com.example.orangecast.data.MediaItem
+import com.example.orangecast.entity.ArtistsByGenre
+import com.example.orangecast.entity.MediaItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_author.view.*
 import kotlinx.android.synthetic.main.item_horizontal_list_genre_title.view.*

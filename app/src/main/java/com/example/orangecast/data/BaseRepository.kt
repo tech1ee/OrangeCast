@@ -1,6 +1,6 @@
-package com.example.orangecast.network.repository
+package com.example.orangecast.data
 
-import com.example.orangecast.data.ErrorResponse
+import com.example.orangecast.entity.ErrorResponse
 import com.google.gson.Gson
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

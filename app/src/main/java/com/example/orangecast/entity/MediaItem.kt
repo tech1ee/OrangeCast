@@ -1,4 +1,4 @@
-package com.example.orangecast.data
+package com.example.orangecast.entity
 
 class MediaItem(
     val wrapperType: String?,

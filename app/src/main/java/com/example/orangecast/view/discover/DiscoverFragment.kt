@@ -16,10 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.view.BaseFragment
 import com.example.orangecast.R
-import com.example.orangecast.data.ArtistsByGenre
-import com.example.orangecast.data.MediaItem
-import com.example.orangecast.view.channeldetails.ChannelDetailsFragment
-import com.example.orangecast.view.channeldetails.ChannelDetailsFragmentArgs
+import com.example.orangecast.entity.ArtistsByGenre
+import com.example.orangecast.entity.MediaItem
 import io.reactivex.Completable
 import kotlinx.android.synthetic.main.fragment_discover.*
 import kotlinx.android.synthetic.main.view_logo.*

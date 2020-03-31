@@ -1,17 +1,11 @@
 package com.example.orangecast.interactor
 
-import androidx.collection.ArraySet
 import androidx.collection.arraySetOf
-import com.example.orangecast.data.ArtistsByGenre
-import com.example.orangecast.data.MediaItem
-import com.example.orangecast.data.Parameters
-import com.example.orangecast.data.SearchResult
-import com.example.orangecast.network.Event
-import com.example.orangecast.network.repository.Repository
-import io.reactivex.Observable
+import com.example.orangecast.entity.ArtistsByGenre
+import com.example.orangecast.entity.MediaItem
+import com.example.orangecast.entity.Parameters
+import com.example.orangecast.data.Repository
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class GenresInteractor(
     private val repository: Repository

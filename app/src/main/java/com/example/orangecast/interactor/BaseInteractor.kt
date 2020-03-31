@@ -1,6 +1,6 @@
 package com.example.orangecast.interactor
 
-import com.example.orangecast.data.Parameters
+import com.example.orangecast.entity.Parameters
 
 abstract class BaseInteractor {
 

@@ -3,11 +3,9 @@ package com.example.orangecast.view
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.orangecast.network.Event
+import com.example.orangecast.data.network.Event
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 open class BaseViewModel : ViewModel() {
 

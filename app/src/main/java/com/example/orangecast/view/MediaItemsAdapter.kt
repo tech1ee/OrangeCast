@@ -5,8 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.R
-import com.example.orangecast.data.MediaItem
-import com.squareup.picasso.Picasso
+import com.example.orangecast.entity.MediaItem
 import kotlinx.android.synthetic.main.item_media_item.view.*
 
 class MediaItemsAdapter: RecyclerView.Adapter<MediaItemsAdapter.ViewHolder>() {

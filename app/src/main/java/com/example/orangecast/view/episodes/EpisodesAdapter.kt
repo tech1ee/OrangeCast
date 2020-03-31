@@ -5,8 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.R
-import com.example.orangecast.data.Episode
-import com.example.orangecast.data.MediaItem
+import com.example.orangecast.entity.Episode
 import kotlinx.android.synthetic.main.item_media_item.view.*
 
 class EpisodesAdapter(
@@ -42,7 +41,8 @@ class EpisodesAdapter(
             val item = list[position]
 
             episodeTitle?.text = item.title
-
+            episodeNumber?.text = item.episodeNumber
+            episodeDuration?.text = item.duration
         }
     }
 

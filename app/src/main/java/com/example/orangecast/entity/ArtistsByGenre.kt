@@ -1,4 +1,4 @@
-package com.example.orangecast.data
+package com.example.orangecast.entity
 
 import androidx.collection.ArraySet
 import androidx.collection.arraySetOf
