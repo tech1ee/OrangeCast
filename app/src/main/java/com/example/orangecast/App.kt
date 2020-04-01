@@ -3,7 +3,9 @@ package com.example.orangecast
 import android.app.Application
 import android.content.Context
 import com.example.orangecast.di.*
-import com.example.orangecast.data.network.Api
+import com.example.orangecast.data.api.SearchApi
+import com.example.orangecast.di.module.ApiModule
+import com.example.orangecast.di.module.AppModule
 import com.facebook.stetho.Stetho
 
 class App : Application() {
@@ -27,7 +29,7 @@ class App : Application() {
     }
 
     companion object {
-        var api: Api? = null
+        var searchApi: SearchApi? = null
 
         @JvmStatic
         fun appComponent(context: Context?): AppComponent? {

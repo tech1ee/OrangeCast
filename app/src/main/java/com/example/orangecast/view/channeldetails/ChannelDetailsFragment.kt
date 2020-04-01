@@ -38,6 +38,8 @@ class ChannelDetailsFragment : BaseFragment() {
 
         episodes_list_rv?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         episodes_list_rv?.adapter = episodesAdapter
+
+        enableBackButton(true)
     }
 
     override fun showData(data: Any?) {

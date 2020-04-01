@@ -10,7 +10,7 @@ data class RSSChannel(
     val item: List<RSSItem>
 )
 
-@Root(name = "item", strict = false)
+@Root(name = "item")
 data class RSSItem(
     @Element val title: String?,
     @Element val pubDate: String?,

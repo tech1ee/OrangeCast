@@ -3,7 +3,7 @@ package com.example.orangecast.view
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.orangecast.data.network.Event
+import com.example.orangecast.entity.Event
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 

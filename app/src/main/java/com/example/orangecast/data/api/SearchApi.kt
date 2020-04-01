@@ -1,4 +1,4 @@
-package com.example.orangecast.data.network
+package com.example.orangecast.data.api
 
 import com.example.orangecast.entity.RSSChannel
 import com.example.orangecast.entity.SearchResult
@@ -8,11 +8,9 @@ import retrofit2.http.GET
 import retrofit2.http.QueryMap
 import retrofit2.http.Url
 
-interface Api {
+interface SearchApi {
 
     @GET("/search")
     fun search(@QueryMap parameters: Map<String, String>): Single<Response<SearchResult>>
 
-    @GET
-    fun getFeed(@Url url: String): Single<Response<RSSChannel>>
 }

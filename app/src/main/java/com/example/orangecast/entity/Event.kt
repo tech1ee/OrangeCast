@@ -1,4 +1,4 @@
-package com.example.orangecast.data.network
+package com.example.orangecast.entity
 
 sealed class Event {
     data class Progress(val inProgress: Boolean): Event()

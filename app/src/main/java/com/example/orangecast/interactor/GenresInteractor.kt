@@ -4,11 +4,11 @@ import androidx.collection.arraySetOf
 import com.example.orangecast.entity.ArtistsByGenre
 import com.example.orangecast.entity.MediaItem
 import com.example.orangecast.entity.Parameters
-import com.example.orangecast.data.Repository
+import com.example.orangecast.data.repository.SearchRepository
 import io.reactivex.Single
 
 class GenresInteractor(
-    private val repository: Repository
+    private val repository: SearchRepository
 ): BaseInteractor() {
 
     fun fetchAllGenres(): Single<List<ArtistsByGenre>> {
