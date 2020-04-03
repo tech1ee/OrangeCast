@@ -9,6 +9,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.orangecast.R
 import com.example.orangecast.entity.Event
 import com.google.android.material.snackbar.Snackbar
@@ -41,17 +43,12 @@ abstract class BaseFragment: Fragment() {
         disposable.clear()
     }
 
-    protected fun disableProgress() {
-        isProgressShowingRequired = false
+    protected fun onBackPressed() {
+        findNavController().popBackStack()
     }
 
-    protected fun enableBackButton(enabled: Boolean) {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(enabled) {
-                override fun handleOnBackPressed() {
-                    if (enabled) requireActivity().onBackPressed()
-                }
-            })
+    protected fun disableProgress() {
+        isProgressShowingRequired = false
     }
 
     protected fun LiveData<Event>.subscribeToEvent() {

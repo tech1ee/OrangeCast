@@ -79,7 +79,6 @@ class DiscoverFragment : BaseFragment() {
     }
 
     private fun showSplash() {
-        enableBackButton(false)
         val rotate = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
         rotate.repeatCount = Animation.INFINITE
         rotate.duration = 2000
@@ -100,6 +99,5 @@ class DiscoverFragment : BaseFragment() {
 
     private fun hideSplash() {
         splashScreen?.dismiss()
-        enableBackButton(true)
     }
 }
