@@ -8,6 +8,7 @@ class ChannelDetailsViewModel(
 ): BaseViewModel() {
 
     fun getArtistDetails(detailsUrl: String) {
-        feedInteractor.getEpisodesFromRSS(detailsUrl).subscribeWithMapToEvent()
+        feedInteractor.getEpisodesFromRSS(detailsUrl)
+            .subscribeWithMapToEvent()
     }
 }

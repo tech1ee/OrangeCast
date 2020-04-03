@@ -28,6 +28,7 @@ open class BaseViewModel : ViewModel() {
                     { error ->
                         eventLiveData.apply { this.value = Event.Error(error.localizedMessage ?: "Error", error) }
                         eventLiveData.apply { this.value = Event.Progress(false) }
+                        error.printStackTrace()
                     }
                 )
         )
