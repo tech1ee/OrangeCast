@@ -36,7 +36,6 @@ class XmlParser {
                     val episodeNumber = getValue(itemElement, TAG_EPISODE)
 
                     list.add(Episode(title, link, pubDate, description, duration, image, episodeNumber))
-                    Log.e(i.toString(), title)
                 }
             }
         } catch (e: Exception) {
