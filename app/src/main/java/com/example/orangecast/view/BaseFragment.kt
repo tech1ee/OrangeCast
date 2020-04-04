@@ -2,35 +2,19 @@ package com.example.orangecast.view
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.example.orangecast.R
-import com.example.orangecast.entity.Event
-import com.google.android.material.snackbar.Snackbar
+import com.example.orangecast.entity.ViewEvent
 import io.reactivex.disposables.CompositeDisposable
 
 
 abstract class BaseFragment: Fragment() {
 
-    protected val disposable = CompositeDisposable()
-    private var progressView: View? = null
-    private var isProgressShowingRequired = true
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         inject()
-        val rootView: ViewGroup? = activity?.findViewById(android.R.id.content)
-        progressView = LayoutInflater.from(context)
-            .inflate(R.layout.view_progress_fullscreen, rootView, false)
-        progressView?.visibility = View.GONE
-        rootView?.addView(progressView)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,43 +22,27 @@ abstract class BaseFragment: Fragment() {
         initView()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        disposable.clear()
-    }
-
     protected fun onBackPressed() {
-        findNavController().popBackStack()
+        activity?.onBackPressed()
     }
 
-    protected fun disableProgress() {
-        isProgressShowingRequired = false
+    protected fun LiveData<ViewEvent>.subscribeToEvent() {
+        this.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is ViewEvent.Progress<Any> -> onProgress(it)
+                is ViewEvent.Error<Any> -> onError(it)
+                is ViewEvent.Data<Any> -> onData(it)
+            }
+        })
     }
 
-    protected fun LiveData<Event>.subscribeToEvent() {
-        this.observe(viewLifecycleOwner, Observer { onEvent(it) })
-    }
+    abstract fun onProgress(event: ViewEvent.Progress<Any>)
 
-    private fun onEvent(event: Event) {
-        when (event) {
-            is Event.Progress -> showProgress(event.inProgress)
-            is Event.Error -> showError(event.message)
-            is Event.Data<*> -> showData(event.data)
-        }
-    }
+    abstract fun onError(event: ViewEvent.Error<Any>)
+
+    abstract fun onData(event: ViewEvent.Data<Any>)
 
     abstract fun inject()
 
     abstract fun initView()
-
-    open fun showData(data: Any?) {}
-
-    private fun showProgress(show: Boolean) {
-        if (show && isProgressShowingRequired) progressView?.visibility = View.VISIBLE
-        else progressView?.visibility = View.GONE
-    }
-
-    private fun showError(message: String) {
-        if (view != null) Snackbar.make(view!!, message, Snackbar.LENGTH_LONG)
-    }
 }

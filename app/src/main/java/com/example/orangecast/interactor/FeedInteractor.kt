@@ -2,6 +2,7 @@ package com.example.orangecast.interactor
 
 import com.example.orangecast.data.repository.FeedRepository
 import com.example.orangecast.entity.Episode
+import com.example.orangecast.entity.EpisodeList
 import io.reactivex.Single
 
 class FeedInteractor(
