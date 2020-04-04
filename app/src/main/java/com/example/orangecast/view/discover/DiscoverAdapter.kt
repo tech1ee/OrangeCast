@@ -4,22 +4,18 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orangecast.R
 import com.example.orangecast.databinding.ItemAuthorBinding
 import com.example.orangecast.databinding.ItemHorizontalListGenreTitleBinding
 import com.example.orangecast.entity.ArtistsByGenre
-import com.example.orangecast.entity.MediaItem
+import com.example.orangecast.entity.Channel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_author.view.*
-import kotlinx.android.synthetic.main.item_horizontal_list_genre_title.view.*
 
 
 class DiscoverAdapter(
-    private val onItemClicked: (MediaItem) -> Unit
+    private val onItemClicked: (Channel) -> Unit
 ) : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
     private var list = listOf<ArtistsByGenre>()
@@ -61,7 +57,7 @@ class DiscoverAdapter(
         }
     }
 
-    private inner class ArtistsAdapter(private val artists: List<MediaItem>
+    private inner class ArtistsAdapter(private val artists: List<Channel>
     ) : RecyclerView.Adapter<ArtistsAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

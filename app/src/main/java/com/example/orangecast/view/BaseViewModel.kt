@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 open class BaseViewModel : ViewModel() {
 
-    protected val eventLiveData = MutableLiveData<ViewEvent>()
+    private val eventLiveData = MutableLiveData<ViewEvent>()
     private val disposable = CompositeDisposable()
 
     fun getEventLiveData(): LiveData<ViewEvent> {
@@ -17,21 +17,25 @@ open class BaseViewModel : ViewModel() {
     }
 
     protected fun <T> Single<T>.subscribeWithMapToEvent() {
-        eventLiveData.apply { this.value = ViewEvent.Progress<T>(true) }
+        showEvent(ViewEvent.Progress<T>(true))
         disposable.add(
             this
                 .subscribe(
                     { data ->
-                        eventLiveData.apply { this.value = ViewEvent.Data<T>(data) }
-                        eventLiveData.apply { this.value = ViewEvent.Progress<T>(false) }
+                        showEvent(ViewEvent.Data<T>(data))
+                        showEvent(ViewEvent.Progress<T>(false))
                     },
                     { error ->
-                        eventLiveData.apply { this.value = ViewEvent.Error<T>(error.localizedMessage ?: "Error", error) }
-                        eventLiveData.apply { this.value = ViewEvent.Progress<T>( false) }
+                        showEvent(ViewEvent.Error<T>(error.localizedMessage ?: "Error", error))
+                        showEvent(ViewEvent.Progress<T>(false))
                         error.printStackTrace()
                     }
                 )
         )
+    }
+
+    protected fun showEvent(event: ViewEvent) {
+        eventLiveData.apply { this.value = event }
     }
 
     override fun onCleared() {

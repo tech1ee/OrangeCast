@@ -1,7 +1,8 @@
-package com.example.orangecast.data.repository
+package com.example.orangecast.data.utils
 
 import android.util.Log
 import com.example.orangecast.entity.Episode
+import com.example.orangecast.entity.Feed
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -15,14 +16,16 @@ import javax.xml.parsers.ParserConfigurationException
 
 class XmlParser {
 
-    fun parseFeed(feed: String): List<Episode> {
+    fun parseFeed(feed: String): Feed {
         val list = arrayListOf<Episode>()
+        var description: String? = null
         try {
             val doc = getDomElements(feed)
             val nodeList = doc?.getElementsByTagName(TAG_CHANNEL)
             val element = nodeList?.item(0) as? Element
+            description = getValue(element, TAG_DESRIPTION)
 
-            val items = element?.getElementsByTagName(TAG_ITEM) as? NodeList
+            val items = element?.getElementsByTagName(TAG_ITEM)
             if (items != null) {
                 for (i in 0..items.length) {
                     val itemElement = items.item(i) as? Element
@@ -30,19 +33,21 @@ class XmlParser {
                     val title = getValue(itemElement, TAG_TITLE)
                     val link = getValue(itemElement, TAG_LINK)
                     val pubDate = getValue(itemElement, TAG_PUB_DATE)
-                    val description = getValue(itemElement, TAG_DESRIPTION)
+                    val itemDescription = getValue(itemElement, TAG_DESRIPTION)
                     val duration = getValue(itemElement, TAG_DURATION)
                     val image = getValue(itemElement, TAG_IMAGE)
                     val episodeNumber = getValue(itemElement, TAG_EPISODE)
 
-                    list.add(Episode(title, link, pubDate, description, duration, image, episodeNumber))
+                    list.add(
+                        Episode(title, link, pubDate, itemDescription, duration, image, episodeNumber)
+                    )
                 }
             }
         } catch (e: Exception) {
             Log.e("parseFeed", e.localizedMessage ?: "")
             e.printStackTrace()
         }
-        return list
+        return Feed(description, list)
     }
 
     private fun getDomElements(xml: String): Document? {

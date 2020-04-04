@@ -5,14 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.R
-import com.example.orangecast.entity.MediaItem
+import com.example.orangecast.entity.Channel
 import kotlinx.android.synthetic.main.item_episode.view.*
 
 class MediaItemsAdapter: RecyclerView.Adapter<MediaItemsAdapter.ViewHolder>() {
 
-    private var items = listOf<MediaItem?>()
+    private var items = listOf<Channel?>()
 
-    fun setItems(items: List<MediaItem?>) {
+    fun setItems(items: List<Channel?>) {
         this.items = items
         notifyDataSetChanged()
     }

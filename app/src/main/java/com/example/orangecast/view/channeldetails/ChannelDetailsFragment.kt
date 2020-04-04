@@ -8,13 +8,15 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
-import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentChannelDetailsBinding
+import com.example.orangecast.entity.Channel
 import com.example.orangecast.entity.Episode
+import com.example.orangecast.entity.Feed
 import com.example.orangecast.entity.ViewEvent
 import com.example.orangecast.view.BaseFragment
 import com.example.orangecast.view.episodes.EpisodesAdapter
 import com.example.orangecast.view.snackbar
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_channel_details.*
 import javax.inject.Inject
 
@@ -63,8 +65,21 @@ class ChannelDetailsFragment : BaseFragment() {
 
     override fun onData(event: ViewEvent.Data<*>) {
         when (event.data) {
-            is List<*> -> episodesAdapter.setList(event.data as List<Episode>)
+            is Channel -> showChannelDetails(event.data)
+            is Feed -> showChannelFeed(event.data)
         }
+    }
+
+    private fun showChannelDetails(channel: Channel) {
+        Picasso.get().load(channel.artworkUrl100).into(binding?.authorImage)
+        binding?.authorTitle?.text = channel.collectionName
+        binding?.authorName?.text = channel.artistName
+        binding?.authorDescription?.text = channel.artistName
+    }
+
+    private fun showChannelFeed(feed: Feed) {
+        binding?.authorDescription?.text = feed.description
+        episodesAdapter.setList(feed.episodes ?: listOf())
     }
 
 }

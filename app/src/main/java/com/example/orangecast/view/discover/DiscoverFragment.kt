@@ -12,8 +12,9 @@ import com.example.orangecast.App
 import com.example.orangecast.view.BaseFragment
 import com.example.orangecast.databinding.FragmentDiscoverBinding
 import com.example.orangecast.entity.ArtistsByGenre
-import com.example.orangecast.entity.MediaItem
+import com.example.orangecast.entity.Channel
 import com.example.orangecast.entity.ViewEvent
+import com.example.orangecast.view.snackbar
 import kotlinx.android.synthetic.main.fragment_discover.*
 import javax.inject.Inject
 
@@ -75,7 +76,7 @@ class DiscoverFragment : BaseFragment() {
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
-
+        snackbar(binding?.root, event.message)
     }
 
     override fun onData(event: ViewEvent.Data<*>) {
@@ -84,11 +85,7 @@ class DiscoverFragment : BaseFragment() {
         }
     }
 
-//    override fun showData(data: Any?) {
-//        adapter.setList(data as List<ArtistsByGenre>)
-//    }
-
-    private fun gotoChannelDetails(item: MediaItem) {
+    private fun gotoChannelDetails(item: Channel) {
         val artistFeedUrl = item.feedUrl ?: return
         val action = DiscoverFragmentDirections.gotoChannelDetails(artistFeedUrl)
         findNavController().navigate(action)

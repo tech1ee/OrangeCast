@@ -1,15 +1,28 @@
 package com.example.orangecast.view.channeldetails
 
-import com.example.orangecast.entity.EpisodeList
-import com.example.orangecast.interactor.FeedInteractor
+import com.example.orangecast.entity.Channel
+import com.example.orangecast.entity.ViewEvent
+import com.example.orangecast.interactor.ChannelInteractor
 import com.example.orangecast.view.BaseViewModel
 
 class ChannelDetailsViewModel(
-    private val feedInteractor: FeedInteractor
+    private val channelInteractor: ChannelInteractor
 ): BaseViewModel() {
 
-    fun getArtistDetails(detailsUrl: String) {
-        feedInteractor.getEpisodesFromRSS(detailsUrl)
+    private var channel: Channel? = null
+
+    fun getArtistDetails(feedUrl: String) {
+        getChannelFeed(feedUrl)
+        getChannelDetails(feedUrl)
+    }
+
+    private fun getChannelFeed(feedUrl: String) {
+        channelInteractor.getChannelFeed(feedUrl)
             .subscribeWithMapToEvent()
+    }
+
+    private fun getChannelDetails(feedUrl: String) {
+        channel = channelInteractor.getChannelDetails(feedUrl)
+        showEvent(ViewEvent.Data(channel))
     }
 }

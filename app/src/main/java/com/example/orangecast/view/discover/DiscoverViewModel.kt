@@ -10,8 +10,8 @@ class DiscoverViewModel(
 
     var searchText = ""
 
-    fun discover() {
-        interactor.fetchAllGenres().subscribeWithMapToEvent()
+    fun discover(isRefresh: Boolean = false) {
+        interactor.fetchAllGenres(isRefresh).subscribeWithMapToEvent()
     }
 
     fun search() {
