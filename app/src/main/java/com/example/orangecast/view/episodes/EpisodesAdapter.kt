@@ -1,15 +1,13 @@
 package com.example.orangecast.view.episodes
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orangecast.R
+import com.example.orangecast.databinding.ItemEpisodeBinding
 import com.example.orangecast.entity.Episode
-import kotlinx.android.synthetic.main.item_media_item.view.*
 
 class EpisodesAdapter(
-    private val listener: Listener
+    private val onItemClicked: (Episode) -> Unit
 ): RecyclerView.Adapter<EpisodesAdapter.ViewHolder>() {
 
     private var list = arrayListOf<Episode>()
@@ -20,33 +18,31 @@ class EpisodesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_media_item, parent, false))
+        val inflater = LayoutInflater.from(parent.context)
+        val itemBinding = ItemEpisodeBinding.inflate(inflater, parent, false)
+        return ViewHolder(itemBinding)
     }
 
     override fun getItemCount() = list.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(itemBinding: ItemEpisodeBinding): RecyclerView.ViewHolder(itemBinding.root) {
 
-        private val episodeNumber = view.episode_number
-        private val publishingDate = view.publishing_date
-        private val episodeTitle = view.episode_title
-        private val episodeDuration = view.episode_duration
-        private val listeningProgressView = view.listening_progress_view
-        private val listeningProgress = view.listening_progress
-        private val playButton = view.play_button
+        private val episodeNumber = itemBinding.episodeNumber
+        private val publishingDate = itemBinding.publishingDate
+        private val episodeTitle = itemBinding.episodeTitle
+        private val episodeDuration = itemBinding.episodeDuration
+        private val listeningProgressView = itemBinding.listeningProgressView
+        private val listeningProgress = itemBinding.listeningProgress
+        private val playButton = itemBinding.playButton
 
         fun bind(position: Int) {
             val item = list[position]
 
-            episodeTitle?.text = item.title
-            episodeNumber?.text = item.episodeNumber
-            episodeDuration?.text = item.duration
+            episodeTitle.text = item.title
+            episodeNumber.text = item.episodeNumber
+            episodeDuration.text = item.duration
         }
-    }
-
-    interface Listener {
-
     }
 }

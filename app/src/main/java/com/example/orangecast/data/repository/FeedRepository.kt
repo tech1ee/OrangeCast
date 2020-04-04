@@ -2,7 +2,9 @@ package com.example.orangecast.data.repository
 
 import android.util.Log
 import com.example.orangecast.data.Repository
+import com.example.orangecast.data.utils.XmlParser
 import com.example.orangecast.entity.Episode
+import com.example.orangecast.entity.Feed
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -13,7 +15,7 @@ class FeedRepository(private val xmlParser: XmlParser
 
 ) : Repository {
 
-    fun getFeed(feedUrl: String): Single<List<Episode>> {
+    fun getFeed(feedUrl: String): Single<Feed> {
         return getRSSFeedXml(feedUrl)
             .map { xmlParser.parseFeed(it) }
             .subscribeOn(Schedulers.io())

@@ -4,29 +4,26 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orangecast.R
+import com.example.orangecast.databinding.ItemAuthorBinding
+import com.example.orangecast.databinding.ItemHorizontalListGenreTitleBinding
 import com.example.orangecast.entity.ArtistsByGenre
-import com.example.orangecast.entity.MediaItem
+import com.example.orangecast.entity.Channel
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_author.view.*
-import kotlinx.android.synthetic.main.item_horizontal_list_genre_title.view.*
 
 
 class DiscoverAdapter(
-    private val listener: Listener
+    private val onItemClicked: (Channel) -> Unit
 ) : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
     private var list = listOf<ArtistsByGenre>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_horizontal_list_genre_title, parent, false)
-        )
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemHorizontalListGenreTitleBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount() = list.size
@@ -38,62 +35,57 @@ class DiscoverAdapter(
         notifyDataSetChanged()
     }
 
-    interface Listener{
-        fun onItemClicked(item: MediaItem)
-    }
+    inner class ViewHolder(itemHorizontalBinding: ItemHorizontalListGenreTitleBinding) : RecyclerView.ViewHolder(itemHorizontalBinding.root) {
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        private val genreTitle = view.genre_title
-        private val genresList = view.genre_list
+        private val genreTitle = itemHorizontalBinding.genreTitle
+        private val genresList = itemHorizontalBinding.genreList
 
         fun bind(position: Int) {
             val item = list[position]
 
-            genreTitle?.text = item.title
-            genresList?.layoutManager = LinearLayoutManager(itemView.context,
-                LinearLayoutManager.HORIZONTAL, false)
-            genresList?.adapter = ArtistsAdapter(item.list.toList())
+            genreTitle.text = item.title
+            genresList.layoutManager = LinearLayoutManager(
+                itemView.context, LinearLayoutManager.HORIZONTAL, false
+            )
+            genresList.adapter = ArtistsAdapter(item.list.toList())
 
             val shader: Shader = LinearGradient(
-                0f, 0f, genreTitle.width.toFloat(),0f,
-                Color.parseColor("#FFC328"), Color.parseColor("#FF3D00"), Shader.TileMode.CLAMP
+                0f, 0f, genreTitle.width.toFloat(), 0f, Color.parseColor("#FFC328"),
+                Color.parseColor("#FF3D00"), Shader.TileMode.CLAMP
             )
-            genreTitle?.paint?.shader = shader
+            genreTitle.paint?.shader = shader
         }
     }
 
-    private inner class ArtistsAdapter(
-        private val artists: List<MediaItem>
+    private inner class ArtistsAdapter(private val artists: List<Channel>
     ) : RecyclerView.Adapter<ArtistsAdapter.ViewHolder>() {
 
-        override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
-        ): ViewHolder {
-            return ViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_author, parent, false))
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val inflater = LayoutInflater.from(parent.context)
+            val itemBinding = ItemAuthorBinding.inflate(inflater, parent, false)
+            return ViewHolder(itemBinding)
         }
 
         override fun getItemCount() = artists.size
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        inner class ViewHolder(itemBinding: ItemAuthorBinding) :
+            RecyclerView.ViewHolder(itemBinding.root) {
 
-            private val authorPhoto = view.author_image
-            private val authorTitle = view.author_title
-            private val authorName = view.author_name
+            private val authorPhoto = itemBinding.authorImage
+            private val authorTitle = itemBinding.authorTitle
+            private val authorName = itemBinding.authorName
 
             fun bind(position: Int) {
                 val item = artists[position]
-                Picasso.get().load(item.artworkUrl100)
-                    .into(authorPhoto)
 
-                authorTitle?.text = item.trackName
-                authorName?.text = item.artistName
+                Picasso.get().load(item.artworkUrl100).into(authorPhoto)
 
-                itemView?.setOnClickListener { listener.onItemClicked(item) }
+                authorTitle.text = item.trackName
+                authorName.text = item.artistName
+
+                itemView.setOnClickListener { onItemClicked(item) }
             }
         }
     }

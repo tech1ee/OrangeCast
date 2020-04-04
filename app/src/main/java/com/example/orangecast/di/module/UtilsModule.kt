@@ -1,6 +1,6 @@
 package com.example.orangecast.di.module
 
-import com.example.orangecast.data.repository.XmlParser
+import com.example.orangecast.data.utils.XmlParser
 import dagger.Module
 import dagger.Provides
 

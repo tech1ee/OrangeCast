@@ -1,6 +1,6 @@
 package com.example.orangecast.entity
 
-class MediaItem(
+class Channel(
     val wrapperType: String?,
     val kind: String?,
     val artistId: String?,

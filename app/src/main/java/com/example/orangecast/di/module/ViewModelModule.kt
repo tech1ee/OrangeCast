@@ -1,6 +1,6 @@
 package com.example.orangecast.di.module
 
-import com.example.orangecast.interactor.FeedInteractor
+import com.example.orangecast.interactor.ChannelInteractor
 import com.example.orangecast.interactor.GenresInteractor
 import com.example.orangecast.view.channeldetails.ChannelDetailsViewModel
 import com.example.orangecast.view.discover.DiscoverViewModel
@@ -19,7 +19,7 @@ class ViewModelModule {
 
     @Singleton
     @Provides
-    fun provideChannelDetailsViewModel(feedInteractor: FeedInteractor): ChannelDetailsViewModel {
-        return ChannelDetailsViewModel(feedInteractor)
+    fun provideChannelDetailsViewModel(channelInteractor: ChannelInteractor): ChannelDetailsViewModel {
+        return ChannelDetailsViewModel(channelInteractor)
     }
 }

@@ -7,5 +7,5 @@ class ArtistsByGenre(
     val id: String?,
     val title: String?
 ) {
-    val list: ArraySet<MediaItem> = arraySetOf<MediaItem>()
+    val list: ArraySet<Channel> = arraySetOf<Channel>()
 }

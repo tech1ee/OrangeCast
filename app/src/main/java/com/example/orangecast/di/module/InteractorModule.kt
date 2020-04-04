@@ -2,7 +2,7 @@ package com.example.orangecast.di.module
 
 import com.example.orangecast.data.repository.FeedRepository
 import com.example.orangecast.data.repository.SearchRepository
-import com.example.orangecast.interactor.FeedInteractor
+import com.example.orangecast.interactor.ChannelInteractor
 import com.example.orangecast.interactor.GenresInteractor
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ class InteractorModule {
 
     @Singleton
     @Provides
-    fun providesRSSInteractor(repository: FeedRepository): FeedInteractor {
-        return FeedInteractor(repository)
+    fun provideChannelInteractor(searchRepository: SearchRepository, feedRepository: FeedRepository): ChannelInteractor {
+        return ChannelInteractor(searchRepository, feedRepository)
     }
 }
