@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.R
 import com.example.orangecast.entity.MediaItem
-import kotlinx.android.synthetic.main.item_media_item.view.*
+import kotlinx.android.synthetic.main.item_episode.view.*
 
 class MediaItemsAdapter: RecyclerView.Adapter<MediaItemsAdapter.ViewHolder>() {
 
@@ -18,7 +18,7 @@ class MediaItemsAdapter: RecyclerView.Adapter<MediaItemsAdapter.ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_media_item, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_episode, parent, false))
     }
 
     override fun getItemCount() = items.size

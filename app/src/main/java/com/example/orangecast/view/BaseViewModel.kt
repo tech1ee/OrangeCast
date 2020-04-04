@@ -22,12 +22,12 @@ open class BaseViewModel : ViewModel() {
             this
                 .subscribe(
                     { data ->
-                        eventLiveData.apply { this.value = ViewEvent.Data(data) }
+                        eventLiveData.apply { this.value = ViewEvent.Data<T>(data) }
                         eventLiveData.apply { this.value = ViewEvent.Progress<T>(false) }
                     },
                     { error ->
                         eventLiveData.apply { this.value = ViewEvent.Error<T>(error.localizedMessage ?: "Error", error) }
-                        eventLiveData.apply { this.value = ViewEvent.Progress<T>(false) }
+                        eventLiveData.apply { this.value = ViewEvent.Progress<T>( false) }
                         error.printStackTrace()
                     }
                 )

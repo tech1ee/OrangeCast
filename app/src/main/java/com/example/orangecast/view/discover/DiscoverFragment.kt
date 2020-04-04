@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.view.BaseFragment
-import com.example.orangecast.R
+import com.example.orangecast.databinding.FragmentDiscoverBinding
+import com.example.orangecast.entity.ArtistsByGenre
 import com.example.orangecast.entity.MediaItem
 import com.example.orangecast.entity.ViewEvent
 import kotlinx.android.synthetic.main.fragment_discover.*
@@ -20,19 +21,26 @@ class DiscoverFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: DiscoverViewModel
-    private var adapter = DiscoverAdapter(object : DiscoverAdapter.Listener {
-        override fun onItemClicked(item: MediaItem) {
-            gotoChannelDetails(item)
-        }
-    })
+    private var binding: FragmentDiscoverBinding? = null
+
+    private var adapter = DiscoverAdapter { item ->
+        gotoChannelDetails(item)
+    }
 
     override fun inject() {
         App.appComponent(context)?.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_discover, container, false)
+        binding = FragmentDiscoverBinding.inflate(inflater)
+        return binding?.root
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     private fun initSearch() {
@@ -54,24 +62,26 @@ class DiscoverFragment : BaseFragment() {
     }
 
     override fun initView() {
-        list_rv?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        list_rv?.adapter = adapter
+        binding?.listRv?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding?.listRv?.adapter = adapter
 
         initSearch()
         viewModel.getEventLiveData().subscribeToEvent()
         viewModel.discover()
     }
 
-    override fun <T> onProgress(event: ViewEvent.Progress<T>) {
-        TODO("Not yet implemented")
+    override fun onProgress(event: ViewEvent.Progress<*>) {
+        binding?.listProgress?.root?.visibility = if (event.inProgress) View.VISIBLE else View.GONE
     }
 
-    override fun <T> onError(event: ViewEvent.Error<T>) {
-        TODO("Not yet implemented")
+    override fun onError(event: ViewEvent.Error<*>) {
+
     }
 
-    override fun <T, D> onData(event: ViewEvent.Data<T, D>) {
-        TODO("Not yet implemented")
+    override fun onData(event: ViewEvent.Data<*>) {
+        when (event.data) {
+            is List<*> -> adapter.setList(event.data as List<ArtistsByGenre>)
+        }
     }
 
 //    override fun showData(data: Any?) {

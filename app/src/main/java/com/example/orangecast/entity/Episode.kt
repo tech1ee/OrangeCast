@@ -1,5 +1,7 @@
 package com.example.orangecast.entity
 
+object EpisodeList
+
 class Episode(
     val title: String?,
     val link: String?,

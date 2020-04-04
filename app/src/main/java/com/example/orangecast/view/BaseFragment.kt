@@ -29,18 +29,18 @@ abstract class BaseFragment: Fragment() {
     protected fun LiveData<ViewEvent>.subscribeToEvent() {
         this.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is ViewEvent.Progress<Any> -> onProgress(it)
-                is ViewEvent.Error<Any> -> onError(it)
-                is ViewEvent.Data<Any> -> onData(it)
+                is ViewEvent.Progress<*> -> onProgress(it)
+                is ViewEvent.Error<*> -> onError(it)
+                is ViewEvent.Data<*> -> onData(it)
             }
         })
     }
 
-    abstract fun onProgress(event: ViewEvent.Progress<Any>)
+    abstract fun onProgress(event: ViewEvent.Progress<*>)
 
-    abstract fun onError(event: ViewEvent.Error<Any>)
+    abstract fun onError(event: ViewEvent.Error<*>)
 
-    abstract fun onData(event: ViewEvent.Data<Any>)
+    abstract fun onData(event: ViewEvent.Data<*>)
 
     abstract fun inject()
 
