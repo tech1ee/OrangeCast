@@ -6,29 +6,43 @@
     android:id="@+id/root_layout"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/back_button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/ic_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_back"
+        android:background="@drawable/button_circle_dark"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/share_button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_margin="8dp"
-        android:background="@drawable/ic_share_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_share"
+        android:background="@drawable/button_circle_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/description_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="65dp"
+        android:src="@drawable/ic_gradient_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/author_card"
+        app:layout_constraintBottom_toBottomOf="@id/author_card"
+        app:layout_constraintStart_toStartOf="@id/author_card"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/author_card"
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:layout_margin="16dp"
+        android:layout_margin="20dp"
         app:cardCornerRadius="65dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/back_button">
@@ -39,18 +53,25 @@
             android:layout_height="130dp" />
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/author_description"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/author_description_scroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        tools:text="The podcast of Comedian Joe Rogan.."
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintStart_toEndOf="@id/author_card"
         app:layout_constraintTop_toTopOf="@id/author_card"
         app:layout_constraintBottom_toBottomOf="@id/author_card"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/author_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            tools:text="The podcast of Comedian Joe Rogan.." />
+    </androidx.core.widget.NestedScrollView>
 
     <TextView
         android:id="@+id/author_title"
@@ -61,7 +82,6 @@
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:maxLines="1"
         tools:text="The Joe Rogan Experience"
         app:layout_constraintStart_toStartOf="@id/author_card"
         app:layout_constraintTop_toBottomOf="@id/author_card"
@@ -72,30 +92,30 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:maxLines="1"
         tools:text="The Joe Rogan Experience"
         app:layout_constraintTop_toBottomOf="@id/author_title"
         app:layout_constraintStart_toStartOf="@id/author_title"
-        app:layout_constraintEnd_toEndOf="@id/author_title"/>
+        app:layout_constraintEnd_toEndOf="@id/author_title" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/subscribe_button"
-        android:layout_width="140dp"
-        android:layout_height="60dp"
-        android:layout_margin="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/button_subscribe"
         android:text="@string/subscribe"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/author_card"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/border_1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/line_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/subscribe_button"
+        app:layout_constraintTop_toBottomOf="@id/author_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -104,7 +124,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:textColor="@android:color/white"
         tools:text="10 episodes"
         app:layout_constraintTop_toTopOf="@id/sort_button"
@@ -112,17 +132,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/download_button"/>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/sort_button"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/ic_sort_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/border_1"/>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/filter_button"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -132,7 +152,7 @@
         app:layout_constraintBottom_toBottomOf="@id/sort_button"
         app:layout_constraintEnd_toStartOf="@id/sort_button"/>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/download_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -142,7 +162,7 @@
         app:layout_constraintBottom_toBottomOf="@id/sort_button"
         app:layout_constraintEnd_toStartOf="@id/filter_button"/>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/border_2"
         android:layout_width="match_parent"
         android:layout_height="1dp"

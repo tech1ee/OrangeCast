@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.orangecast.entity.ViewEvent
-import io.reactivex.disposables.CompositeDisposable
 
 
 abstract class BaseFragment: Fragment() {
