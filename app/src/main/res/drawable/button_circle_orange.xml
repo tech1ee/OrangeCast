@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="50dp"
+    android:height="50dp"
+    android:viewportWidth="80.56"
+    android:viewportHeight="80.56"
+    >
+
+    <group>
+
+        <clip-path
+            android:pathData="M80.5625 40.2812C80.5625 62.528 62.528 80.5625 40.2812 80.5625C18.0345 80.5625 0 62.528 0 40.2812C0 18.0345 18.0345 0 40.2812 0C62.528 0 80.5625 18.0345 80.5625 40.2812Z"
+            />
+
+        <group
+            android:translateX="0.159"
+            android:translateY="1.453"
+            android:pivotX="40.281"
+            android:pivotY="40.281"
+            android:scaleX="3.052"
+            android:scaleY="2.756"
+            android:rotation="-115.693"
+            >
+
+            <path
+                android:pathData="M0 0V80.5625H80.5625V0"
+                >
+
+                <aapt:attr name="android:fillColor">
+
+                    <gradient
+                        android:type="linear"
+                        android:startX="20.141"
+                        android:startY="40.281"
+                        android:endX="60.422"
+                        android:endY="40.281"
+                        >
+
+                        <item
+                            android:color="#FF3D00"
+                            android:offset="0"
+                            />
+
+                        <item
+                            android:color="#FFC328"
+                            android:offset="1"
+                            />
+
+                    </gradient>
+
+                </aapt:attr>
+
+            </path>
+
+        </group>
+
+        <path
+            android:pathData="M80.5625 40.2812C80.5625 62.528 62.528 80.5625 40.2812 80.5625C18.0345 80.5625 0 62.528 0 40.2812C0 18.0345 18.0345 0 40.2812 0C62.528 0 80.5625 18.0345 80.5625 40.2812Z"
+            android:strokeWidth="3"
+            android:strokeColor="#FF9345"
+            />
+
+    </group>
+
+</vector>

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.databinding.FragmentChannelDetailsBinding
 import com.example.orangecast.entity.Channel
-import com.example.orangecast.entity.Episode
 import com.example.orangecast.entity.Feed
 import com.example.orangecast.entity.ViewEvent
 import com.example.orangecast.view.BaseFragment

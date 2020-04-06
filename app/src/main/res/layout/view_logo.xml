@@ -39,7 +39,7 @@
         android:id="@+id/logo_play"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/logo_play"
+        android:src="@drawable/ic_play"
         app:layout_constraintStart_toStartOf="@id/logo_background"
         app:layout_constraintTop_toTopOf="@id/logo_background"
         app:layout_constraintEnd_toEndOf="@id/logo_background"
