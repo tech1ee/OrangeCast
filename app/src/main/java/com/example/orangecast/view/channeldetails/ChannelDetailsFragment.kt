@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,7 @@ class ChannelDetailsFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: ChannelDetailsViewModel
-    private var binding: FragmentChannelDetailsBinding? = null
+    private lateinit var binding: FragmentChannelDetailsBinding
     private val args: ChannelDetailsFragmentArgs by navArgs()
     private val episodesAdapter = EpisodesAdapter { episode ->
 
@@ -37,10 +38,11 @@ class ChannelDetailsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentChannelDetailsBinding.inflate(inflater)
-        return binding?.root
+        return binding.root
     }
 
     override fun initView() {
+        (binding.appBar.layoutParams as CoordinatorLayout.LayoutParams).behavior = ChannelDetailsBehavior()
         viewModel.getEventLiveData().subscribeToEvent()
         viewModel.getChannelDetails(args.artistFeedUrl)
 
@@ -55,7 +57,7 @@ class ChannelDetailsFragment : BaseFragment() {
     }
 
     override fun onProgress(event: ViewEvent.Progress<*>) {
-        binding?.listProgress?.root?.visibility = if (event.inProgress) View.VISIBLE else View.GONE
+        binding.listProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
@@ -72,14 +74,14 @@ class ChannelDetailsFragment : BaseFragment() {
     }
 
     private fun showChannelDetails(channel: Channel) {
-        Picasso.get().load(channel.artworkUrl100).into(binding?.authorImage)
-        binding?.authorTitle?.text = channel.collectionName
-        binding?.authorName?.text = channel.artistName
-        binding?.authorDescription?.text = channel.artistName
+        Picasso.get().load(channel.artworkUrl100).into(binding.authorImage)
+        binding.authorTitle.text = channel.collectionName
+        binding.authorName.text = channel.artistName
+        binding.authorDescription.text = channel.artistName
     }
 
     private fun showChannelFeed(feed: Feed?) {
-        binding?.authorDescription?.text = feed?.description
+        binding.authorDescription.text = feed?.description
         episodesAdapter.setList(feed?.episodes ?: listOf())
     }
 
