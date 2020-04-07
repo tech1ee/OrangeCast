@@ -9,20 +9,8 @@ class ChannelDetailsViewModel(
     private val channelInteractor: ChannelInteractor
 ): BaseViewModel() {
 
-    private var channel: Channel? = null
-
-    fun getArtistDetails(feedUrl: String) {
-        getChannelFeed(feedUrl)
-        getChannelDetails(feedUrl)
-    }
-
-    private fun getChannelFeed(feedUrl: String) {
-        channelInteractor.getChannelFeed(feedUrl)
+   fun getChannelDetails(feedUrl: String) {
+        channelInteractor.getChannelDetailsWithFeed(feedUrl)
             .subscribeWithMapToEvent()
-    }
-
-    private fun getChannelDetails(feedUrl: String) {
-        channel = channelInteractor.getChannelDetails(feedUrl)
-        showEvent(ViewEvent.Data(channel))
     }
 }

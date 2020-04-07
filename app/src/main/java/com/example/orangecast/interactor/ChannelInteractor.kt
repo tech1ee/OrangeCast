@@ -12,11 +12,12 @@ class ChannelInteractor(
     private val feedRepository: FeedRepository
 ): BaseInteractor() {
 
-    fun getChannelDetails(feedUrl: String): Channel? {
-        return searchRepository.getChannelByFeedUrl(feedUrl)
-    }
-
-    fun getChannelFeed(feedUrl: String): Single<Feed> {
+    fun getChannelDetailsWithFeed(feedUrl: String): Single<Channel> {
         return feedRepository.getFeed(feedUrl)
+            .map {
+                val channel = searchRepository.getChannelByFeedUrl(feedUrl)
+                channel?.feed = it
+                channel ?: throw Throwable("Channel is null")
+            }
     }
 }

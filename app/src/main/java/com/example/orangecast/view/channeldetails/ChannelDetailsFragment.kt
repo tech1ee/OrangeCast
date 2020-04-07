@@ -42,7 +42,7 @@ class ChannelDetailsFragment : BaseFragment() {
 
     override fun initView() {
         viewModel.getEventLiveData().subscribeToEvent()
-        viewModel.getArtistDetails(args.artistFeedUrl)
+        viewModel.getChannelDetails(args.artistFeedUrl)
 
         initButtons()
 
@@ -64,8 +64,10 @@ class ChannelDetailsFragment : BaseFragment() {
 
     override fun onData(event: ViewEvent.Data<*>) {
         when (event.data) {
-            is Channel -> showChannelDetails(event.data)
-            is Feed -> showChannelFeed(event.data)
+            is Channel -> {
+                showChannelDetails(event.data)
+                showChannelFeed(event.data.feed)
+            }
         }
     }
 
@@ -76,9 +78,9 @@ class ChannelDetailsFragment : BaseFragment() {
         binding?.authorDescription?.text = channel.artistName
     }
 
-    private fun showChannelFeed(feed: Feed) {
-        binding?.authorDescription?.text = feed.description
-        episodesAdapter.setList(feed.episodes ?: listOf())
+    private fun showChannelFeed(feed: Feed?) {
+        binding?.authorDescription?.text = feed?.description
+        episodesAdapter.setList(feed?.episodes ?: listOf())
     }
 
 }
