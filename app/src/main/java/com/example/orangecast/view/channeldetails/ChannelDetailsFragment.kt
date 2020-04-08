@@ -54,7 +54,7 @@ class ChannelDetailsFragment : BaseFragment() {
     }
 
     override fun onProgress(event: ViewEvent.Progress<*>) {
-        list_progress?.visibility = if (event.inProgress) View.VISIBLE else View.GONE
+        channel_list_progress?.visibility = if (event.inProgress) View.VISIBLE else View.GONE
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
