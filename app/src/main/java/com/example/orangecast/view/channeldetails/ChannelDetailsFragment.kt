@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
-import com.example.orangecast.databinding.FragmentChannelDetailsBinding
+import com.example.orangecast.R
 import com.example.orangecast.entity.Channel
 import com.example.orangecast.entity.Feed
 import com.example.orangecast.entity.ViewEvent
@@ -18,13 +17,13 @@ import com.example.orangecast.view.episodes.EpisodesAdapter
 import com.example.orangecast.view.snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_channel_details.*
+import kotlinx.android.synthetic.main.view_channel_details_top.view.*
 import javax.inject.Inject
 
 class ChannelDetailsFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: ChannelDetailsViewModel
-    private lateinit var binding: FragmentChannelDetailsBinding
     private val args: ChannelDetailsFragmentArgs by navArgs()
     private val episodesAdapter = EpisodesAdapter { episode ->
 
@@ -37,31 +36,29 @@ class ChannelDetailsFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentChannelDetailsBinding.inflate(inflater)
-        return binding.root
+        return LayoutInflater.from(context).inflate(R.layout.fragment_channel_details, container, false)
     }
 
     override fun initView() {
-        (binding.appBar.layoutParams as CoordinatorLayout.LayoutParams).behavior = ChannelDetailsBehavior()
-        viewModel.getEventLiveData().subscribeToEvent()
-        viewModel.getChannelDetails(args.artistFeedUrl)
-
         initButtons()
 
         episodes_list_rv?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         episodes_list_rv?.adapter = episodesAdapter
+
+        viewModel.getEventLiveData().subscribeToEvent()
+        viewModel.getChannelDetails(args.artistFeedUrl)
     }
 
     private fun initButtons() {
-        back_button?.setOnClickListener { onBackPressed() }
+        header?.back_button?.setOnClickListener { onBackPressed() }
     }
 
     override fun onProgress(event: ViewEvent.Progress<*>) {
-        binding.listProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
+        list_progress?.visibility = if (event.inProgress) View.VISIBLE else View.GONE
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
-        snackbar(root_layout, event.message)
+        snackbar(motion_layout, event.message)
     }
 
     override fun onData(event: ViewEvent.Data<*>) {
@@ -74,14 +71,13 @@ class ChannelDetailsFragment : BaseFragment() {
     }
 
     private fun showChannelDetails(channel: Channel) {
-        Picasso.get().load(channel.artworkUrl100).into(binding.authorImage)
-        binding.authorTitle.text = channel.collectionName
-        binding.authorName.text = channel.artistName
-        binding.authorDescription.text = channel.artistName
+        Picasso.get().load(channel.artworkUrl100).into(header?.author_image)
+        header?.author_title?.text = channel.collectionName
+        header?.author_name?.text = channel.artistName
     }
 
     private fun showChannelFeed(feed: Feed?) {
-        binding.authorDescription.text = feed?.description
+        header?.author_description?.text = feed?.description
         episodesAdapter.setList(feed?.episodes ?: listOf())
     }
 

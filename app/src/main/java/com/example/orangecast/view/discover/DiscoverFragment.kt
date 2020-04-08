@@ -9,8 +9,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
+import com.example.orangecast.R
 import com.example.orangecast.view.BaseFragment
-import com.example.orangecast.databinding.FragmentDiscoverBinding
 import com.example.orangecast.entity.ArtistsByGenre
 import com.example.orangecast.entity.Channel
 import com.example.orangecast.entity.ViewEvent
@@ -22,7 +22,6 @@ class DiscoverFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: DiscoverViewModel
-    private var binding: FragmentDiscoverBinding? = null
 
     private var adapter = DiscoverAdapter { item ->
         gotoChannelDetails(item)
@@ -35,13 +34,7 @@ class DiscoverFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDiscoverBinding.inflate(inflater)
-        return binding?.root
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
+        return LayoutInflater.from(context).inflate(R.layout.fragment_discover, container, false)
     }
 
     private fun initSearch() {
@@ -63,8 +56,8 @@ class DiscoverFragment : BaseFragment() {
     }
 
     override fun initView() {
-        binding?.listRv?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        binding?.listRv?.adapter = adapter
+        list_rv?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        list_rv?.adapter = adapter
 
         initSearch()
         viewModel.getEventLiveData().subscribeToEvent()
@@ -72,11 +65,11 @@ class DiscoverFragment : BaseFragment() {
     }
 
     override fun onProgress(event: ViewEvent.Progress<*>) {
-        binding?.listProgress?.root?.visibility = if (event.inProgress) View.VISIBLE else View.GONE
+        list_progress?.visibility = if (event.inProgress) View.VISIBLE else View.GONE
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
-        snackbar(binding?.root, event.message)
+        snackbar(root_layout, event.message)
     }
 
     override fun onData(event: ViewEvent.Data<*>) {
