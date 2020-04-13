@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.R
+import com.example.orangecast.databinding.FragmentDiscoverBinding
 import com.example.orangecast.view.BaseFragment
 import com.example.orangecast.entity.ArtistsByGenre
 import com.example.orangecast.entity.Channel
@@ -22,6 +23,7 @@ class DiscoverFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: DiscoverViewModel
+    private lateinit var binding: FragmentDiscoverBinding
 
     private var adapter = DiscoverAdapter { item ->
         gotoChannelDetails(item)
@@ -34,7 +36,8 @@ class DiscoverFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return LayoutInflater.from(context).inflate(R.layout.fragment_discover, container, false)
+        binding = FragmentDiscoverBinding.inflate(inflater)
+        return binding.root
     }
 
     private fun initSearch() {
@@ -56,8 +59,8 @@ class DiscoverFragment : BaseFragment() {
     }
 
     override fun initView() {
-        list_rv?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        list_rv?.adapter = adapter
+        binding.listRv.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.listRv.adapter = adapter
 
         initSearch()
         viewModel.getEventLiveData().subscribeToEvent()
@@ -65,11 +68,11 @@ class DiscoverFragment : BaseFragment() {
     }
 
     override fun onProgress(event: ViewEvent.Progress<*>) {
-        list_progress?.visibility = if (event.inProgress) View.VISIBLE else View.GONE
+        binding.listProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
-        snackbar(root_layout, event.message)
+        snackbar(binding.rootLayout, event.message)
     }
 
     override fun onData(event: ViewEvent.Data<*>) {

@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.R
+import com.example.orangecast.databinding.ItemEpisodeBinding
 import com.example.orangecast.entity.Episode
 import kotlinx.android.synthetic.main.item_episode.view.*
 
@@ -20,30 +21,30 @@ class EpisodesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater
-            .from(parent.context).inflate(R.layout.item_episode, parent, false))
+        val inflater = LayoutInflater.from(parent.context)
+        return ViewHolder(ItemEpisodeBinding.inflate(inflater, parent, false))
     }
 
     override fun getItemCount() = list.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(binding: ItemEpisodeBinding): RecyclerView.ViewHolder(binding.root) {
 
-        private val episodeNumber = view.episode_number
-        private val publishingDate = view.publishing_date
-        private val episodeTitle = view.episode_title
-        private val episodeDuration = view.episode_duration
-        private val listeningProgressView = view.listening_progress_view
-        private val listeningProgress = view.listening_progress
-        private val playButton = view.play_button
+        private val episodeNumber = binding.episodeNumber
+        private val publishingDate = binding.publishingDate
+        private val episodeTitle = binding.episodeTitle
+        private val episodeDuration = binding.episodeDuration
+        private val listeningProgressView = binding.listeningProgressView
+        private val listeningProgress = binding.listeningProgress
+        private val playButton = binding.playButton
 
         fun bind(position: Int) {
             val item = list[position]
 
-            episodeTitle?.text = item.title
-            episodeNumber?.text = item.episodeNumber
-            episodeDuration?.text = item.duration
+            episodeTitle.text = item.title
+            episodeNumber.text = item.episodeNumber
+            episodeDuration.text = item.duration
         }
     }
 }
