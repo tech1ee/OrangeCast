@@ -5,12 +5,18 @@ import com.example.orangecast.entity.ViewEvent
 import com.example.orangecast.interactor.ChannelInteractor
 import com.example.orangecast.view.BaseViewModel
 
-class ChannelDetailsViewModel(
-    private val channelInteractor: ChannelInteractor
-): BaseViewModel() {
+class ChannelDetailsViewModel(private val channelInteractor: ChannelInteractor
+) : BaseViewModel() {
 
-   fun getChannelDetails(feedUrl: String) {
-        channelInteractor.getChannelDetailsWithFeed(feedUrl)
-            .subscribeWithMapToEvent()
+    private var feedUrl: String? = null
+
+    fun setFeedUrl(url: String) {
+        feedUrl = url
+    }
+
+    fun getChannelDetails() {
+        if (feedUrl == null) return
+
+        channelInteractor.getChannelDetailsWithFeed(feedUrl!!).subscribeWithMapToEvent()
     }
 }
