@@ -44,24 +44,21 @@ class ChannelDetailsFragment : BaseFragment() {
 
     override fun initView() {
         initButtons()
-        binding.episodesListLayout.episodesListRv.layoutManager = LinearLayoutManager(
-            context, RecyclerView.VERTICAL, false
-        )
-        binding.episodesListLayout.episodesListRv.adapter = episodesAdapter
-        binding.episodesListLayout.episodesListRv.addOnScrollListener(
-            ChannelDetailsListScrollListener(binding.header)
-        )
-
+        binding.episodesListRv.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = episodesAdapter
+        }
         viewModel.getEventLiveData().subscribeToEvent()
         viewModel.getChannelDetails(args.artistFeedUrl)
     }
 
     private fun initButtons() {
-        binding.header.backButton.setOnClickListener { onBackPressed() }
+        binding.toolbarView.backButton.setOnClickListener { onBackPressed() }
     }
 
     override fun onProgress(event: ViewEvent.Progress<*>) {
-        binding.episodesListLayout.channelListProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
+        binding.channelListProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
@@ -79,8 +76,8 @@ class ChannelDetailsFragment : BaseFragment() {
 
     private fun showChannelDetails(channel: Channel) {
         Picasso.get().load(channel.artworkUrl100).into(header?.author_image)
-        binding.header.authorTitle.text = channel.collectionName
-        binding.header.authorName.text = channel.artistName
+        binding.headerView.authorTitle.text = channel.collectionName
+        binding.headerView.authorName.text = channel.artistName
     }
 
     private fun showChannelFeed(feed: Feed?) {
