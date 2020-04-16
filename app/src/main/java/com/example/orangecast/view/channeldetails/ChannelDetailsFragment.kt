@@ -1,14 +1,17 @@
 package com.example.orangecast.view.channeldetails
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
+import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentChannelDetailsBinding
 import com.example.orangecast.entity.Channel
 import com.example.orangecast.entity.Feed
@@ -44,21 +47,41 @@ class ChannelDetailsFragment : BaseFragment() {
 
     override fun initView() {
         initButtons()
-        binding.episodesListRv.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = episodesAdapter
-        }
-        viewModel.getEventLiveData().subscribeToEvent()
-        viewModel.getChannelDetails(args.artistFeedUrl)
+        initRefreshing()
+        initEpisodesList()
+
+        subscribeToViewModel()
     }
 
     private fun initButtons() {
         binding.toolbarView.backButton.setOnClickListener { onBackPressed() }
     }
 
+    private fun initRefreshing() {
+        if (context == null) return
+        binding.swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(context!!, R.color.colorGradientDarkEnd))
+        binding.swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorAccent))
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.getChannelDetails() }
+        binding.swipeRefreshLayout.isRefreshing = false
+    }
+
+    private fun initEpisodesList() {
+        binding.episodesListRv.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = episodesAdapter
+        }
+    }
+
+    private fun subscribeToViewModel() {
+        viewModel.getEventLiveData().subscribeToEvent()
+        viewModel.setFeedUrl(args.artistFeedUrl)
+        viewModel.getChannelDetails()
+    }
+
     override fun onProgress(event: ViewEvent.Progress<*>) {
         binding.channelListProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
+        if (!event.inProgress) binding.swipeRefreshLayout.isRefreshing  = false
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
