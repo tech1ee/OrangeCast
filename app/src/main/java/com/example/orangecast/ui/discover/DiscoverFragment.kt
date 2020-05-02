@@ -1,21 +1,22 @@
-package com.example.orangecast.view.discover
+package com.example.orangecast.ui.discover
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentDiscoverBinding
-import com.example.orangecast.view.BaseFragment
+import com.example.orangecast.ui.BaseFragment
 import com.example.orangecast.entity.ArtistsByGenre
 import com.example.orangecast.entity.Channel
 import com.example.orangecast.entity.ViewEvent
-import com.example.orangecast.view.snackbar
+import com.example.orangecast.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_discover.*
 import javax.inject.Inject
 
@@ -58,17 +59,28 @@ class DiscoverFragment : BaseFragment() {
         })
     }
 
+    private fun initRefreshing() {
+        if (context == null) return
+        binding.swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+            ContextCompat.getColor(context!!, R.color.colorGradientDarkEnd))
+        binding.swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorAccent))
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.discover(true) }
+        binding.swipeRefreshLayout.isRefreshing = false
+    }
+
     override fun initView() {
         binding.listRv.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         binding.listRv.adapter = adapter
 
         initSearch()
+        initRefreshing()
         viewModel.getEventLiveData().subscribeToEvent()
         viewModel.discover()
     }
 
     override fun onProgress(event: ViewEvent.Progress<*>) {
         binding.listProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
+        if (!event.inProgress) binding.swipeRefreshLayout.isRefreshing  = false
     }
 
     override fun onError(event: ViewEvent.Error<*>) {
@@ -83,7 +95,7 @@ class DiscoverFragment : BaseFragment() {
 
     private fun gotoChannelDetails(item: Channel) {
         val artistFeedUrl = item.feedUrl ?: return
-        val action = DiscoverFragmentDirections.gotoChannelDetails(artistFeedUrl)
+        val action = DiscoverFragmentDirections.channelDetails(artistFeedUrl)
         findNavController().navigate(action)
     }
 }

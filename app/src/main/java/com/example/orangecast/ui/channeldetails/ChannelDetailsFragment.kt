@@ -1,8 +1,6 @@
-package com.example.orangecast.view.channeldetails
+package com.example.orangecast.ui.channeldetails
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +14,9 @@ import com.example.orangecast.databinding.FragmentChannelDetailsBinding
 import com.example.orangecast.entity.Channel
 import com.example.orangecast.entity.Feed
 import com.example.orangecast.entity.ViewEvent
-import com.example.orangecast.view.BaseFragment
-import com.example.orangecast.view.episodes.EpisodesAdapter
-import com.example.orangecast.view.snackbar
+import com.example.orangecast.ui.BaseFragment
+import com.example.orangecast.ui.episodes.EpisodesAdapter
+import com.example.orangecast.ui.snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_channel_details.*
 import kotlinx.android.synthetic.main.view_channel_details_top.view.*

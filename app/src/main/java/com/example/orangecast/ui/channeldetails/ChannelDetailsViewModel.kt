@@ -1,9 +1,7 @@
-package com.example.orangecast.view.channeldetails
+package com.example.orangecast.ui.channeldetails
 
-import com.example.orangecast.entity.Channel
-import com.example.orangecast.entity.ViewEvent
 import com.example.orangecast.interactor.ChannelInteractor
-import com.example.orangecast.view.BaseViewModel
+import com.example.orangecast.ui.BaseViewModel
 
 class ChannelDetailsViewModel(private val channelInteractor: ChannelInteractor
 ) : BaseViewModel() {
