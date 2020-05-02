@@ -1,13 +1,10 @@
-package com.example.orangecast.view.episodes
+package com.example.orangecast.ui.episodes
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orangecast.R
 import com.example.orangecast.databinding.ItemEpisodeBinding
 import com.example.orangecast.entity.Episode
-import kotlinx.android.synthetic.main.item_episode.view.*
 
 class EpisodesAdapter(
     private val onItemClicked: (Episode) -> Unit

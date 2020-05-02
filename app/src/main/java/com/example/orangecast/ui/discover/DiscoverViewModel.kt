@@ -1,6 +1,6 @@
-package com.example.orangecast.view.discover
+package com.example.orangecast.ui.discover
 
-import com.example.orangecast.view.BaseViewModel
+import com.example.orangecast.ui.BaseViewModel
 import com.example.orangecast.interactor.GenresInteractor
 
 class DiscoverViewModel(

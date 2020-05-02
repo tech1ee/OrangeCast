@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/discoverFragment"
-        android:name="com.example.orangecast.view.discover.DiscoverFragment"
+        android:name="com.example.orangecast.ui.discover.DiscoverFragment"
         android:label="DiscoverFragment">
 
         <action
-            android:id="@+id/gotoChannelDetails"
+            android:id="@+id/channelDetails"
             app:destination="@id/channelDetails" />
     </fragment>
 
     <fragment
         android:id="@+id/channelDetails"
-        android:name="com.example.orangecast.view.channeldetails.ChannelDetailsFragment">
+        android:name="com.example.orangecast.ui.channeldetails.ChannelDetailsFragment">
 
         <argument
             android:name="artistFeedUrl"

@@ -1,4 +1,4 @@
-package com.example.orangecast.view
+package com.example.orangecast.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.orangecast.R
-import com.example.orangecast.view.discover.DiscoverFragment
+import com.example.orangecast.ui.discover.DiscoverFragment
 
 class HomeFragment : Fragment() {
 
