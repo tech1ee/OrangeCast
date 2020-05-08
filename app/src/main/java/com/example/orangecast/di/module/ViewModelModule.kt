@@ -2,8 +2,8 @@ package com.example.orangecast.di.module
 
 import com.example.orangecast.interactor.ChannelInteractor
 import com.example.orangecast.interactor.GenresInteractor
-import com.example.orangecast.view.channeldetails.ChannelDetailsViewModel
-import com.example.orangecast.view.discover.DiscoverViewModel
+import com.example.orangecast.ui.channeldetails.ChannelDetailsViewModel
+import com.example.orangecast.ui.discover.DiscoverViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
