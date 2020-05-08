@@ -1,8 +1,9 @@
 package com.example.orangecast.entity
 
-import com.google.gson.annotations.SerializedName
+import java.nio.channels.Channel
+
 
 class SearchResult(
-    @SerializedName("resultCount") val resultCount: Int?,
-    @SerializedName("results") val results: List<Channel>
+    val resultCount: Int?,
+    val results: List<Channel>
 )

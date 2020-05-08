@@ -1,7 +1,7 @@
 package com.example.orangecast.di.module
 
-import com.example.orangecast.data.repository.FeedRepository
-import com.example.orangecast.data.repository.SearchRepository
+import com.example.data.repository.FeedRepository
+import com.example.data.repository.SearchRepository
 import com.example.orangecast.interactor.ChannelInteractor
 import com.example.orangecast.interactor.GenresInteractor
 import dagger.Module

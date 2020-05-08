@@ -3,9 +3,9 @@ package com.example.orangecast.entity
 import androidx.collection.ArraySet
 import androidx.collection.arraySetOf
 
-class ArtistsByGenre(
+class Artists(
     val id: String?,
     val title: String?
 ) {
-    val list: ArraySet<Channel> = arraySetOf<Channel>()
+    val list: ArraySet<Artist> = arraySetOf()
 }

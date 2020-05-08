@@ -1,10 +1,9 @@
 package com.example.orangecast.interactor
 
-import com.example.orangecast.data.repository.FeedRepository
-import com.example.orangecast.data.repository.SearchRepository
-import com.example.orangecast.entity.Episode
-import com.example.orangecast.entity.Channel
-import com.example.orangecast.entity.Feed
+import com.example.data.repository.FeedRepository
+import com.example.data.repository.SearchRepository
+import com.example.orangecast.entity.Artist
+import com.example.orangecast.mapper.mapToAppEntity
 import io.reactivex.Single
 
 class ChannelInteractor(
@@ -12,12 +11,12 @@ class ChannelInteractor(
     private val feedRepository: FeedRepository
 ): BaseInteractor() {
 
-    fun getChannelDetailsWithFeed(feedUrl: String): Single<Channel> {
+    fun getChannelDetailsWithFeed(feedUrl: String): Single<Artist> {
         return feedRepository.getFeed(feedUrl)
             .map {
-                val channel = searchRepository.getChannelByFeedUrl(feedUrl)
-                channel?.feed = it
-                channel ?: throw Throwable("Channel is null")
+                val artistResponse = searchRepository.getChannelByFeedUrl(feedUrl)
+                val artist: Artist? = artistResponse?.mapToAppEntity(it)
+                artist ?: throw Throwable("Artist is null")
             }
     }
 }

@@ -1,7 +1,5 @@
 package com.example.orangecast.view.channeldetails
 
-import com.example.orangecast.entity.Channel
-import com.example.orangecast.entity.ViewEvent
 import com.example.orangecast.interactor.ChannelInteractor
 import com.example.orangecast.view.BaseViewModel
 

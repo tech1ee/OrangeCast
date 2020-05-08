@@ -1,12 +1,11 @@
-package com.example.orangecast.data.utils
+package com.example.data.utils
 
 import android.util.Log
-import com.example.orangecast.entity.Episode
-import com.example.orangecast.entity.Feed
+import com.example.data.network.entity.EpisodeResponse
+import com.example.data.network.entity.FeedResponse
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import org.xml.sax.SAXException
 import java.io.IOException
@@ -16,8 +15,8 @@ import javax.xml.parsers.ParserConfigurationException
 
 class XmlParser {
 
-    fun parseFeed(feed: String): Feed {
-        val list = arrayListOf<Episode>()
+    fun parseFeed(feed: String): FeedResponse {
+        val list = arrayListOf<EpisodeResponse>()
         var description: String? = null
         try {
             val doc = getDomElements(feed)
@@ -39,7 +38,7 @@ class XmlParser {
                     val episodeNumber = getValue(itemElement, TAG_EPISODE)
 
                     list.add(
-                        Episode(title, link, pubDate, itemDescription, duration, image, episodeNumber)
+                        EpisodeResponse(title, link, pubDate, itemDescription, duration, image, episodeNumber)
                     )
                 }
             }
@@ -47,7 +46,7 @@ class XmlParser {
             Log.e("parseFeed", e.localizedMessage ?: "")
             e.printStackTrace()
         }
-        return Feed(description, list)
+        return FeedResponse(description, list)
     }
 
     private fun getDomElements(xml: String): Document? {

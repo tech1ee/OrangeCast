@@ -1,6 +1,6 @@
-package com.example.orangecast.di.module
+package com.example.data.di
 
-import com.example.orangecast.data.Api
+import com.example.data.network.Api
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

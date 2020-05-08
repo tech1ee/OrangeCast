@@ -9,16 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.databinding.ItemAuthorBinding
 import com.example.orangecast.databinding.ItemHorizontalListGenreTitleBinding
-import com.example.orangecast.entity.ArtistsByGenre
-import com.example.orangecast.entity.Channel
+import com.example.orangecast.entity.Artist
+import com.example.orangecast.entity.Artists
 import com.squareup.picasso.Picasso
 
 
 class DiscoverAdapter(
-    private val onItemClicked: (Channel) -> Unit
+    private val onItemClicked: (Artist) -> Unit
 ) : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
-    private var list = listOf<ArtistsByGenre>()
+    private var list = listOf<Artists>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -29,7 +29,7 @@ class DiscoverAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    fun setList(list: List<ArtistsByGenre>) {
+    fun setList(list: List<Artists>) {
         this.list = list
         notifyDataSetChanged()
     }
@@ -56,7 +56,7 @@ class DiscoverAdapter(
         }
     }
 
-    private inner class ArtistsAdapter(private val artists: List<Channel>
+    private inner class ArtistsAdapter(private val artists: List<Artist>
     ) : RecyclerView.Adapter<ArtistsAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -79,8 +79,8 @@ class DiscoverAdapter(
 
                 Picasso.get().load(item.artworkUrl100).into(authorPhoto)
 
-                authorTitle.text = item.trackName
-                authorName.text = item.artistName
+                authorTitle.text = item.artistName
+                authorName.text = item.collectionName
 
                 itemView.setOnClickListener { onItemClicked(item) }
             }

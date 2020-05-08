@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentChannelDetailsBinding
-import com.example.orangecast.entity.Channel
+import com.example.orangecast.entity.Artist
 import com.example.orangecast.entity.Feed
 import com.example.orangecast.entity.ViewEvent
 import com.example.orangecast.view.BaseFragment
@@ -88,14 +88,14 @@ class ChannelDetailsFragment : BaseFragment() {
 
     override fun onData(event: ViewEvent.Data<*>) {
         when (event.data) {
-            is Channel -> {
+            is Artist -> {
                 showChannelDetails(event.data)
                 showChannelFeed(event.data.feed)
             }
         }
     }
 
-    private fun showChannelDetails(channel: Channel) {
+    private fun showChannelDetails(channel: Artist) {
         Picasso.get().load(channel.artworkUrl100).into(header?.author_image)
         binding.headerView.authorTitle.text = channel.collectionName
         binding.headerView.authorName.text = channel.artistName

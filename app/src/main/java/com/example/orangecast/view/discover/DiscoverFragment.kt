@@ -9,11 +9,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
-import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentDiscoverBinding
+import com.example.orangecast.entity.Artist
+import com.example.orangecast.entity.Artists
 import com.example.orangecast.view.BaseFragment
-import com.example.orangecast.entity.ArtistsByGenre
-import com.example.orangecast.entity.Channel
 import com.example.orangecast.entity.ViewEvent
 import com.example.orangecast.view.snackbar
 import kotlinx.android.synthetic.main.fragment_discover.*
@@ -77,11 +76,11 @@ class DiscoverFragment : BaseFragment() {
 
     override fun onData(event: ViewEvent.Data<*>) {
         when (event.data) {
-            is List<*> -> adapter.setList(event.data as List<ArtistsByGenre>)
+            is List<*> -> adapter.setList(event.data as List<Artists>)
         }
     }
 
-    private fun gotoChannelDetails(item: Channel) {
+    private fun gotoChannelDetails(item: Artist) {
         val artistFeedUrl = item.feedUrl ?: return
         val action = DiscoverFragmentDirections.gotoChannelDetails(artistFeedUrl)
         findNavController().navigate(action)

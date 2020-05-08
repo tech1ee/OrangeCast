@@ -1,10 +1,8 @@
-package com.example.orangecast.data.repository
+package com.example.data.repository
 
 import android.util.Log
-import com.example.orangecast.data.Repository
-import com.example.orangecast.data.utils.XmlParser
-import com.example.orangecast.entity.Episode
-import com.example.orangecast.entity.Feed
+import com.example.data.network.entity.FeedResponse
+import com.example.data.utils.XmlParser
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -15,7 +13,7 @@ class FeedRepository(private val xmlParser: XmlParser
 
 ) : Repository {
 
-    fun getFeed(feedUrl: String): Single<Feed> {
+    fun getFeed(feedUrl: String): Single<FeedResponse> {
         return getRSSFeedXml(feedUrl)
             .map { xmlParser.parseFeed(it) }
             .map { removeEmptyItems(it) }
@@ -41,7 +39,7 @@ class FeedRepository(private val xmlParser: XmlParser
         }
     }
 
-    private fun removeEmptyItems(feed: Feed): Feed {
+    private fun removeEmptyItems(feed: FeedResponse): FeedResponse {
         val list = feed.episodes as MutableList
         list.removeAt(list.lastIndex)
         feed.episodes = list

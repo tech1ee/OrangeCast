@@ -1,5 +1,8 @@
 package com.example.orangecast.di
 
+import com.example.data.di.ApiModule
+import com.example.data.di.RepositoryModule
+import com.example.data.di.UtilsModule
 import com.example.orangecast.App
 import com.example.orangecast.di.module.*
 import com.example.orangecast.view.channeldetails.ChannelDetailsFragment
