@@ -1,4 +1,4 @@
-package com.example.orangecast.view
+package com.example.orangecast.ui
 
 import android.content.Context
 import android.os.Bundle

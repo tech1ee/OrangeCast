@@ -1,4 +1,4 @@
-package com.example.orangecast.view.discover
+package com.example.orangecast.ui.discover
 
 import android.graphics.Color
 import android.graphics.LinearGradient
