@@ -3,7 +3,6 @@ package com.example.orangecast.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.orangecast.entity.ViewEvent
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
@@ -26,7 +25,8 @@ open class BaseViewModel : ViewModel() {
                         showEvent(ViewEvent.Progress<T>(false))
                     },
                     { error ->
-                        showEvent(ViewEvent.Error<T>(error.localizedMessage ?: "Error", error))
+                        showEvent(
+                            ViewEvent.Error<T>(error.localizedMessage ?: "Error", error))
                         showEvent(ViewEvent.Progress<T>(false))
                         error.printStackTrace()
                     }

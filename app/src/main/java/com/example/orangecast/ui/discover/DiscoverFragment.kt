@@ -15,7 +15,7 @@ import com.example.orangecast.databinding.FragmentDiscoverBinding
 import com.example.orangecast.ui.BaseFragment
 import com.example.orangecast.entity.Artist
 import com.example.orangecast.entity.Artists
-import com.example.orangecast.entity.ViewEvent
+import com.example.orangecast.ui.ViewEvent
 import com.example.orangecast.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_discover.*
 import javax.inject.Inject

@@ -6,7 +6,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.example.orangecast.entity.ViewEvent
 
 
 abstract class BaseFragment: Fragment() {

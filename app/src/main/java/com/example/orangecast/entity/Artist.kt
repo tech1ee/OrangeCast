@@ -1,17 +1,17 @@
 package com.example.orangecast.entity
 
 class Artist(
-    val kind: String?,
-    val artistId: String?,
-    val artistName: String?,
-    val collectionName: String?,
-    val artistViewUrl: String?,
-    val feedUrl: String?,
-    val artworkUrl30: String?,
-    val artworkUrl60: String?,
-    val artworkUrl100: String?,
-    val genreIds: List<String>?,
-    val genres: List<String>?,
-    val primaryGenreName: String?,
+    val kind: String? = null,
+    val artistId: String? = null,
+    val artistName: String? = null,
+    val collectionName: String? = null,
+    val artistViewUrl: String? = null,
+    val feedUrl: String? = null,
+    val artworkUrl30: String? = null,
+    val artworkUrl60: String? = null,
+    val artworkUrl100: String? = null,
+    val genreIds: List<String>? = null,
+    val genres: List<String>? = null,
+    val primaryGenreName: String? = null,
     var feed: Feed? = null
 )

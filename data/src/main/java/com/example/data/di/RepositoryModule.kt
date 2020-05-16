@@ -1,8 +1,10 @@
 package com.example.data.di
 
+import com.example.data.database.dao.ArtistDao
 import com.example.data.network.Api
 import com.example.data.repository.FeedRepository
 import com.example.data.repository.SearchRepository
+import com.example.data.repository.SubscriptionsRepository
 import com.example.data.utils.XmlParser
 import dagger.Module
 import dagger.Provides
@@ -21,5 +23,11 @@ class RepositoryModule {
     @Provides
     fun provideFeedRepository(xmlParser: XmlParser): FeedRepository {
         return FeedRepository(xmlParser)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSubscriptionRepository(artistDao: ArtistDao): SubscriptionsRepository {
+        return SubscriptionsRepository(artistDao)
     }
 }

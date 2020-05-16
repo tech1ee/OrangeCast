@@ -13,7 +13,7 @@ import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentChannelDetailsBinding
 import com.example.orangecast.entity.Artist
 import com.example.orangecast.entity.Feed
-import com.example.orangecast.entity.ViewEvent
+import com.example.orangecast.ui.ViewEvent
 import com.example.orangecast.ui.BaseFragment
 import com.example.orangecast.ui.episodes.EpisodesAdapter
 import com.example.orangecast.ui.snackbar

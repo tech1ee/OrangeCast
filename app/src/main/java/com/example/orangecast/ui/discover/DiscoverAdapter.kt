@@ -42,7 +42,7 @@ class DiscoverAdapter(
         fun bind(position: Int) {
             val item = list[position]
 
-            genreTitle.text = item.title
+            genreTitle.text = item.genre
             genresList.layoutManager = LinearLayoutManager(
                 itemView.context, LinearLayoutManager.HORIZONTAL, false
             )

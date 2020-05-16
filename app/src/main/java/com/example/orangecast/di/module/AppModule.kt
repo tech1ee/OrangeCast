@@ -1,5 +1,6 @@
 package com.example.orangecast.di.module
 
+import android.content.Context
 import com.example.orangecast.App
 import dagger.Module
 import dagger.Provides
@@ -12,5 +13,11 @@ class AppModule(val app: App) {
     @Provides
     fun provideApplication(): App {
         return app
+    }
+
+    @Singleton
+    @Provides
+    fun provideApplicationContext(app: App): Context {
+        return app.applicationContext
     }
 }

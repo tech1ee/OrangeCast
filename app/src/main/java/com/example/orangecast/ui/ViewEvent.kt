@@ -1,4 +1,4 @@
-package com.example.orangecast.entity
+package com.example.orangecast.ui
 
 sealed class ViewEvent {
     data class Progress<T>(val inProgress: Boolean): ViewEvent()

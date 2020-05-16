@@ -25,6 +25,5 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = binding.bottomNavigationView
         val navHostFragment = nav_host_fragment ?: return
         NavigationUI.setupWithNavController(bottomNavigationView, navHostFragment.findNavController())
-
     }
 }
