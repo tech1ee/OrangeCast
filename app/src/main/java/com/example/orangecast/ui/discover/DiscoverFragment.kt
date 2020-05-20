@@ -1,6 +1,7 @@
 package com.example.orangecast.ui.discover
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,8 @@ import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentDiscoverBinding
 import com.example.orangecast.ui.BaseFragment
 import com.example.orangecast.entity.Artist
-import com.example.orangecast.entity.Artists
+import com.example.orangecast.entity.ArtistsGenre
+import com.example.orangecast.entity.Genres
 import com.example.orangecast.ui.ViewEvent
 import com.example.orangecast.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_discover.*
@@ -74,22 +76,31 @@ class DiscoverFragment : BaseFragment() {
 
         initSearch()
         initRefreshing()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.e("DiscoverFragment", "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getEventLiveData().subscribeToEvent()
         viewModel.discover()
     }
 
-    override fun onProgress(event: ViewEvent.Progress<*>) {
+    override fun onProgress(event: ViewEvent.Progress) {
         binding.listProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
         if (!event.inProgress) binding.swipeRefreshLayout.isRefreshing  = false
     }
 
-    override fun onError(event: ViewEvent.Error<*>) {
+    override fun onError(event: ViewEvent.Error) {
         snackbar(binding.rootLayout, event.message)
     }
 
     override fun onData(event: ViewEvent.Data<*>) {
         when (event.data) {
-            is List<*> -> adapter.setList(event.data as List<Artists>)
+            is Genres -> adapter.setList(event.data.list)
         }
     }
 

@@ -31,6 +31,10 @@
         <action
             android:id="@+id/channelDetails"
             app:destination="@id/channelDetails" />
+
+        <action
+            android:id="@+id/discover"
+            app:destination="@id/discover"/>
     </fragment>
 
 

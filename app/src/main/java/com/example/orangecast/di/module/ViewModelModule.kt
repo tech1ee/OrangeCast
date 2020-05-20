@@ -21,8 +21,10 @@ class ViewModelModule {
 
     @Singleton
     @Provides
-    fun provideChannelDetailsViewModel(channelInteractor: ChannelInteractor): ChannelDetailsViewModel {
-        return ChannelDetailsViewModel(channelInteractor)
+    fun provideChannelDetailsViewModel(channelInteractor: ChannelInteractor,
+        subscriptionInteractor: SubscriptionInteractor
+    ): ChannelDetailsViewModel {
+        return ChannelDetailsViewModel(channelInteractor, subscriptionInteractor)
     }
 
     @Singleton

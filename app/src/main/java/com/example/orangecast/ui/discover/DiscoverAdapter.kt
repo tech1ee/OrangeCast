@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.databinding.ItemAuthorBinding
 import com.example.orangecast.databinding.ItemHorizontalListGenreTitleBinding
 import com.example.orangecast.entity.Artist
-import com.example.orangecast.entity.Artists
+import com.example.orangecast.entity.ArtistsGenre
 import com.squareup.picasso.Picasso
 
 
@@ -18,7 +18,7 @@ class DiscoverAdapter(
     private val onItemClicked: (Artist) -> Unit
 ) : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
-    private var list = listOf<Artists>()
+    private var list = listOf<ArtistsGenre>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -29,7 +29,7 @@ class DiscoverAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    fun setList(list: List<Artists>) {
+    fun setList(list: List<ArtistsGenre>) {
         this.list = list
         notifyDataSetChanged()
     }

@@ -3,7 +3,7 @@ package com.example.orangecast.entity
 import androidx.collection.ArraySet
 import androidx.collection.arraySetOf
 
-class Artists(
+class ArtistsGenre(
     val genreId: String?,
     val genre: String?
 ) {

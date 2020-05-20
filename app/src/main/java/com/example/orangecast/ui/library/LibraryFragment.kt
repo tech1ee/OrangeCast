@@ -1,6 +1,7 @@
 package com.example.orangecast.ui.library
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.orangecast.App
 import com.example.orangecast.databinding.FragmentLibraryBinding
 import com.example.orangecast.entity.Artist
+import com.example.orangecast.entity.Subscriptions
 import com.example.orangecast.ui.ViewEvent
 import com.example.orangecast.ui.BaseFragment
+import com.example.orangecast.ui.snackbar
 import javax.inject.Inject
 
 class LibraryFragment : BaseFragment() {
@@ -33,30 +36,43 @@ class LibraryFragment : BaseFragment() {
 
     override fun initView() {
         binding.artistsRv.layoutManager = GridLayoutManager(context, 3)
+        binding.artistsRv.adapter = adapter
+        viewModel.getEventLiveData().subscribeToEvent()
         viewModel.getAllSubscriptions()
     }
 
     override fun onData(event: ViewEvent.Data<*>) {
         when (event.data) {
-            is List<*> -> showArtistsList(event.data as List<Artist>)
+            is Subscriptions -> showArtistsList(event.data.list)
         }
     }
 
-    override fun onProgress(event: ViewEvent.Progress<*>) {
+    override fun onProgress(event: ViewEvent.Progress) {
 
     }
 
-    override fun onError(event: ViewEvent.Error<*>) {
-
+    override fun onError(event: ViewEvent.Error) {
+        snackbar(binding.root, event.message)
     }
 
     private fun showArtistsList(list: List<Artist>) {
+        if (list.isNullOrEmpty()) showAddSubscriptionsButton()
+        else adapter.setList(list)
+    }
 
+    private fun showAddSubscriptionsButton() {
+        binding.addSubscriptionsLayout.setOnClickListener { gotoDiscover() }
+        binding.addSubscriptionsLayout.visibility = View.VISIBLE
     }
 
     private fun gotoChannelDetails(item: Artist) {
         val artistFeedUrl = item.feedUrl ?: return
         val action = LibraryFragmentDirections.channelDetails(artistFeedUrl)
+        findNavController().navigate(action)
+    }
+
+    private fun gotoDiscover() {
+        val action = LibraryFragmentDirections.discover()
         findNavController().navigate(action)
     }
 }

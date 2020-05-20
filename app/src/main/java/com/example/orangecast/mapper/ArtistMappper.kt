@@ -36,6 +36,20 @@ fun FeedResponse.mapResponseToAppEntity(): Feed {
     )
 }
 
+fun Artist.mapAppEntityToDatabase(): ArtistEntity {
+    return ArtistEntity(
+        artistId = artistId ?: "",
+        artistName = artistName ?: "",
+        kind = kind,
+        collectionName = collectionName,
+        artistViewUrl = artistViewUrl,
+        feedUrl = feedUrl,
+        artworkUrl30 = artworkUrl30,
+        artworkUrl60 = artworkUrl60,
+        artworkUrl100 = artworkUrl100
+    )
+}
+
 fun List<ArtistEntity>.mapDatabaseToAppEntity(): List<Artist> {
     return this.map {
         Artist(

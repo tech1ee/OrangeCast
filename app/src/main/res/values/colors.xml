@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#FFB323</color>
     <color name="colorGradientDarkEnd">#141415</color>
+    <color name="colorNavigationSelected">#FF3D00</color>
 </resources>

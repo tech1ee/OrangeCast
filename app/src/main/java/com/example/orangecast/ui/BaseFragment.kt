@@ -2,6 +2,7 @@ package com.example.orangecast.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -27,16 +28,16 @@ abstract class BaseFragment: Fragment() {
     protected fun LiveData<ViewEvent>.subscribeToEvent() {
         this.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is ViewEvent.Progress<*> -> onProgress(it)
-                is ViewEvent.Error<*> -> onError(it)
+                is ViewEvent.Progress -> onProgress(it)
+                is ViewEvent.Error -> onError(it)
                 is ViewEvent.Data<*> -> onData(it)
             }
         })
     }
 
-    abstract fun onProgress(event: ViewEvent.Progress<*>)
+    abstract fun onProgress(event: ViewEvent.Progress)
 
-    abstract fun onError(event: ViewEvent.Error<*>)
+    abstract fun onError(event: ViewEvent.Error)
 
     abstract fun onData(event: ViewEvent.Data<*>)
 

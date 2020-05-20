@@ -19,6 +19,7 @@ import com.example.orangecast.ui.episodes.EpisodesAdapter
 import com.example.orangecast.ui.snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_channel_details.*
+import kotlinx.android.synthetic.main.fragment_channel_details.view.*
 import kotlinx.android.synthetic.main.view_channel_details_top.view.*
 import javax.inject.Inject
 
@@ -57,8 +58,12 @@ class ChannelDetailsFragment : BaseFragment() {
 
     private fun initRefreshing() {
         if (context == null) return
-        binding.swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(context!!, R.color.colorGradientDarkEnd))
-        binding.swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(context!!, R.color.colorAccent))
+        binding.swipeRefreshLayout.setProgressBackgroundColorSchemeColor(
+            ContextCompat.getColor(context!!, R.color.colorGradientDarkEnd)
+        )
+        binding.swipeRefreshLayout.setColorSchemeColors(
+            ContextCompat.getColor(context!!, R.color.colorAccent)
+        )
         binding.swipeRefreshLayout.setOnRefreshListener { viewModel.getChannelDetails() }
         binding.swipeRefreshLayout.isRefreshing = false
     }
@@ -77,12 +82,12 @@ class ChannelDetailsFragment : BaseFragment() {
         viewModel.getChannelDetails()
     }
 
-    override fun onProgress(event: ViewEvent.Progress<*>) {
+    override fun onProgress(event: ViewEvent.Progress) {
         binding.channelListProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
-        if (!event.inProgress) binding.swipeRefreshLayout.isRefreshing  = false
+        if (!event.inProgress) binding.swipeRefreshLayout.isRefreshing = false
     }
 
-    override fun onError(event: ViewEvent.Error<*>) {
+    override fun onError(event: ViewEvent.Error) {
         snackbar(binding.rootContainer, event.message)
     }
 
@@ -92,6 +97,7 @@ class ChannelDetailsFragment : BaseFragment() {
                 showChannelDetails(event.data)
                 showChannelFeed(event.data.feed)
             }
+            is ArtistViewEvent.Subscribed -> initSubscribeButton(event.data.isSubscribed)
         }
     }
 
@@ -99,6 +105,18 @@ class ChannelDetailsFragment : BaseFragment() {
         Picasso.get().load(channel.artworkUrl100).into(header?.author_image)
         binding.headerView.authorTitle.text = channel.collectionName
         binding.headerView.authorName.text = channel.artistName
+    }
+
+    private fun initSubscribeButton(isSubscribed: Boolean) {
+        val context = context ?: return
+        binding.headerView.subscribeButton.text = if (isSubscribed) getString(R.string.subscribed)
+        else getString(R.string.subscribe)
+        binding.headerView.subscribeButton.background = ContextCompat.getDrawable(
+            context, if (isSubscribed) R.drawable.button_subscribed else R.drawable.button_subscribe
+        )
+        binding.headerView.subscribeButton.setOnClickListener {
+            if (isSubscribed) viewModel.unsubscribe() else viewModel.subscribe()
+        }
     }
 
     private fun showChannelFeed(feed: Feed?) {
