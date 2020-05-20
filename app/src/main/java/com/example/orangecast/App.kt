@@ -2,8 +2,8 @@ package com.example.orangecast
 
 import android.app.Application
 import android.content.Context
-import com.example.data.di.ApiModule
 import com.example.orangecast.di.*
+import com.example.orangecast.di.module.AppModule
 import com.facebook.stetho.Stetho
 
 class App : Application() {
@@ -19,7 +19,8 @@ class App : Application() {
     private fun initDagger() {
         appComponent = DaggerAppComponent
             .builder()
-            .apiModule(ApiModule())
+            .appModule(AppModule(this))
+//            .apiModule(ApiModule())
             .build()
 
         appComponent?.inject(this)

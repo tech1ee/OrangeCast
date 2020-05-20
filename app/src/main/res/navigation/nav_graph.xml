@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/discoverFragment">
+    app:startDestination="@id/discover">
 
     <fragment
-        android:id="@+id/discoverFragment"
+        android:id="@+id/discover"
         android:name="com.example.orangecast.ui.discover.DiscoverFragment"
         android:label="DiscoverFragment">
 
@@ -22,6 +22,19 @@
         <argument
             android:name="artistFeedUrl"
             app:argType="string"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/library"
+        android:name="com.example.orangecast.ui.library.LibraryFragment">
+
+        <action
+            android:id="@+id/channelDetails"
+            app:destination="@id/channelDetails" />
+
+        <action
+            android:id="@+id/discover"
+            app:destination="@id/discover"/>
     </fragment>
 
 
