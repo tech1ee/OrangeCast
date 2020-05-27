@@ -1,4 +1,4 @@
-package com.example.orangecast.ui.channeldetails
+package com.example.orangecast.ui.artist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.R
-import com.example.orangecast.databinding.FragmentChannelDetailsBinding
+import com.example.orangecast.databinding.FragmentArtistBinding
 import com.example.orangecast.entity.Artist
 import com.example.orangecast.entity.Feed
 import com.example.orangecast.ui.ViewEvent
@@ -18,17 +18,16 @@ import com.example.orangecast.ui.BaseFragment
 import com.example.orangecast.ui.episodes.EpisodesAdapter
 import com.example.orangecast.ui.snackbar
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_channel_details.*
-import kotlinx.android.synthetic.main.fragment_channel_details.view.*
+import kotlinx.android.synthetic.main.fragment_artist.*
 import kotlinx.android.synthetic.main.view_channel_details_top.view.*
 import javax.inject.Inject
 
-class ChannelDetailsFragment : BaseFragment() {
+class ArtistFragment : BaseFragment() {
 
     @Inject
-    lateinit var viewModel: ChannelDetailsViewModel
-    private lateinit var binding: FragmentChannelDetailsBinding
-    private val args: ChannelDetailsFragmentArgs by navArgs()
+    lateinit var viewModel: ArtistViewModel
+    private lateinit var binding: FragmentArtistBinding
+    private val args: ArtistFragmentArgs by navArgs()
     private val episodesAdapter = EpisodesAdapter { episode ->
 
     }
@@ -40,7 +39,7 @@ class ChannelDetailsFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentChannelDetailsBinding.inflate(inflater)
+        binding = FragmentArtistBinding.inflate(inflater)
         return binding.root
     }
 
@@ -64,7 +63,7 @@ class ChannelDetailsFragment : BaseFragment() {
         binding.swipeRefreshLayout.setColorSchemeColors(
             ContextCompat.getColor(context!!, R.color.colorAccent)
         )
-        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.getChannelDetails() }
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.getArtistDetails() }
         binding.swipeRefreshLayout.isRefreshing = false
     }
 
@@ -79,7 +78,7 @@ class ChannelDetailsFragment : BaseFragment() {
     private fun subscribeToViewModel() {
         viewModel.getEventLiveData().subscribeToEvent()
         viewModel.setFeedUrl(args.artistFeedUrl)
-        viewModel.getChannelDetails()
+        viewModel.getArtistDetails()
     }
 
     override fun onProgress(event: ViewEvent.Progress) {
@@ -93,10 +92,8 @@ class ChannelDetailsFragment : BaseFragment() {
 
     override fun onData(event: ViewEvent.Data<*>) {
         when (event.data) {
-            is Artist -> {
-                showChannelDetails(event.data)
-                showChannelFeed(event.data.feed)
-            }
+            is Artist -> showChannelDetails(event.data)
+            is Feed -> showChannelFeed(event.data)
             is ArtistViewEvent.Subscribed -> initSubscribeButton(event.data.isSubscribed)
         }
     }

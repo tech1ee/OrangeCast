@@ -5,4 +5,6 @@
     <color name="colorAccent">#FFB323</color>
     <color name="colorGradientDarkEnd">#141415</color>
     <color name="colorNavigationSelected">#FF3D00</color>
+    <color name="colorShadowLight">#12FFFFFF</color>
+    <color name="colorShadowDark">#80000000</color>
 </resources>

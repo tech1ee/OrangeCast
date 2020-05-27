@@ -11,11 +11,11 @@ import com.example.orangecast.databinding.ItemAuthorBinding
 import com.example.orangecast.databinding.ItemHorizontalListGenreTitleBinding
 import com.example.orangecast.entity.Artist
 import com.example.orangecast.entity.ArtistsGenre
+import com.example.orangecast.ui.utils.CircleTransform
 import com.squareup.picasso.Picasso
 
 
-class DiscoverAdapter(
-    private val onItemClicked: (Artist) -> Unit
+class DiscoverAdapter(private val onItemClicked: (Artist) -> Unit
 ) : RecyclerView.Adapter<DiscoverAdapter.ViewHolder>() {
 
     private var list = listOf<ArtistsGenre>()
@@ -34,7 +34,8 @@ class DiscoverAdapter(
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(binding: ItemHorizontalListGenreTitleBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(binding: ItemHorizontalListGenreTitleBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         private val genreTitle = binding.genreTitle
         private val genresList = binding.genreList
@@ -77,7 +78,10 @@ class DiscoverAdapter(
             fun bind(position: Int) {
                 val item = artists[position]
 
-                Picasso.get().load(item.artworkUrl100).into(authorPhoto)
+                Picasso.get()
+                    .load(item.artworkUrl100)
+                    .transform(CircleTransform)
+                    .into(authorPhoto)
 
                 authorTitle.text = item.artistName
                 authorName.text = item.collectionName

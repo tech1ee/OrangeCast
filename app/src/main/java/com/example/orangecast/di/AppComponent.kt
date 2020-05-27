@@ -6,7 +6,7 @@ import com.example.data.di.RepositoryModule
 import com.example.data.di.UtilsModule
 import com.example.orangecast.App
 import com.example.orangecast.di.module.*
-import com.example.orangecast.ui.channeldetails.ChannelDetailsFragment
+import com.example.orangecast.ui.artist.ArtistFragment
 import com.example.orangecast.ui.discover.DiscoverFragment
 import com.example.orangecast.ui.library.LibraryFragment
 import dagger.Component
@@ -21,7 +21,7 @@ interface AppComponent {
 
     fun inject(fragment: DiscoverFragment)
 
-    fun inject(fragment: ChannelDetailsFragment)
+    fun inject(fragment: ArtistFragment)
 
     fun inject(fragment: LibraryFragment)
 
