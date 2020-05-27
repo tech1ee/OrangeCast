@@ -22,7 +22,7 @@ class SearchRepository(
         } else Single.just(discoverData)
     }
 
-    fun getChannelByFeedUrl(feedUrl: String): ArtistResponse? {
+    fun getArtistByFeedUrl(feedUrl: String): ArtistResponse? {
         return discoverData?.results?.find { it.feedUrl == feedUrl }
     }
 }

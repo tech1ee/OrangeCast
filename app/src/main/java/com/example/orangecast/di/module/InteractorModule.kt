@@ -1,10 +1,9 @@
 package com.example.orangecast.di.module
 
-import com.example.data.database.dao.ArtistDao
 import com.example.data.repository.FeedRepository
 import com.example.data.repository.SearchRepository
 import com.example.data.repository.SubscriptionsRepository
-import com.example.orangecast.interactor.ChannelInteractor
+import com.example.orangecast.interactor.ArtistInteractor
 import com.example.orangecast.interactor.GenresInteractor
 import com.example.orangecast.interactor.SubscriptionInteractor
 import dagger.Module
@@ -22,8 +21,8 @@ class InteractorModule {
 
     @Singleton
     @Provides
-    fun provideChannelInteractor(searchRepository: SearchRepository, feedRepository: FeedRepository): ChannelInteractor {
-        return ChannelInteractor(searchRepository, feedRepository)
+    fun provideChannelInteractor(searchRepository: SearchRepository, feedRepository: FeedRepository): ArtistInteractor {
+        return ArtistInteractor(searchRepository, feedRepository)
     }
 
     @Singleton

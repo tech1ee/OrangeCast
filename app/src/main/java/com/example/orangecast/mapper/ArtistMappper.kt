@@ -25,8 +25,7 @@ fun ArtistResponse.mapResponseToAppEntity(feedResponse: FeedResponse? = null): A
         artworkUrl100 = artworkUrl100,
         genreIds = genreIds,
         genres = genres,
-        primaryGenreName = primaryGenreName,
-        feed = feedResponse?.mapResponseToAppEntity()
+        primaryGenreName = primaryGenreName
     )
 }
 

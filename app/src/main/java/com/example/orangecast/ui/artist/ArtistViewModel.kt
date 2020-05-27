@@ -1,13 +1,13 @@
-package com.example.orangecast.ui.channeldetails
+package com.example.orangecast.ui.artist
 
 import com.example.orangecast.entity.Artist
-import com.example.orangecast.interactor.ChannelInteractor
+import com.example.orangecast.interactor.ArtistInteractor
 import com.example.orangecast.interactor.SubscriptionInteractor
 import com.example.orangecast.ui.BaseViewModel
 import com.example.orangecast.ui.ViewEvent
 
-class ChannelDetailsViewModel(
-    private val channelInteractor: ChannelInteractor,
+class ArtistViewModel(
+    private val channelInteractor: ArtistInteractor,
     private val subscriptionInteractor: SubscriptionInteractor
 ) : BaseViewModel() {
 
@@ -18,14 +18,15 @@ class ChannelDetailsViewModel(
         feedUrl = url
     }
 
-    fun getChannelDetails() {
+    fun getArtistDetails() {
         if (feedUrl == null) return
-        channelInteractor.getChannelDetailsWithFeed(feedUrl!!)
+        channelInteractor.getArtistDetails(feedUrl!!)
             .doAfterSuccess {
                 artist = it
                 checkIsSubscribed()
             }
             .subscribeWithMapToEvent()
+        channelInteractor.getArtistDetails(feedUrl!!).subscribeWithMapToEvent()
     }
 
     fun subscribe() {

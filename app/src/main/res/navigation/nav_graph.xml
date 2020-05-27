@@ -11,13 +11,13 @@
         android:label="DiscoverFragment">
 
         <action
-            android:id="@+id/channelDetails"
-            app:destination="@id/channelDetails" />
+            android:id="@+id/artist"
+            app:destination="@id/artist" />
     </fragment>
 
     <fragment
-        android:id="@+id/channelDetails"
-        android:name="com.example.orangecast.ui.channeldetails.ChannelDetailsFragment">
+        android:id="@+id/artist"
+        android:name="com.example.orangecast.ui.artist.ArtistFragment">
 
         <argument
             android:name="artistFeedUrl"
@@ -29,8 +29,8 @@
         android:name="com.example.orangecast.ui.library.LibraryFragment">
 
         <action
-            android:id="@+id/channelDetails"
-            app:destination="@id/channelDetails" />
+            android:id="@+id/artist"
+            app:destination="@id/artist" />
 
         <action
             android:id="@+id/discover"
