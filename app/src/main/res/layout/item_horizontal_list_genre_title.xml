@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <TextView
+    <com.example.orangecast.ui.view.GradientTextView
         android:id="@+id/genre_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:id="@+id/genre_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/item_author"/>
+        tools:listitem="@layout/item_artist"/>
 
     <ImageView
         android:layout_width="match_parent"

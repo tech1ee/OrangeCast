@@ -10,13 +10,13 @@
         android:id="@+id/image_card"
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:layout_margin="10dp"
+        android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:neumorph_shadowColorDark="@color/colorShadowDark"
         app:neumorph_shadowColorLight="@color/colorShadowLight"
-        app:neumorph_shadowElevation="6dp"
+        app:neumorph_shadowElevation="5dp"
         app:neumorph_shapeAppearance="@style/DiscoverAuthorImage">
 
         <ImageView
