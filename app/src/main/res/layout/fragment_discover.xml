@@ -9,12 +9,17 @@
     android:orientation="vertical"
     tools:context=".ui.discover.DiscoverFragment">
 
-    <androidx.cardview.widget.CardView
+    <soup.neumorphism.NeumorphCardView
         android:id="@+id/search_card"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="25dp"
+        android:layout_height="70dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/search_background"
+        app:neumorph_shapeType="pressed"
+        app:neumorph_shadowColorDark="@color/colorShadowDark"
+        app:neumorph_shadowColorLight="@color/colorShadowLight"
+        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shapeAppearance="@style/SearchView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,9 +28,8 @@
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/search_background"
             app:searchIcon="@drawable/ic_search_gray" />
-    </androidx.cardview.widget.CardView>
+    </soup.neumorphism.NeumorphCardView>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"

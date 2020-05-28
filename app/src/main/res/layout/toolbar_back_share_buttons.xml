@@ -4,25 +4,47 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <soup.neumorphism.NeumorphCardView
         android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/button_circle_dark"
-        android:src="@drawable/ic_back"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:neumorph_shadowColorDark="@color/colorShadowDark"
+        app:neumorph_shadowColorLight="@color/colorShadowLight"
+        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage">
 
-    <androidx.appcompat.widget.AppCompatImageButton
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="13dp"
+            android:background="@drawable/button_circle_dark"
+            android:src="@drawable/ic_back"
+            android:layout_gravity="center"/>
+    </soup.neumorphism.NeumorphCardView>
+
+    <soup.neumorphism.NeumorphCardView
         android:id="@+id/share_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/button_circle_dark"
-        android:src="@drawable/ic_share"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:neumorph_shadowColorDark="@color/colorShadowDark"
+        app:neumorph_shadowColorLight="@color/colorShadowLight"
+        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="13dp"
+            android:background="@drawable/button_circle_dark"
+            android:src="@drawable/ic_share"
+            android:layout_gravity="center"/>
+    </soup.neumorphism.NeumorphCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

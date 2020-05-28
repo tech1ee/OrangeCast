@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orangecast.databinding.ItemAuthorBinding
+import com.example.orangecast.databinding.ItemArtistBinding
 import com.example.orangecast.databinding.ItemHorizontalListGenreTitleBinding
 import com.example.orangecast.entity.Artist
 import com.example.orangecast.entity.ArtistsGenre
@@ -48,12 +48,6 @@ class DiscoverAdapter(private val onItemClicked: (Artist) -> Unit
                 itemView.context, LinearLayoutManager.HORIZONTAL, false
             )
             genresList.adapter = ArtistsAdapter(item.list.toList())
-
-            val shader: Shader = LinearGradient(
-                0f, 0f, genreTitle.width.toFloat() ?: 0f, 0f, Color.parseColor("#FFC328"),
-                Color.parseColor("#FF3D00"), Shader.TileMode.CLAMP
-            )
-            genreTitle.paint?.shader = shader
         }
     }
 
@@ -62,14 +56,14 @@ class DiscoverAdapter(private val onItemClicked: (Artist) -> Unit
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
-            return ViewHolder(ItemAuthorBinding.inflate(inflater, parent, false))
+            return ViewHolder(ItemArtistBinding.inflate(inflater, parent, false))
         }
 
         override fun getItemCount() = artists.size
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-        inner class ViewHolder(binding: ItemAuthorBinding) : RecyclerView.ViewHolder(binding.root) {
+        inner class ViewHolder(binding: ItemArtistBinding) : RecyclerView.ViewHolder(binding.root) {
 
             private val authorPhoto = binding.authorImage
             private val authorTitle = binding.authorTitle
