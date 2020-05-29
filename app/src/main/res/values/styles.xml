@@ -32,7 +32,6 @@
     <style name="SearchView">
         <item name="neumorph_cornerFamily">rounded</item>
         <item name="neumorph_cornerSize">25dp</item>
-        <item name="neumorph_shadowElevation">7dp</item>
     </style>
 
 </resources>

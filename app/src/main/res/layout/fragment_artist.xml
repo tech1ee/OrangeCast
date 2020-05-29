@@ -29,7 +29,7 @@
 
                 <include
                     android:id="@+id/header_view"
-                    layout="@layout/view_channel_details_top" />
+                    layout="@layout/view_artist_details_top" />
             </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar

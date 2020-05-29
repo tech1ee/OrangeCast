@@ -17,9 +17,10 @@ import com.example.orangecast.ui.ViewEvent
 import com.example.orangecast.ui.BaseFragment
 import com.example.orangecast.ui.episodes.EpisodesAdapter
 import com.example.orangecast.ui.snackbar
+import com.example.orangecast.ui.utils.CircleTransform
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_artist.*
-import kotlinx.android.synthetic.main.view_channel_details_top.view.*
+import kotlinx.android.synthetic.main.view_artist_details_top.view.*
 import javax.inject.Inject
 
 class ArtistFragment : BaseFragment() {
@@ -99,15 +100,16 @@ class ArtistFragment : BaseFragment() {
     }
 
     private fun showChannelDetails(channel: Artist) {
-        Picasso.get().load(channel.artworkUrl100).into(header?.author_image)
+        Picasso.get().load(channel.artworkUrl100).transform(CircleTransform)
+            .placeholder(R.drawable.circle_background).into(header?.author_image)
         binding.headerView.authorTitle.text = channel.collectionName
         binding.headerView.authorName.text = channel.artistName
     }
 
     private fun initSubscribeButton(isSubscribed: Boolean) {
         val context = context ?: return
-        binding.headerView.subscribeButton.text = if (isSubscribed) getString(R.string.subscribed)
-        else getString(R.string.subscribe)
+//        binding.headerView.subscribeButton = if (isSubscribed) getString(R.string.subscribed)
+//        else getString(R.string.subscribe)
         binding.headerView.subscribeButton.background = ContextCompat.getDrawable(
             context, if (isSubscribed) R.drawable.button_subscribed else R.drawable.button_subscribe
         )
