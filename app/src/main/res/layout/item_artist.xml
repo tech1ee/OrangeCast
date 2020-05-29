@@ -6,24 +6,19 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <soup.neumorphism.NeumorphCardView
-        android:id="@+id/image_card"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+    <soup.neumorphism.NeumorphImageView
+        android:id="@+id/author_image"
+        android:layout_width="142dp"
+        android:layout_height="142dp"
         android:layout_margin="8dp"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:neumorph_shadowColorDark="@color/colorShadowDark"
         app:neumorph_shadowColorLight="@color/colorShadowLight"
         app:neumorph_shadowElevation="5dp"
-        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage">
-
-        <ImageView
-            android:id="@+id/author_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </soup.neumorphism.NeumorphCardView>
+        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage" />
 
     <TextView
         android:id="@+id/author_title"
@@ -39,7 +34,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_card"
+        app:layout_constraintTop_toBottomOf="@id/author_image"
         tools:text="Poetry Unbound" />
 
     <TextView

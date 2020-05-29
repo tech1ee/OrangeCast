@@ -11,26 +11,26 @@
         android:layout_height="0dp"
         android:layout_marginStart="65dp"
         android:layout_marginTop="40dp"
+        android:layout_marginBottom="12dp"
         android:src="@drawable/ic_gradient_description"
-        app:layout_constraintBottom_toBottomOf="@id/author_card"
+        app:layout_constraintBottom_toBottomOf="@id/author_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/author_card"
-        app:layout_constraintTop_toTopOf="@id/author_card" />
+        app:layout_constraintStart_toStartOf="@id/author_image"
+        app:layout_constraintTop_toTopOf="@id/author_image" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/author_card"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_margin="20dp"
-        app:cardCornerRadius="65dp"
+    <soup.neumorphism.NeumorphImageView
+        android:id="@+id/author_image"
+        android:layout_width="142dp"
+        android:layout_height="142dp"
+        android:layout_margin="8dp"
+        android:padding="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/author_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp" />
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="parent"
+        app:neumorph_backgroundColor="@color/colorGradientDarkEnd"
+        app:neumorph_shadowColorDark="@color/colorShadowDark"
+        app:neumorph_shadowColorLight="@color/colorShadowLight"
+        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/author_description_scroll"
@@ -38,11 +38,12 @@
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="12dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="@id/author_card"
+        app:layout_constraintBottom_toBottomOf="@id/author_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/author_card"
-        app:layout_constraintTop_toTopOf="@id/author_card">
+        app:layout_constraintStart_toEndOf="@id/author_image"
+        app:layout_constraintTop_toTopOf="@id/author_image">
 
         <TextView
             android:id="@+id/author_description"
@@ -63,8 +64,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/subscribe_button"
-        app:layout_constraintStart_toStartOf="@id/author_card"
-        app:layout_constraintTop_toBottomOf="@id/author_card"
+        app:layout_constraintStart_toStartOf="@id/author_image"
+        app:layout_constraintTop_toBottomOf="@id/author_image"
         tools:text="The Joe Rogan Experience" />
 
     <TextView
@@ -77,17 +78,36 @@
         app:layout_constraintTop_toBottomOf="@id/author_title"
         tools:text="The Joe Rogan Experience" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <soup.neumorphism.NeumorphCardView
         android:id="@+id/subscribe_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/button_subscribe"
+        android:layout_width="130dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="8dp"
+        android:padding="12dp"
         android:gravity="center"
         android:text="@string/subscribe"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/author_card" />
+        app:layout_constraintTop_toBottomOf="@id/author_image"
+        app:neumorph_shadowColorDark="@color/colorShadowDark"
+        app:neumorph_shadowColorLight="@color/colorShadowLight"
+        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shapeAppearance="@style/SearchView">
+
+        <ImageView
+            android:id="@+id/subscribe_button_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/button_subscribe"/>
+
+        <TextView
+            android:id="@+id/subscribe_button_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/subscribe"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:textAllCaps="true"/>
+    </soup.neumorphism.NeumorphCardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/episode_list_filter_layout"
