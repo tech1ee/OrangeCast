@@ -24,9 +24,16 @@
         <item name="android:indeterminateTint">@color/colorAccent</item>
     </style>
 
-    <style name="DiscoverAuthorImage">
+    <style name="DiscoverAuthorImage" parent="Widget.Neumorph.ImageButton">
+        <item name="android:scaleType">fitXY</item>
         <item name="neumorph_cornerFamily">oval</item>
         <item name="neumorph_cornerSize">65dp</item>
+    </style>
+
+    <style name="CircularImageButton" parent="Widget.Neumorph.ImageButton">
+        <item name="android:scaleType">fitXY</item>
+        <item name="neumorph_cornerFamily">oval</item>
+        <item name="neumorph_cornerSize">25dp</item>
     </style>
 
     <style name="SearchView">

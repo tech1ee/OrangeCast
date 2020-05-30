@@ -46,7 +46,7 @@
         android:lines="2"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/play_button"
+        app:layout_constraintEnd_toStartOf="@id/play_button_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/publishing_date"
         tools:text="The Joe Rogan Experience" />
@@ -90,16 +90,28 @@
             tools:text="24%" />
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/play_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/button_circle_orange"
-        android:src="@drawable/ic_play"
+    <soup.neumorphism.NeumorphCardView
+        android:id="@+id/play_button_card"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:neumorph_shadowColorDark="@color/colorShadowDark"
+        app:neumorph_shadowColorLight="@color/colorShadowLight"
+        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage">
+
+        <ImageView
+            android:id="@+id/play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/button_circle_orange"
+            android:src="@drawable/ic_play"
+            android:layout_gravity="center"/>
+    </soup.neumorphism.NeumorphCardView>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/bottom_line"
