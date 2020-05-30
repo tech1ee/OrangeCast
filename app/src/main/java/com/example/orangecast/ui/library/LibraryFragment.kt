@@ -61,7 +61,7 @@ class LibraryFragment : BaseFragment() {
     }
 
     private fun showAddSubscriptionsButton() {
-        binding.addSubscriptionsLayout.setOnClickListener { gotoDiscover() }
+        binding.addSubscriptionsButton.setOnClickListener { gotoDiscover() }
         binding.addSubscriptionsLayout.visibility = View.VISIBLE
     }
 

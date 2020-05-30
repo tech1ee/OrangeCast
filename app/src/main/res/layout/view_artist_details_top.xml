@@ -80,6 +80,7 @@
 
     <soup.neumorphism.NeumorphCardView
         android:id="@+id/subscribe_button"
+        style="@style/CircularImageButton"
         android:layout_width="130dp"
         android:layout_height="64dp"
         android:layout_marginEnd="8dp"

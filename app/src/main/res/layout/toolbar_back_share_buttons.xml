@@ -6,6 +6,7 @@
 
     <soup.neumorphism.NeumorphCardView
         android:id="@+id/back_button"
+        style="@style/CircularImageButton"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_margin="8dp"
@@ -15,7 +16,7 @@
         app:neumorph_shadowColorDark="@color/colorShadowDark"
         app:neumorph_shadowColorLight="@color/colorShadowLight"
         app:neumorph_shadowElevation="5dp"
-        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage">
+        app:neumorph_shapeAppearance="@style/CircularImageButton">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -28,6 +29,7 @@
 
     <soup.neumorphism.NeumorphCardView
         android:id="@+id/share_button"
+        style="@style/CircularImageButton"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_margin="8dp"
@@ -36,7 +38,7 @@
         app:neumorph_shadowColorDark="@color/colorShadowDark"
         app:neumorph_shadowColorLight="@color/colorShadowLight"
         app:neumorph_shadowElevation="5dp"
-        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage">
+        app:neumorph_shapeAppearance="@style/CircularImageButton">
 
         <ImageView
             android:layout_width="wrap_content"

@@ -6,8 +6,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <soup.neumorphism.NeumorphImageView
+    <soup.neumorphism.NeumorphImageButton
         android:id="@+id/author_image"
+        style="@style/DiscoverAuthorImage"
         android:layout_width="142dp"
         android:layout_height="142dp"
         android:layout_margin="8dp"

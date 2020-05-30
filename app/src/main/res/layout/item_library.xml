@@ -6,31 +6,20 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/image_shadow"
-        android:layout_width="102dp"
-        android:layout_height="102dp"
-        android:layout_margin="16dp"
-        android:fitsSystemWindows="true"
-        android:src="@drawable/circle_background"
+    <soup.neumorphism.NeumorphImageButton
+        android:id="@+id/author_image"
+        style="@style/CircularImageButton"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:layout_margin="8dp"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:cardCornerRadius="65dp"
-        app:layout_constraintBottom_toBottomOf="@id/image_shadow"
-        app:layout_constraintEnd_toEndOf="@id/image_shadow"
-        app:layout_constraintStart_toStartOf="@id/image_shadow"
-        app:layout_constraintTop_toTopOf="@id/image_shadow">
-
-        <ImageView
-            android:id="@+id/author_image"
-            android:layout_width="130dp"
-            android:layout_height="130dp" />
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="parent"
+        app:neumorph_shadowColorDark="@color/colorShadowDark"
+        app:neumorph_shadowColorLight="@color/colorShadowLight"
+        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shapeAppearance="@style/DiscoverAuthorImage" />
 
     <TextView
         android:id="@+id/author_title"
@@ -46,7 +35,7 @@
         android:maxLines="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_shadow"
+        app:layout_constraintTop_toBottomOf="@id/author_image"
         tools:text="Poetry Unbound" />
 
     <TextView

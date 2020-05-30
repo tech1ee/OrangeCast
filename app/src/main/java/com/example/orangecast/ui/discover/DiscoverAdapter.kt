@@ -80,6 +80,7 @@ class DiscoverAdapter(private val onItemClicked: (Artist) -> Unit
                 authorTitle.text = item.artistName
                 authorName.text = item.collectionName
 
+                authorPhoto.setOnClickListener { onItemClicked(item) }
                 itemView.setOnClickListener { onItemClicked(item) }
             }
         }
