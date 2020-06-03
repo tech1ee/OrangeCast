@@ -25,22 +25,6 @@ abstract class BaseFragment: Fragment() {
         activity?.onBackPressed()
     }
 
-    protected fun LiveData<ViewEvent>.subscribeToEvent() {
-        this.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is ViewEvent.Progress -> onProgress(it)
-                is ViewEvent.Error -> onError(it)
-                is ViewEvent.Data<*> -> onData(it)
-            }
-        })
-    }
-
-    abstract fun onProgress(event: ViewEvent.Progress)
-
-    abstract fun onError(event: ViewEvent.Error)
-
-    abstract fun onData(event: ViewEvent.Data<*>)
-
     abstract fun inject()
 
     abstract fun initView()

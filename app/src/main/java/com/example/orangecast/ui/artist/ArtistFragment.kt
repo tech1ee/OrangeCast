@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,42 +78,44 @@ class ArtistFragment : BaseFragment() {
     }
 
     private fun subscribeToViewModel() {
-        viewModel.getEventLiveData().subscribeToEvent()
+        viewModel.infoLiveData().observe(viewLifecycleOwner, Observer { onEvent(it) })
+        viewModel.feedLiveData().observe(viewLifecycleOwner, Observer { onEvent(it) })
         viewModel.setFeedUrl(args.artistFeedUrl)
         viewModel.getArtistDetails()
     }
 
-    override fun onProgress(event: ViewEvent.Progress) {
-        binding.channelListProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
-        if (!event.inProgress) binding.swipeRefreshLayout.isRefreshing = false
-    }
-
-    override fun onError(event: ViewEvent.Error) {
-        snackbar(binding.rootContainer, event.message)
-    }
-
-    override fun onData(event: ViewEvent.Data<*>) {
-        when (event.data) {
-            is Artist -> showChannelDetails(event.data)
-            is Feed -> showChannelFeed(event.data)
-            is ArtistViewEvent.Subscribed -> initSubscribeButton(event.data.isSubscribed)
+    private fun onEvent(event: ArtistViewEvent) {
+        when (event) {
+            is ArtistViewEvent.ArtistInfo.Data -> showArtistDetails(event.artist)
+            is ArtistViewEvent.ArtistInfo.Subscribed -> initSubscribeButton(event.isSubscribed)
+            is ArtistViewEvent.ArtistFeed.Data -> showChannelFeed(event.feed)
+            is ArtistViewEvent.ArtistFeed.Progress -> onProgress(event.inProgress)
         }
     }
 
-    private fun showChannelDetails(channel: Artist) {
+    private fun onProgress(inProgress: Boolean) {
+        binding.channelListProgress.root.visibility = if (inProgress) View.VISIBLE else View.GONE
+        if (!inProgress) binding.swipeRefreshLayout.isRefreshing = false
+    }
+
+    private fun onError(event: ViewEvent.Error) {
+        snackbar(binding.rootContainer, event.message)
+    }
+
+    private fun showArtistDetails(channel: Artist) {
         Picasso.get().load(channel.artworkUrl100).transform(CircleTransform)
-            .placeholder(R.drawable.circle_background).into(header?.author_image)
+            .placeholder(R.drawable.circle_background).into(binding.headerView.authorImage)
         binding.headerView.authorTitle.text = channel.collectionName
         binding.headerView.authorName.text = channel.artistName
     }
 
     private fun initSubscribeButton(isSubscribed: Boolean) {
         val context = context ?: return
-//        binding.headerView.subscribeButton = if (isSubscribed) getString(R.string.subscribed)
-//        else getString(R.string.subscribe)
-        binding.headerView.subscribeButton.background = ContextCompat.getDrawable(
+        binding.headerView.subscribeButtonText.text = if (isSubscribed) getString(R.string.subscribed)
+        else getString(R.string.subscribe)
+        binding.headerView.subscribeButtonBackground.setImageDrawable(ContextCompat.getDrawable(
             context, if (isSubscribed) R.drawable.button_subscribed else R.drawable.button_subscribe
-        )
+        ))
         binding.headerView.subscribeButton.setOnClickListener {
             if (isSubscribed) viewModel.unsubscribe() else viewModel.subscribe()
         }
