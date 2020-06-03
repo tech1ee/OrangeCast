@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.orangecast.App
@@ -23,35 +24,40 @@ class LibraryFragment : BaseFragment() {
     private lateinit var binding: FragmentLibraryBinding
     private val adapter = LibraryAdapter { gotoChannelDetails(it) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLibraryBinding.inflate(inflater)
         return binding.root
     }
 
     override fun inject() {
-        App.appComponent(context)?.inject(this)
+        App.appComponent(context)
+                ?.inject(this)
     }
 
     override fun initView() {
         binding.artistsRv.layoutManager = GridLayoutManager(context, 3)
         binding.artistsRv.adapter = adapter
-        viewModel.getEventLiveData().subscribeToEvent()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.libraryLiveData().observe(viewLifecycleOwner, Observer { onEvent(it) })
         viewModel.getAllSubscriptions()
     }
 
-    override fun onData(event: ViewEvent.Data<*>) {
-        when (event.data) {
-            is Subscriptions -> showArtistsList(event.data.list)
+    private fun onEvent(event: LibraryViewEvent) {
+        when (event) {
+            is LibraryViewEvent.Data -> showArtistsList(event.subscriptions.list)
         }
     }
 
-    override fun onProgress(event: ViewEvent.Progress) {
+    private fun onProgress(event: ViewEvent.Progress) {
 
     }
 
-    override fun onError(event: ViewEvent.Error) {
+    private fun onError(event: ViewEvent.Error) {
         snackbar(binding.root, event.message)
     }
 

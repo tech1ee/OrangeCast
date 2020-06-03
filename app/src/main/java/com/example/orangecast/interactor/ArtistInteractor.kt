@@ -16,7 +16,8 @@ class ArtistInteractor(
     fun getArtistDetails(feedUrl: String): Single<Artist> {
         return Single.create {
             val artistResponse = searchRepository.getArtistByFeedUrl(feedUrl)
-            artistResponse?.mapResponseToAppEntity()
+            val artist = artistResponse?.mapResponseToAppEntity() ?: return@create
+            it.onSuccess(artist)
         }
     }
 

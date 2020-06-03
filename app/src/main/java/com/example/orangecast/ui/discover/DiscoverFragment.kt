@@ -1,12 +1,14 @@
 package com.example.orangecast.ui.discover
 
 import android.os.Bundle
+import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,14 +49,14 @@ class DiscoverFragment : BaseFragment() {
         search_view?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return if (query != null) {
-                    viewModel.search()
+
                     true
                 } else false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 return if (newText != null) {
-                    viewModel.searchText = newText
+
                     true
                 } else false
             }
@@ -76,6 +78,7 @@ class DiscoverFragment : BaseFragment() {
 
         initSearch()
         initRefreshing()
+        observeViewModel()
     }
 
     override fun onStart() {
@@ -85,23 +88,32 @@ class DiscoverFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getEventLiveData().subscribeToEvent()
         viewModel.discover()
     }
 
-    override fun onProgress(event: ViewEvent.Progress) {
-        binding.listProgress.root.visibility = if (event.inProgress) View.VISIBLE else View.GONE
-        if (!event.inProgress) binding.swipeRefreshLayout.isRefreshing  = false
+    private fun observeViewModel() {
+        viewModel.discoverLiveData().observe(viewLifecycleOwner, Observer { onEvent(it) })
     }
 
-    override fun onError(event: ViewEvent.Error) {
-        snackbar(binding.rootLayout, event.message)
-    }
-
-    override fun onData(event: ViewEvent.Data<*>) {
-        when (event.data) {
-            is Genres -> adapter.setList(event.data.list)
+    private fun onEvent(event: DiscoverViewEvent) {
+        when (event) {
+            is DiscoverViewEvent.Progress -> onProgress(event.inProgress)
+            is DiscoverViewEvent.Error -> onError(event.message)
+            is DiscoverViewEvent.Data -> onData(event.data)
         }
+    }
+
+    private fun onProgress(inProgress: Boolean) {
+        binding.listProgress.root.visibility = if (inProgress) View.VISIBLE else View.GONE
+        if (!inProgress) binding.swipeRefreshLayout.isRefreshing  = false
+    }
+
+    private fun onError(message: String) {
+        snackbar(binding.rootLayout, message)
+    }
+
+    private fun onData(data: Genres) {
+        adapter.setList(data.list)
     }
 
     private fun gotoChannelDetails(item: Artist) {

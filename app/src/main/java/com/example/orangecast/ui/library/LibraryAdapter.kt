@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.databinding.ItemLibraryBinding
 import com.example.orangecast.entity.Artist
+import com.example.orangecast.ui.utils.CircleTransform
 import com.squareup.picasso.Picasso
 
 class LibraryAdapter(
@@ -36,7 +37,7 @@ class LibraryAdapter(
         fun bind(position: Int) {
             val item = list[position]
 
-            Picasso.get().load(item.artworkUrl100).into(image)
+            Picasso.get().load(item.artworkUrl100).transform(CircleTransform).into(image)
             title.text = item.artistName
             name.text = item.collectionName
 
