@@ -73,12 +73,12 @@ class LibraryFragment : BaseFragment() {
 
     private fun gotoChannelDetails(item: Artist) {
         val artistFeedUrl = item.feedUrl ?: return
-        val action = LibraryFragmentDirections.artist(artistFeedUrl)
+        val action = LibraryFragmentDirections.artistScreen(artistFeedUrl)
         findNavController().navigate(action)
     }
 
     private fun gotoDiscover() {
-        val action = LibraryFragmentDirections.discover()
+        val action = LibraryFragmentDirections.discoverScreen()
         findNavController().navigate(action)
     }
 }

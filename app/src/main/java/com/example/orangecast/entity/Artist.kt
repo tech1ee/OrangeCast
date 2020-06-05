@@ -13,5 +13,5 @@ class Artist(
     val genreIds: List<String>? = null,
     val genres: List<String>? = null,
     val primaryGenreName: String? = null,
-    var isSubscribed: Boolean = false
+    var isSubscribed: Boolean? = null
 )

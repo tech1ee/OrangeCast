@@ -3,16 +3,18 @@ package com.example.orangecast.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.orangecast.R
 import com.example.orangecast.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var currentNavController: LiveData<NavController>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +25,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun initNavigation() {
         val bottomNavigationView = binding.bottomNavigationView
-        val navHostFragment = nav_host_fragment ?: return
-        NavigationUI.setupWithNavController(bottomNavigationView, navHostFragment.findNavController())
+        val navGraphIds = listOf(R.navigation.discover, R.navigation.library)
+        val controller = bottomNavigationView.setupWithNavController(
+                navGraphIds = navGraphIds,
+                fragmentManager = supportFragmentManager,
+                containerId = R.id.nav_host_fragment,
+                intent = intent
+        )
+
+        currentNavController = controller
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return currentNavController?.value?.navigateUp() ?: false
+
     }
 }

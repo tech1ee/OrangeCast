@@ -29,7 +29,7 @@
         app:neumorph_backgroundColor="@color/colorGradientDarkEnd"
         app:neumorph_shadowColorDark="@color/colorShadowDark"
         app:neumorph_shadowColorLight="@color/colorShadowLight"
-        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shadowElevation="@dimen/shadow_size"
         app:neumorph_shapeAppearance="@style/DiscoverAuthorImage"/>
 
     <androidx.core.widget.NestedScrollView
@@ -92,7 +92,7 @@
         app:layout_constraintTop_toBottomOf="@id/author_image"
         app:neumorph_shadowColorDark="@color/colorShadowDark"
         app:neumorph_shadowColorLight="@color/colorShadowLight"
-        app:neumorph_shadowElevation="5dp"
+        app:neumorph_shadowElevation="@dimen/shadow_size"
         app:neumorph_shapeAppearance="@style/SearchView">
 
         <ImageView
@@ -108,7 +108,7 @@
             android:text="@string/subscribe"
             android:textColor="@android:color/white"
             android:gravity="center"
-            android:textAllCaps="true"/>
+            android:textAllCaps="false"/>
     </soup.neumorphism.NeumorphCardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout

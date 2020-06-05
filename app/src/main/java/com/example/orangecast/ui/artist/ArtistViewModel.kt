@@ -7,7 +7,7 @@ import com.example.orangecast.interactor.SubscriptionInteractor
 import com.example.orangecast.ui.BaseViewModel
 
 class ArtistViewModel(
-        private val channelInteractor: ArtistInteractor,
+        private val artistInteractor: ArtistInteractor,
         private val subscriptionInteractor: SubscriptionInteractor
 ) : BaseViewModel() {
 
@@ -27,7 +27,7 @@ class ArtistViewModel(
     fun getArtistDetails() {
         if (feedUrl == null) return
         disposable.add(
-                channelInteractor.getArtistDetails(feedUrl!!)
+                artistInteractor.getArtistDetails(feedUrl!!)
                         .subscribe({
                             artist = it
                             infoEvent(ArtistViewEvent.ArtistInfo.Data(artist!!))
@@ -40,7 +40,7 @@ class ArtistViewModel(
     private fun getArtistFeed() {
         feedEvent(ArtistViewEvent.ArtistFeed.Progress(true))
         disposable.add(
-                channelInteractor.getArtistFeed(feedUrl!!)
+                artistInteractor.getArtistFeed(feedUrl!!)
                         .subscribe({
                             feedEvent(ArtistViewEvent.ArtistFeed.Progress(false))
                             feedEvent(ArtistViewEvent.ArtistFeed.Data(it))

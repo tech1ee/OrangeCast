@@ -19,26 +19,7 @@ class GenresInteractor(
         parameters[Parameters.Search.Key.LIMIT] = Parameters.Search.Value.MAX_LIMIT
         return repository.discover(isRefresh, parameters)
             .map {
-                val list = sortGenres(it.results.mapResponseToAppEntity())
-                Genres(list)
+                Genres(it.mapResponseToAppEntity())
             }
-    }
-
-    private fun sortGenres(results: List<Artist>): List<ArtistsGenre> {
-        val genres = arraySetOf<ArtistsGenre>()
-        results.forEach { media ->
-            if (media.genreIds != null) {
-                for (i in media.genreIds.indices) {
-                    val genreId = media.genreIds[i]
-                    if (genres.find { it.genreId == genreId } != null) {
-                        genres.find { it.genreId == genreId }?.list?.add(media)
-                    } else {
-                        genres.add(ArtistsGenre(genreId, media.genres?.get(i)))
-                    }
-                }
-            }
-        }
-        genres.removeAll { it.list.isEmpty() || it.genre?.toLowerCase() == "podcasts" }
-        return genres.sortedByDescending { it.list.size }
     }
 }
