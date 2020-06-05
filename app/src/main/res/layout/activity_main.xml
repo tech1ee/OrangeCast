@@ -8,12 +8,12 @@
     android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:navGraph="@navigation/nav_graph"
+        android:background="@null"
         app:defaultNavHost="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

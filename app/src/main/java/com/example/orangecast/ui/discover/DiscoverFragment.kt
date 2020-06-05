@@ -118,7 +118,7 @@ class DiscoverFragment : BaseFragment() {
 
     private fun gotoChannelDetails(item: Artist) {
         val artistFeedUrl = item.feedUrl ?: return
-        val action = DiscoverFragmentDirections.artist(artistFeedUrl)
+        val action = DiscoverFragmentDirections.artistScreen(artistFeedUrl)
         findNavController().navigate(action)
     }
 }

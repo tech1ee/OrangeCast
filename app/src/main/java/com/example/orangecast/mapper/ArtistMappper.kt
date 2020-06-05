@@ -3,12 +3,37 @@ package com.example.orangecast.mapper
 import com.example.data.database.entity.ArtistEntity
 import com.example.data.network.entity.ArtistResponse
 import com.example.data.network.entity.FeedResponse
+import com.example.data.network.entity.GenreResponse
 import com.example.orangecast.entity.Artist
+import com.example.orangecast.entity.ArtistsGenre
 import com.example.orangecast.entity.Feed
 
-fun List<ArtistResponse>.mapResponseToAppEntity(): List<Artist> {
-    val list = arrayListOf<Artist>()
-    this.forEach { list.add(it.mapResponseToAppEntity()) }
+fun List<GenreResponse>.mapResponseToAppEntity(): List<ArtistsGenre> {
+    val list = arrayListOf<ArtistsGenre>()
+
+    this.forEach { genreResponse ->
+        val genre = ArtistsGenre(genreResponse.genreId, genreResponse.genre)
+        genreResponse.list.forEach { artistResponse ->
+            genre.list.add(
+                    Artist(
+                            kind = artistResponse.kind,
+                            artistId = artistResponse.artistId,
+                            artistName = artistResponse.artistName,
+                            collectionName = artistResponse.collectionName,
+                            artistViewUrl = artistResponse.artistViewUrl,
+                            feedUrl = artistResponse.feedUrl,
+                            artworkUrl30 = artistResponse.artworkUrl30,
+                            artworkUrl60 = artistResponse.artworkUrl60,
+                            artworkUrl100 = artistResponse.artworkUrl100,
+                            genres = artistResponse.genres,
+                            primaryGenreName = artistResponse.primaryGenreName,
+                            genreIds = artistResponse.genreIds,
+                            isSubscribed = null
+                    )
+            )
+        }
+        list.add(genre)
+    }
     return list
 }
 
