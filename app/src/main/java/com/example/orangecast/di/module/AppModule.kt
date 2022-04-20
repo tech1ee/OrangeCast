@@ -1,23 +1,26 @@
 package com.example.orangecast.di.module
 
-import android.content.Context
-import com.example.orangecast.App
+import com.example.orangecast.data.itunes.ITunesApi
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
-class AppModule(val app: App) {
+@InstallIn(SingletonComponent::class)
+class ITunesModule {
 
-    @Singleton
     @Provides
-    fun provideApplication(): App {
-        return app
+    @Singleton
+    fun provideITunesApi(): ITunesApi {
+        return Retrofit.Builder()
+                .baseUrl(BuildConfig.ITUNES_API)
+                .addCallAdapterFactory(MoshiConverterFactory.create())
+                .build()
+                .create(ITunesApi::class.java)
     }
 
-    @Singleton
-    @Provides
-    fun provideApplicationContext(app: App): Context {
-        return app.applicationContext
-    }
 }
