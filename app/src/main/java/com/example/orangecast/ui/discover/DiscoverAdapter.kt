@@ -1,16 +1,11 @@
 package com.example.orangecast.ui.discover
 
-import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Shader
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.databinding.ItemArtistBinding
 import com.example.orangecast.databinding.ItemHorizontalListGenreTitleBinding
-import com.example.orangecast.entity.Artist
-import com.example.orangecast.entity.ArtistsGenre
 import com.example.orangecast.ui.utils.CircleTransform
 import com.squareup.picasso.Picasso
 

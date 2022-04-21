@@ -1,4 +1,4 @@
-package com.example.orangecast.data.listennotes
+package com.example.orangecast.data.listennotes.entity
 
 data class ChannelListen(
         val id: String?,

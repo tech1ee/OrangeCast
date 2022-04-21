@@ -1,6 +1,6 @@
 package com.example.orangecast.data.itunes
 
-import com.example.orangecast.data.itunes.SearchResultITunes
+import com.example.orangecast.data.itunes.entity.SearchResultITunes
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.QueryMap

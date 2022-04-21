@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.App
 import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentArtistBinding
-import com.example.orangecast.entity.Artist
-import com.example.orangecast.entity.Feed
 import com.example.orangecast.ui.ViewEvent
 import com.example.orangecast.ui.BaseFragment
 import com.example.orangecast.ui.episodes.EpisodesAdapter

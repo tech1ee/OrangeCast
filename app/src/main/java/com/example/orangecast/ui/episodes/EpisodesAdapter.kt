@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.databinding.ItemEpisodeBinding
-import com.example.orangecast.entity.Episode
 
 class EpisodesAdapter(
     private val onItemClicked: (Episode) -> Unit

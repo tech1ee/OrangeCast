@@ -1,4 +1,4 @@
-package com.example.orangecast.data.itunes
+package com.example.orangecast.data.itunes.entity
 
 data class ChannelITunes(
         val wrapperType: String?,

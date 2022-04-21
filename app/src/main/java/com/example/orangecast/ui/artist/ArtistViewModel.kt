@@ -1,7 +1,6 @@
 package com.example.orangecast.ui.artist
 
 import androidx.lifecycle.MutableLiveData
-import com.example.orangecast.entity.Artist
 import com.example.orangecast.interactor.ArtistInteractor
 import com.example.orangecast.interactor.SubscriptionInteractor
 import com.example.orangecast.ui.BaseViewModel

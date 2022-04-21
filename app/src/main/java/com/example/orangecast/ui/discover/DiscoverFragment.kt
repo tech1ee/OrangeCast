@@ -1,7 +1,6 @@
 package com.example.orangecast.ui.discover
 
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +15,6 @@ import com.example.orangecast.App
 import com.example.orangecast.R
 import com.example.orangecast.databinding.FragmentDiscoverBinding
 import com.example.orangecast.ui.BaseFragment
-import com.example.orangecast.entity.Artist
-import com.example.orangecast.entity.ArtistsGenre
-import com.example.orangecast.entity.Genres
-import com.example.orangecast.ui.ViewEvent
 import com.example.orangecast.ui.snackbar
 import kotlinx.android.synthetic.main.fragment_discover.*
 import javax.inject.Inject

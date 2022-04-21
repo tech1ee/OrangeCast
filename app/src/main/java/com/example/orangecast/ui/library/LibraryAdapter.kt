@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orangecast.databinding.ItemLibraryBinding
-import com.example.orangecast.entity.Artist
 import com.example.orangecast.ui.utils.CircleTransform
 import com.squareup.picasso.Picasso
 

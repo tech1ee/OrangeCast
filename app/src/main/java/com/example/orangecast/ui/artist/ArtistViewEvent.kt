@@ -1,8 +1,5 @@
 package com.example.orangecast.ui.artist
 
-import com.example.orangecast.entity.Artist
-import com.example.orangecast.entity.Feed
-
 sealed class ArtistViewEvent {
     sealed class ArtistInfo: ArtistViewEvent() {
         data class Data(val artist: Artist) : ArtistViewEvent.ArtistInfo()

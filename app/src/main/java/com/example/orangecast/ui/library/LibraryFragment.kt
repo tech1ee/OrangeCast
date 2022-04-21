@@ -1,7 +1,6 @@
 package com.example.orangecast.ui.library
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.orangecast.App
 import com.example.orangecast.databinding.FragmentLibraryBinding
-import com.example.orangecast.entity.Artist
-import com.example.orangecast.entity.Subscriptions
 import com.example.orangecast.ui.ViewEvent
 import com.example.orangecast.ui.BaseFragment
 import com.example.orangecast.ui.snackbar
