@@ -1,8 +1,6 @@
 package com.example.orangecast.ui.discover
 
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.orangecast.ui.BaseViewModel
 import com.example.orangecast.interactor.GenresInteractor
 
 class DiscoverViewModel(

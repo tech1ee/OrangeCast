@@ -42,6 +42,7 @@ class GetBestPodcasts @Inject constructor(
                 Channel(
                     idListenNotes = it.id,
                     idItunes = it.itunesId,
+                    title = it.title,
                     image = it.image,
                     thumbnail = it.thumbnail,
                     description = it.description,

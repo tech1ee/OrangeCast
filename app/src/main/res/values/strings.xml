@@ -8,5 +8,7 @@
     <string name="my_library">My library</string>
     <string name="new_episodes">New episodes</string>
     <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
     <string name="subscribed">Subscribed</string>
+    <string name="unsubscribed">Unsubscribed</string>
 </resources>
