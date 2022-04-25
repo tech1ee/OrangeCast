@@ -16,7 +16,7 @@ class GetBestPodcasts @Inject constructor(
         genreId: Int? = null,
         page: Int? = null,
         region: String? = null,
-        safeMode: Int?
+        safeMode: Int? = 0
     ): Flow<BestPodcastsState> = flow {
         emit(BestPodcastsState.Loading)
 

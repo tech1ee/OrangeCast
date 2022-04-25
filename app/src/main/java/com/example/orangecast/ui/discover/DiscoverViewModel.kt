@@ -1,31 +1,40 @@
 package com.example.orangecast.ui.discover
 
-import androidx.lifecycle.MediatorLiveData
-import com.example.orangecast.interactor.GenresInteractor
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.orangecast.domain.BestPodcastsState
+import com.example.orangecast.domain.GetBestPodcasts
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DiscoverViewModel(
-        private val interactor: GenresInteractor
-) : BaseViewModel() {
+@AndroidEntryPoint
+class DiscoverViewModel @Inject constructor(
+    private val getBestPodcasts: GetBestPodcasts
+) : ViewModel() {
 
-    private val discoverLiveData = MediatorLiveData<DiscoverViewEvent>()
+    private val _state = MutableStateFlow(DiscoverViewState())
+    val state: StateFlow<DiscoverViewState>
+        get() = _state
 
-    fun discoverLiveData() = discoverLiveData
 
-    fun discover(isRefresh: Boolean = false) {
-        event(DiscoverViewEvent.Progress(true))
-        disposable.add(
-                interactor.fetchAllGenres(isRefresh)
-                        .subscribe({
-                            event(DiscoverViewEvent.Progress(false))
-                            event(DiscoverViewEvent.Data(it))
-                        }, {
-                            event(DiscoverViewEvent.Progress(false))
-                            event(DiscoverViewEvent.Error(it.localizedMessage ?: "DISCOVER ERROR"))
-                        })
-        )
-    }
+    init {
+        viewModelScope.launch {
+            val bestPodcastsState = getBestPodcasts.execute()
+                .collectAsState(BestPodcastsState.None, viewModelScope.coroutineContext)
+            when (bestPodcastsState.value) {
+                is BestPodcastsState.Loading -> _state.emit(DiscoverViewState(bestPodcastsLoading = true))
+                is BestPodcastsState.Data -> _state.emit(
+                    DiscoverViewState(
+                        bestPodcasts =
+                        (bestPodcastsState.value as BestPodcastsState.Data).data
+                    )
+                )
+            }
 
-    private fun event(event: DiscoverViewEvent) {
-        discoverLiveData.apply { value = event }
+        }
     }
 }

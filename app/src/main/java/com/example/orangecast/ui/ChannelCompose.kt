@@ -5,9 +5,9 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
-import androidx.compose.material.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -25,7 +25,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.orangecast.R
+import com.example.orangecast.entity.Category
 import com.example.orangecast.entity.Channel
+
+@Composable
+fun ChannelsByCategoryColumn(
+    channels: List<Channel>,
+    onSubscribeClicked: (Channel) -> Unit,
+    modifier: Modifier = Modifier
+) {
+   LazyColumn(
+       modifier = modifier
+   ) {
+
+       ChannelsRow(
+               channels = channels,
+               onSubscribeClicked = onSubscribeClicked,
+               modifier = modifier
+       )
+   }
+}
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
