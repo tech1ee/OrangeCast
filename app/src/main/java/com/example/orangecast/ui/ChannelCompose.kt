@@ -23,10 +23,8 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.orangecast.R
-import com.example.orangecast.entity.Category
 import com.example.orangecast.entity.Channel
 
 @Composable
@@ -35,45 +33,39 @@ fun ChannelsByCategoryColumn(
     onSubscribeClicked: (Channel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-   LazyColumn(
-       modifier = modifier
-   ) {
 
        ChannelsRow(
                channels = channels,
                onSubscribeClicked = onSubscribeClicked,
                modifier = modifier
        )
-   }
+
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ChannelsRow(
     channels: List<Channel>,
     onSubscribeClicked: (Channel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val lastIndex = channels.size - 1
     LazyRow(
         modifier = modifier,
         contentPadding = PaddingValues(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
     ) {
-        channels.forEachIndexed { index, channel ->
-            ChannelsRowItem(
-                title = channel.title ?: "",
-                imageUrl = channel.image,
-                isSubscribed = channel.isSubscribed,
-                onSubscribeClicked = { onSubscribeClicked(channel) },
-                modifier = Modifier.width(128.dp)
-            )
-
-            if (index < lastIndex) Spacer(Modifier.width(24.dp))
+        items(channels.size) { i ->
+            channels[i].let { channel ->
+                ChannelsRowItem(
+                    title = channel.title ?: "",
+                    imageUrl = channel.image,
+                    isSubscribed = channel.isSubscribed,
+                    onSubscribeClicked = { onSubscribeClicked(channel) },
+                    modifier = Modifier.width(128.dp)
+                )
+            }
         }
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun ChannelsRowItem(
     title: String,
@@ -82,47 +74,48 @@ private fun ChannelsRowItem(
     onSubscribeClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    LazyColumn(
         modifier.semantics(mergeDescendants = true){}
     ) {
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            if (imageUrl != null) {
-                Image(
-                    painter = rememberImagePainter(
-                        data = imageUrl,
-                        builder = {
-                            crossfade(true)
-                        }
-                    ),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(MaterialTheme.shapes.medium)
+        items(1) {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+            ) {
+                if (imageUrl != null) {
+                    Image(
+                        painter = rememberImagePainter(
+                            data = imageUrl,
+                            builder = {
+                                crossfade(true)
+                            }
+                        ),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(MaterialTheme.shapes.medium)
+                    )
+                }
+
+                SubscribeChannelIconButton(
+                    onClick = onSubscribeClicked,
+                    isSubscribed = isSubscribed,
+                    modifier = Modifier.align(Alignment.BottomEnd)
                 )
             }
 
-            SubscribeChannelIconButton(
-                onClick = onSubscribeClicked,
-                isSubscribed = isSubscribed,
-                modifier = Modifier.align(Alignment.BottomEnd)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.body2,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth()
             )
         }
-
-        Text(
-            text = title,
-            style = MaterialTheme.typography.body2,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth()
-        )
     }
 }
 

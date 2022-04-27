@@ -20,6 +20,15 @@ allprojects {
         google()
         mavenCentral()
     }
+    // Suppress Compose Kotlin compiler compatibility warning
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            freeCompilerArgs += [
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+            ]
+        }
+    }
 }
 
 task clean(type: Delete) {
