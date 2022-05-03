@@ -28,7 +28,7 @@ class ApiModule {
     @Singleton
     fun provideListenNotesApi(): ListenApi {
         return Retrofit.Builder()
-                .baseUrl("https://listen-api.listennotes.com/api/v2")
+                .baseUrl("https://listen-api.listennotes.com/api/v2/")
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
                 .create(ListenApi::class.java)

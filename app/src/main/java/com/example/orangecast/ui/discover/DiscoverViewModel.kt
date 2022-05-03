@@ -1,3 +1,5 @@
+@file:Suppress("NonExhaustiveWhenStatementMigration")
+
 package com.example.orangecast.ui.discover
 
 import androidx.lifecycle.ViewModel
