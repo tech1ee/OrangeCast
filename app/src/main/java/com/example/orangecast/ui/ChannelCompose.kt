@@ -33,7 +33,6 @@ fun ChannelsByCategoryColumn(
     onSubscribeClicked: (Channel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
        ChannelsRow(
                channels = channels,
                onSubscribeClicked = onSubscribeClicked,

@@ -1,5 +1,3 @@
-@file:Suppress("NonExhaustiveWhenStatementMigration")
-
 package com.example.orangecast.ui.discover
 
 import androidx.lifecycle.ViewModel
@@ -24,6 +22,10 @@ class DiscoverViewModel @Inject constructor(
 
 
     init {
+        getBestPodcasts()
+    }
+
+    private fun getBestPodcasts() {
         viewModelScope.launch {
             getBestPodcasts.execute()
                 .onEach { bestPodcastsState ->
