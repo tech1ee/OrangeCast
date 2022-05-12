@@ -14,6 +14,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "LISTEN_NOTES_API_KEY", LISTEN_NOTES_API_KEY
     }
     buildTypes {
         release {
@@ -83,6 +85,10 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+
+    //OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+
 
     // Stetho
     implementation 'com.facebook.stetho:stetho:1.6.0'
