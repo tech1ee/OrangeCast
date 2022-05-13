@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,37 +30,44 @@ import com.example.orangecast.entity.Channel
 
 @Composable
 fun ChannelsByCategoryColumn(
-    channels: List<Channel>,
+    channelCategories: List<Channel>,
     onSubscribeClicked: (Channel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-       ChannelsRow(
-               channels = channels,
-               onSubscribeClicked = onSubscribeClicked,
-               modifier = modifier
-       )
+
 
 }
 
 @Composable
-fun ChannelsRow(
+fun CategoryOfChannelsRow(
+    title: String,
     channels: List<Channel>,
     onSubscribeClicked: (Channel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyRow(
-        modifier = modifier,
-        contentPadding = PaddingValues(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
+    Column(
+        modifier = modifier
     ) {
-        items(channels.size) { i ->
-            channels[i].let { channel ->
-                ChannelsRowItem(
-                    title = channel.title ?: "",
-                    imageUrl = channel.image,
-                    isSubscribed = channel.isSubscribed,
-                    onSubscribeClicked = { onSubscribeClicked(channel) },
-                    modifier = Modifier.width(128.dp)
-                )
+        Text(
+            text = title,
+            modifier = Modifier
+                .align(alignment = Alignment.Start)
+                .padding(horizontal = 16.dp, vertical = 4.dp)
+        )
+        LazyRow(
+            modifier = modifier,
+            contentPadding = PaddingValues(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
+        ) {
+            items(channels.size) { i ->
+                channels[i].let { channel ->
+                    ChannelsRowItem(
+                        title = channel.title ?: "",
+                        imageUrl = channel.image,
+                        isSubscribed = channel.isSubscribed,
+                        onSubscribeClicked = { onSubscribeClicked(channel) },
+                        modifier = Modifier.width(128.dp)
+                    )
+                }
             }
         }
     }
@@ -74,35 +82,39 @@ private fun ChannelsRowItem(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier.semantics(mergeDescendants = true){}
+        modifier.semantics(mergeDescendants = true) {}
     ) {
         items(1) {
-            Box(
-                Modifier
+            Card(
+                modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
+                    .padding(4.dp),
+                shape = RoundedCornerShape(24.dp)
             ) {
-                if (imageUrl != null) {
-                    Image(
-                        painter = rememberImagePainter(
-                            data = imageUrl,
-                            builder = {
-                                crossfade(true)
-                            }
-                        ),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(MaterialTheme.shapes.medium)
+                Box {
+                    if (imageUrl != null) {
+                        Image(
+                            painter = rememberImagePainter(
+                                data = imageUrl,
+                                builder = {
+                                    crossfade(true)
+                                }
+                            ),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(MaterialTheme.shapes.medium)
+                        )
+                    }
+
+                    SubscribeChannelIconButton(
+                        onClick = onSubscribeClicked,
+                        isSubscribed = isSubscribed,
+                        modifier = Modifier.align(Alignment.BottomEnd)
                     )
                 }
-
-                SubscribeChannelIconButton(
-                    onClick = onSubscribeClicked,
-                    isSubscribed = isSubscribed,
-                    modifier = Modifier.align(Alignment.BottomEnd)
-                )
             }
 
             Text(
@@ -111,7 +123,7 @@ private fun ChannelsRowItem(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
-                    .padding(top = 8.dp)
+                    .padding(4.dp)
                     .fillMaxWidth()
             )
         }

@@ -8,6 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -19,9 +20,16 @@ class ApiModule {
     @Provides
     @Singleton
     fun provideITunesApi(): ITunesApi {
+        val client = OkHttpClient.Builder()
+        if (BuildConfig.DEBUG) {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            client.addInterceptor(interceptor)
+        }
         return Retrofit.Builder()
             .baseUrl("https://itunes.apple.com")
             .addConverterFactory(MoshiConverterFactory.create())
+            .client(client.build())
             .build()
             .create(ITunesApi::class.java)
     }
@@ -39,6 +47,11 @@ class ApiModule {
                 .build()
 
             return@addInterceptor chain.proceed(request)
+        }
+        if (BuildConfig.DEBUG) {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            client.addInterceptor(interceptor)
         }
         return Retrofit.Builder()
             .baseUrl("https://listen-api.listennotes.com/api/v2/")

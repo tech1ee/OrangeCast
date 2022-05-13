@@ -13,6 +13,6 @@ data class ChannelListen(
         val language: String?,
         val country: String?,
         val website: String?,
-        val is_claimed: String?,
+        val is_claimed: Boolean?,
         val genre_ids: List<Int>?
 )

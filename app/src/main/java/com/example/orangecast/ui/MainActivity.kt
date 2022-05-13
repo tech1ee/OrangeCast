@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -16,10 +14,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            MaterialTheme {
-                Scaffold(backgroundColor = Color.White) {
-                    Home()
-                }
+            MaterialTheme(
+                colors = MaterialTheme.colors.copy(
+                    primary = AppColors.colorPrimary,
+                    secondary = AppColors.colorSecondary,
+                    background = AppColors.colorBackground
+                )
+            ) {
+                Home()
             }
         }
     }

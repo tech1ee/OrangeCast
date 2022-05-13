@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.orangecast.domain.BestPodcastsState
 import com.example.orangecast.domain.GetBestPodcasts
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,9 +28,9 @@ class DiscoverViewModel @Inject constructor(
     }
 
     private fun getBestPodcasts() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getBestPodcasts.execute()
-                .onEach { bestPodcastsState ->
+                .collect { bestPodcastsState ->
                     when (bestPodcastsState) {
                         is BestPodcastsState.Loading -> _state.emit(DiscoverViewState(bestPodcastsLoading = true))
                         is BestPodcastsState.Data -> _state.emit(
