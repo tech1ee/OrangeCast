@@ -9,7 +9,7 @@ data class ChannelListen(
         val totalEpisodes: Int?,
         val explicitContent: Boolean?,
         val description: String?,
-        val itunesId: Int?,
+        val itunes_id: Int?,
         val language: String?,
         val country: String?,
         val website: String?,

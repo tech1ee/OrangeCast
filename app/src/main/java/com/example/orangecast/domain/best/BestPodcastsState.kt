@@ -1,4 +1,4 @@
-package com.example.orangecast.domain
+package com.example.orangecast.domain.best
 
 import com.example.orangecast.entity.Channel
 

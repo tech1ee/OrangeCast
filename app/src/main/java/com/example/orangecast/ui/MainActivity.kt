@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
+import com.example.orangecast.ui.themes.AppColors
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -15,13 +16,11 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             MaterialTheme(
-                colors = MaterialTheme.colors.copy(
-                    primary = AppColors.colorPrimary,
-                    secondary = AppColors.colorSecondary,
-                    background = AppColors.colorBackground
-                )
+                colors = AppColors
             ) {
-                Home()
+                Home(
+
+                )
             }
         }
     }

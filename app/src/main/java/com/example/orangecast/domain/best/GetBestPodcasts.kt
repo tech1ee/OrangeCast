@@ -1,8 +1,7 @@
-package com.example.orangecast.domain
+package com.example.orangecast.domain.best
 
 import com.example.orangecast.data.listennotes.ListenNotesRepository
-import com.example.orangecast.data.listennotes.entity.ChannelListen
-import com.example.orangecast.entity.Channel
+import com.example.orangecast.domain.toUIChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -33,25 +32,6 @@ class GetBestPodcasts @Inject constructor(
         } catch (e: Exception) {
             emit(BestPodcastsState.Error(e))
         }
-    }
-
-    private fun List<ChannelListen>.toUIChannel(): List<Channel> {
-        val list = mutableListOf<Channel>()
-        forEach {
-            list.add(
-                Channel(
-                    idListenNotes = it.id,
-                    idItunes = it.itunesId,
-                    title = it.title,
-                    image = it.image,
-                    thumbnail = it.thumbnail,
-                    description = it.description,
-                    website = it.website,
-                    genreIds = it.genre_ids
-                )
-            )
-        }
-        return list
     }
 
     companion object {

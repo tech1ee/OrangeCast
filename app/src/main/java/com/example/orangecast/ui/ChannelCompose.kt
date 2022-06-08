@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -42,6 +43,7 @@ fun ChannelsByCategoryColumn(
 fun CategoryOfChannelsRow(
     title: String,
     channels: List<Channel>,
+    onChannelClicked: (channelId: String) -> Unit,
     onSubscribeClicked: (Channel) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -64,6 +66,11 @@ fun CategoryOfChannelsRow(
                         title = channel.title ?: "",
                         imageUrl = channel.image,
                         isSubscribed = channel.isSubscribed,
+                        onChannelClicked = {
+                            channel.idListenNotes?.let { channelId ->
+                                onChannelClicked(channelId)
+                            }
+                        },
                         onSubscribeClicked = { onSubscribeClicked(channel) },
                         modifier = Modifier.width(128.dp)
                     )
@@ -78,13 +85,14 @@ private fun ChannelsRowItem(
     title: String,
     imageUrl: String?,
     isSubscribed: Boolean,
+    onChannelClicked: () -> Unit,
     onSubscribeClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
+    Column(
         modifier.semantics(mergeDescendants = true) {}
+            .clickable { onChannelClicked() }
     ) {
-        items(1) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -126,7 +134,6 @@ private fun ChannelsRowItem(
                     .padding(4.dp)
                     .fillMaxWidth()
             )
-        }
     }
 }
 
