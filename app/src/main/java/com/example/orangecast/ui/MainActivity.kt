@@ -18,9 +18,7 @@ class MainActivity : AppCompatActivity() {
             MaterialTheme(
                 colors = AppColors
             ) {
-                Home(
-
-                )
+                Home()
             }
         }
     }

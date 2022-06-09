@@ -12,4 +12,7 @@
     <string name="subscribed">Subscribed</string>
     <string name="unsubscribed">Unsubscribed</string>
     <string name="popular">Popular</string>
+    <string name="back">Back</string>
+    <string name="add">Add</string>
+    <string name="more">More</string>
 </resources>

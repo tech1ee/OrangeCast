@@ -16,6 +16,7 @@ sealed class Screen(val route: String) {
     object Home: Screen("home")
     object Channel: Screen("channel/{channelId}") {
         fun createRoute(channelId: String) = "channel/$channelId"
+        fun getChannelId() = route.substringAfter("channel/")
     }
 }
 
@@ -42,6 +43,10 @@ class AppState(
         if (from.lifecycleIsResumed()) {
             navController.navigate(Screen.Channel.createRoute(channelId))
         }
+    }
+
+    fun navigateBack() {
+        navController.popBackStack()
     }
 
     @Suppress("DEPRECATION")
