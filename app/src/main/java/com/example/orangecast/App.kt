@@ -1,8 +1,10 @@
 package com.example.orangecast
 
 import android.app.Application
-import com.facebook.stetho.Stetho
+import com.orangecast.app.BuildConfig
+
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 @HiltAndroidApp
 class App : Application() {
@@ -10,6 +12,12 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Stetho.initializeWithDefaults(this)
+        initTimber()
+    }
+
+    private fun initTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 }

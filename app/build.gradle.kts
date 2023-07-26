@@ -55,6 +55,7 @@ android {
 
 dependencies {
     implementation(project(":base-ui"))
+    implementation(project(":navigation"))
 
     implementation(AppDependencies.lifecycleProcess)
 

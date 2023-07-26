@@ -23,6 +23,7 @@ fun includeCommonModule(name: String) {
     project(":$name").projectDir = File(rootDir, "modules/$name")
 }
 includeCommonModule("common")
+includeCommonModule("main")
 includeCommonModule("navigation")
 
 
@@ -33,4 +34,3 @@ fun includeBaseModule(name: String) {
 includeBaseModule("base-ui")
 includeBaseModule("base-data")
 includeBaseModule("base-domain")
-include(":navigation")

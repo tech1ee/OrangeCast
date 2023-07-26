@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/modules/base/base-domain" />
             <option value="$PROJECT_DIR$/modules/base/base-ui" />
             <option value="$PROJECT_DIR$/modules/common" />
+            <option value="$PROJECT_DIR$/modules/main" />
             <option value="$PROJECT_DIR$/modules/navigation" />
           </set>
         </option>
