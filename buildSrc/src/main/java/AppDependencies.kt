@@ -56,11 +56,13 @@ object AppDependencies {
     const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
 
     // Accompanist
+    private const val accompanistSystemUiController = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
     private const val accompanistSwiperefresh = "com.google.accompanist:accompanist-swiperefresh:${Versions.accompanist}"
     private const val accompanistPager = "com.google.accompanist:accompanist-pager:${Versions.accompanist}"
     private const val accompanistPlaceholder = "com.google.accompanist:accompanist-placeholder-material:${Versions.accompanist}"
 
     val accompanistLibs = listOf(
+        accompanistSystemUiController,
         accompanistSwiperefresh,
         accompanistPager,
         accompanistPlaceholder,

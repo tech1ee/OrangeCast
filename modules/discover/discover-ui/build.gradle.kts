@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.orangecast.navigation"
+    namespace = "dev.orangepie.discover.ui"
     buildFeatures.apply {
         compose = true
     }
@@ -19,11 +19,9 @@ android {
 
 
 dependencies {
-    implementation(project(":main"))
     implementation(project(":base-ui"))
-    implementation(project(":discover-ui"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)
-
+    kaptAndroidTest(AppDependencies.hiltAndroidCompiler)
 }

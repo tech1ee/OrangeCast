@@ -7,6 +7,7 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="corretto-17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -16,6 +17,7 @@
             <option value="$PROJECT_DIR$/modules/base/base-domain" />
             <option value="$PROJECT_DIR$/modules/base/base-ui" />
             <option value="$PROJECT_DIR$/modules/common" />
+            <option value="$PROJECT_DIR$/modules/discover/discover-ui" />
             <option value="$PROJECT_DIR$/modules/main" />
             <option value="$PROJECT_DIR$/modules/navigation" />
           </set>

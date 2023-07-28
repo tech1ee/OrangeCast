@@ -34,3 +34,10 @@ fun includeBaseModule(name: String) {
 includeBaseModule("base-ui")
 includeBaseModule("base-data")
 includeBaseModule("base-domain")
+
+
+fun includeDiscoverModule(name: String) {
+    include(":$name")
+    project(":$name").projectDir = File(rootDir, "modules/discover/$name")
+}
+includeDiscoverModule("discover-ui")

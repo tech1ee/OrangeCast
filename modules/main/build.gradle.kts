@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation(project(":base-ui"))
+    implementation(project(":discover-ui"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)

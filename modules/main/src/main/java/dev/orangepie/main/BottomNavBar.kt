@@ -1,21 +1,34 @@
 package dev.orangepie.main
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.seamm_team.main.ui.R
 import dev.orangepie.base.ui.navigation.NavCommand
 import dev.orangepie.base.ui.navigation.Navigator
+import dev.orangepie.base.ui.theme.Color
+import dev.orangepie.discover.ui.DiscoverScreenRoute
 import dev.orangepie.main.model.NavBarScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun BottomNavBar(
+fun BottomNav(
     navController: NavHostController,
     innerPadding: PaddingValues,
     startTab: String,
@@ -34,6 +47,7 @@ fun BottomNavBar(
                         }
                         navController.popBackStack()
                     }
+
                     is NavCommand.BackTo -> {
                         navCommand.result?.let { result ->
                             navController.previousBackStackEntry?.savedStateHandle?.let {
@@ -48,11 +62,13 @@ fun BottomNavBar(
                             saveState = false,
                         )
                     }
+
                     is NavCommand.Navigate -> {
                         when (navCommand.route) {
                             NavBarScreen.Discover.route.getRoute(),
                             NavBarScreen.Search.route.getRoute(),
-                            NavBarScreen.Library.route.getRoute(),-> {
+                            NavBarScreen.Library.route.getRoute(),
+                            -> {
                                 navController.navigate(
                                     navCommand.route
                                 ) {
@@ -63,17 +79,20 @@ fun BottomNavBar(
                                     restoreState = true
                                 }
                             }
+
                             else -> navController.navigate(
                                 navCommand.route,
                                 navCommand.builder,
                             )
                         }
                     }
+
                     is NavCommand.Reset -> navController.navigate(startTab) {
                         popUpTo(NavBarScreen.Discover.route.getRoute()) { inclusive = true }
                         launchSingleTop = true
                         restoreState = true
                     }
+
                     null -> Unit
                 }
             }
@@ -84,7 +103,52 @@ fun BottomNavBar(
         navController = navController,
         startDestination = startTab,
     ) {
-
+        DiscoverScreenRoute.composable(this, navController)
     }
+}
 
+@Composable
+fun BottomBar(
+    navController: NavController,
+    onClick: (NavBarScreen) -> Unit,
+) {
+    Column {
+        Divider(color = Color.White.copy(alpha = 0.2f))
+        BottomNavigation(
+            backgroundColor = Color.Black,
+            contentColor = Color.Grey,
+        ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+            listOf(
+                NavBarScreen.Discover,
+                NavBarScreen.Search,
+                NavBarScreen.Library,
+            ).forEach { screen ->
+                val selected = currentDestination?.hierarchy
+                    ?.any { it.route == screen.route.getRoute() } == true
+
+                BottomNavigationItem(
+                    icon = {
+                        when (screen) {
+                            is NavBarScreen.Discover -> Icon(
+                                painter = painterResource(id = R.drawable.ic_discover),
+                                contentDescription = "Discover",
+                            )
+                            is NavBarScreen.Search -> Icon(
+                                painter = painterResource(id = R.drawable.ic_search),
+                                contentDescription = "Search",
+                            )
+                            is NavBarScreen.Library -> Icon(
+                                painter = painterResource(id = R.drawable.ic_library),
+                                contentDescription = "Library",
+                            )
+                        }
+                    },
+                    selected = selected,
+                    onClick = { onClick(screen) },
+                )
+            }
+        }
+    }
 }
