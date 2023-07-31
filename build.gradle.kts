@@ -3,6 +3,7 @@ import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.LibraryPlugin
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 buildscript {
     repositories {
@@ -50,14 +51,17 @@ fun PluginContainer.applyBaseConfig(project: Project) {
 fun BaseExtension.baseConfig() {
     compileSdkVersion(AppConfig.compileSdkVersion)
     buildToolsVersion(AppConfig.buildToolsVersion)
+
+    val listenNotesApiKey = gradleLocalProperties(rootDir).getProperty("LISTEN_NOTES_API_KEY")
+
     buildTypes {
         getByName("release") {
             buildConfigField("String", "APP_ID", "\"${AppConfig.appId}${""}\"")
-            buildConfigField("String", "BASE_URL", "\"TBD/\"")
-           }
+            buildConfigField("String", "LISTEN_NOTES_API_KEY", listenNotesApiKey)
+        }
         getByName("debug") {
             buildConfigField("String", "APP_ID", "\"${AppConfig.appId}${".debug"}\"")
-            buildConfigField("String", "BASE_URL", "\"TBD/\"")
+            buildConfigField("String", "LISTEN_NOTES_API_KEY", listenNotesApiKey)
         }
     }
 

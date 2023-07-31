@@ -11,11 +11,12 @@ plugins {
 dependencies {
     api(AppDependencies.coreLibs)
     api(project(":common"))
-    implementation(project(":base-data"))
+    implementation(project(":base-domain"))
+    implementation(project(":podcasts-data"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)
 }
 android {
-    namespace = "com.orangecast.base.domain"
+    namespace = "com.orangecast.podcasts.domain"
 }

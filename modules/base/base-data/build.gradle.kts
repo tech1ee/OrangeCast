@@ -18,5 +18,5 @@ dependencies {
     kapt(AppDependencies.moshiKotlinCodegen)
 }
 android {
-    namespace = "com.orangecast.base.bl"
+    namespace = "com.orangecast.base.data"
 }

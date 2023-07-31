@@ -20,6 +20,8 @@
             <option value="$PROJECT_DIR$/modules/discover/discover-ui" />
             <option value="$PROJECT_DIR$/modules/main" />
             <option value="$PROJECT_DIR$/modules/navigation" />
+            <option value="$PROJECT_DIR$/modules/podcasts/podcasts-data" />
+            <option value="$PROJECT_DIR$/modules/podcasts/podcasts-domain" />
           </set>
         </option>
       </GradleProjectSettings>

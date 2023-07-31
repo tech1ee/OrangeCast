@@ -41,3 +41,10 @@ fun includeDiscoverModule(name: String) {
     project(":$name").projectDir = File(rootDir, "modules/discover/$name")
 }
 includeDiscoverModule("discover-ui")
+
+fun includePodcastsModule(name: String) {
+    include(":$name")
+    project(":$name").projectDir = File(rootDir, "modules/podcasts/$name")
+}
+includePodcastsModule("podcasts-data")
+includePodcastsModule("podcasts-domain")
