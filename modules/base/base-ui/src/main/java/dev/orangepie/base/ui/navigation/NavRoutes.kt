@@ -14,6 +14,10 @@ sealed class NavRoutes: Routes {
         fun getNavGraphRoute(value: TabNavRoutes) =
             getRoute().replace("{$KEY_TAB}", value.getRoute())
     }
+
+    object Podcasts : NavRoutes() {
+        override fun getRoute() = "podcasts"
+    }
 }
 
 sealed class TabNavRoutes : Routes {

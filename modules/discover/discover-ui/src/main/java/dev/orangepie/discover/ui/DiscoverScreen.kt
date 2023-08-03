@@ -1,14 +1,11 @@
 package dev.orangepie.discover.ui
 
 import android.os.Bundle
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.SavedStateHandle
 import dev.orangepie.base.ui.navigation.NavRoute
 import dev.orangepie.base.ui.navigation.TabNavRoutes
+import dev.orangepie.podcasts.ui.PodcastsScreen
 
 object DiscoverScreenRoute : NavRoute {
     override val route = TabNavRoutes.Discover
@@ -21,7 +18,5 @@ object DiscoverScreenRoute : NavRoute {
 
 @Composable
 fun DiscoverScreen() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Discover")
-    }
+    PodcastsScreen()
 }

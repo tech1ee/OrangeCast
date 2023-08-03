@@ -11,7 +11,7 @@ class MainViewModel @Inject constructor(): BaseViewModel() {
     fun onBottomNavClick(navBarScreen: NavBarScreen) {
         navigate(
             NavCommand.Navigate(
-                router = Navigator.Router.ROOT,
+                router = Navigator.Router.CHILD,
                 route = navBarScreen.route.getRoute(),
             )
         )

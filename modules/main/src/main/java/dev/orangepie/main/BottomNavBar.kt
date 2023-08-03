@@ -146,6 +146,8 @@ fun BottomBar(
                         }
                     },
                     selected = selected,
+                    selectedContentColor = Color.Orange,
+                    unselectedContentColor = Color.Grey2,
                     onClick = { onClick(screen) },
                 )
             }

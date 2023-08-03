@@ -8,6 +8,7 @@ class ListenNotesAuthInterceptor: Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder = chain.request().newBuilder()
+        builder.addHeader("App", "default.app")
         builder.addHeader("X-ListenAPI-Key", BuildConfig.LISTEN_NOTES_API_KEY)
         return chain.proceed(builder.build())
     }

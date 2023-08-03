@@ -3,8 +3,9 @@ package dev.orangepie.podcasts.data.mapper
 import dev.orangepie.podcasts.data.model.PodcastListenNotesRepoModel
 import dev.orangepie.podcasts.data.model.PodcastsBestListenNotesResponse
 import dev.orangepie.podcasts.data.model.PodcastsListenNotesRepoModel
+import javax.inject.Inject
 
-class PodcastsListenNotesRepoMapper {
+class PodcastsListenNotesRepoMapper @Inject constructor() {
 
     fun toRepoModel(response: PodcastsBestListenNotesResponse): PodcastsListenNotesRepoModel {
         return PodcastsListenNotesRepoModel(

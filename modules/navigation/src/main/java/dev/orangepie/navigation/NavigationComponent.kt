@@ -14,6 +14,7 @@ import dev.orangepie.base.ui.navigation.Navigator
 import dev.orangepie.base.ui.navigation.TabNavRoutes
 import dev.orangepie.discover.ui.DiscoverScreenRoute
 import dev.orangepie.main.MainScreenRoute
+import dev.orangepie.podcasts.ui.PodcastsScreenRoute
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -76,5 +77,6 @@ fun NavigationComponent(paddingValues: PaddingValues) {
     ) {
         MainScreenRoute.composable(this, navController)
         DiscoverScreenRoute.composable(this, navController)
+        PodcastsScreenRoute.composable(this, navController)
     }
 }

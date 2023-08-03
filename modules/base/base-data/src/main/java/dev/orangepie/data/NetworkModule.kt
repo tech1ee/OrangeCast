@@ -21,8 +21,8 @@ object NetworkModule {
 
     const val ITUNES = "iTunes"
     const val LISTEN_NOTES = "ListenNotes"
-    private const val ITUNES_URL = "https://itunes.apple.com"
-    private const val LISTEN_NOTES_URL = "https://listen-api.listennotes.com/api/v2"
+    private const val ITUNES_URL = "https://itunes.apple.com/"
+    private const val LISTEN_NOTES_URL = "https://listen-api.listennotes.com/api/v2/"
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient {

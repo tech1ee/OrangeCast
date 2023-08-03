@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.orangecast.navigation"
+    namespace = "com.orangecast.podcasts.ui"
     buildFeatures.apply {
         compose = true
     }
@@ -19,12 +19,10 @@ android {
 
 
 dependencies {
-    implementation(project(":main"))
     implementation(project(":base-ui"))
-    implementation(project(":discover-ui"))
-    implementation(project(":podcasts-ui"))
+    implementation(project(":podcasts-domain"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)
-
+    kaptAndroidTest(AppDependencies.hiltAndroidCompiler)
 }

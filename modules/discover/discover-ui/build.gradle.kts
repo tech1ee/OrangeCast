@@ -20,6 +20,7 @@ android {
 
 dependencies {
     implementation(project(":base-ui"))
+    implementation(project(":podcasts-ui"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)

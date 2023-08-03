@@ -48,3 +48,4 @@ fun includePodcastsModule(name: String) {
 }
 includePodcastsModule("podcasts-data")
 includePodcastsModule("podcasts-domain")
+includePodcastsModule("podcasts-ui")

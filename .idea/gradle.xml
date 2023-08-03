@@ -22,6 +22,7 @@
             <option value="$PROJECT_DIR$/modules/navigation" />
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-data" />
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-domain" />
+            <option value="$PROJECT_DIR$/modules/podcasts/podcasts-ui" />
           </set>
         </option>
       </GradleProjectSettings>

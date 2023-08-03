@@ -21,15 +21,13 @@ abstract class PodcastsITunesModule {
     abstract fun bindPodcastsRepository(impl: PodcastsRepositoryImpl): PodcastsRepository
 
     companion object {
-        @Named(NetworkModule.ITUNES)
         @Provides
-        fun providePodcastsITunesApi(retrofit: Retrofit): PodcastsITunesApi {
+        fun providePodcastsITunesApi(@Named(NetworkModule.ITUNES) retrofit: Retrofit): PodcastsITunesApi {
             return retrofit.create(PodcastsITunesApi::class.java)
         }
 
-        @Named(NetworkModule.LISTEN_NOTES)
         @Provides
-        fun providePodcastsListenNotesApi(retrofit: Retrofit): PodcastsListenNotesApi {
+        fun providePodcastsListenNotesApi(@Named(NetworkModule.LISTEN_NOTES) retrofit: Retrofit): PodcastsListenNotesApi {
             return retrofit.create(PodcastsListenNotesApi::class.java)
         }
     }

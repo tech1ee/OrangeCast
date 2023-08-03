@@ -4,8 +4,9 @@ import dev.orangepie.podcasts.data.model.PodcastListenNotesRepoModel
 import dev.orangepie.podcasts.data.model.PodcastListenNotesResponse
 import dev.orangepie.podcasts.data.model.PodcastsITunesRepoModel
 import dev.orangepie.podcasts.data.model.PodcastsITunesResponse
+import javax.inject.Inject
 
-class PodcastsITunesRepoMapper {
+class PodcastsITunesRepoMapper @Inject constructor() {
 
     fun toRepoModel(response: PodcastsITunesResponse): PodcastsITunesRepoModel {
         return PodcastsITunesRepoModel(
