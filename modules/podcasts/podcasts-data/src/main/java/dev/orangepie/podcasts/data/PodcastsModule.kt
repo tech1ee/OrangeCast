@@ -15,7 +15,7 @@ import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class PodcastsITunesModule {
+abstract class PodcastsModule {
 
     @Binds
     abstract fun bindPodcastsRepository(impl: PodcastsRepositoryImpl): PodcastsRepository

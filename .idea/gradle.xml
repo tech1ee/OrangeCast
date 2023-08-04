@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/modules/base/base-ui" />
             <option value="$PROJECT_DIR$/modules/common" />
             <option value="$PROJECT_DIR$/modules/discover/discover-ui" />
+            <option value="$PROJECT_DIR$/modules/genres/genres-data" />
             <option value="$PROJECT_DIR$/modules/main" />
             <option value="$PROJECT_DIR$/modules/navigation" />
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-data" />

@@ -49,3 +49,9 @@ fun includePodcastsModule(name: String) {
 includePodcastsModule("podcasts-data")
 includePodcastsModule("podcasts-domain")
 includePodcastsModule("podcasts-ui")
+
+fun includeGenresModule(name: String) {
+    include(":$name")
+    project(":$name").projectDir = File(rootDir, "modules/genres/$name")
+}
+includeGenresModule("genres-data")
