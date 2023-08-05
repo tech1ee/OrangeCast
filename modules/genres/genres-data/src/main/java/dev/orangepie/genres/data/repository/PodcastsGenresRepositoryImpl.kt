@@ -10,7 +10,16 @@ class PodcastsGenresRepositoryImpl @Inject constructor(
     private val api: PodcastGenresListenNotesApi,
 ): PodcastsGenresRepository {
 
+    private val genresListenNotes = mutableSetOf<PodcastGenreListenNotesRepoModel>()
+
     override suspend fun getPodcastGenresListenNotes(): List<PodcastGenreListenNotesRepoModel> {
-        return api.getPodcastGenres().genres.map { podcastGenreRepoMapper.toRepoModel(it) }
+        if (genresListenNotes.isEmpty()) {
+            val response = api.getPodcastGenres()
+            val genresRepoModels = response.genres
+                .map { podcastGenreRepoMapper.toRepoModel(it) }
+                .filter { !it.name.contains("Podcast") }
+            genresListenNotes.addAll(genresRepoModels)
+        }
+        return genresListenNotes.toList()
     }
 }

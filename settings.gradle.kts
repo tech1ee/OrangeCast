@@ -55,3 +55,5 @@ fun includeGenresModule(name: String) {
     project(":$name").projectDir = File(rootDir, "modules/genres/$name")
 }
 includeGenresModule("genres-data")
+includeGenresModule("genres-domain")
+includeGenresModule("genres-ui")
