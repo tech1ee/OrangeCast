@@ -1,5 +1,6 @@
 package dev.orangepie.podcasts.domain.mapper
 
+import dev.orangepie.genres.domain.model.PodcastGenreModel
 import dev.orangepie.podcasts.data.model.PodcastListenNotesRepoModel
 import dev.orangepie.podcasts.data.model.PodcastsITunesRepoModel
 import dev.orangepie.podcasts.domain.model.PodcastChannelModel
@@ -13,17 +14,28 @@ class PodcastChannelMapper @Inject constructor() {
             title = repoModel.artistName,
             imagePreviewUrl = repoModel.artworkUrl100,
             imageFullUrl = repoModel.artworkUrl600,
-            genre = repoModel.primaryGenreName
+            genres = listOf(
+                PodcastGenreModel(
+                    id = repoModel.genreIds?.firstOrNull()?.toInt() ?: 0,
+                    name = repoModel.genres?.firstOrNull() ?: "",
+                    parentId = null,
+                )
+            )
         )
     }
 
-    fun toModel(repoModel: PodcastListenNotesRepoModel): PodcastChannelModel {
+    fun toModel(
+        repoModel: PodcastListenNotesRepoModel,
+        genres: List<PodcastGenreModel>
+    ): PodcastChannelModel {
         return PodcastChannelModel(
             itunesId = repoModel.itunesId?.toLong(),
             title = repoModel.title,
             imagePreviewUrl = repoModel.thumbnail,
             imageFullUrl = repoModel.image,
-            genre = repoModel.genreIds?.firstOrNull()?.toString()
+            genres = repoModel.genreIds?.mapNotNull { id ->
+                genres.firstOrNull { it.id == id }
+            } ?: emptyList(),
         )
     }
 }

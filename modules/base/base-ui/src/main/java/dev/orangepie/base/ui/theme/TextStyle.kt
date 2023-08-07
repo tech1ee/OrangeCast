@@ -8,14 +8,17 @@ object TextStyle {
 
     val H1 = TextStyle(
         fontSize = 32.sp,
+        fontWeight = FontWeight.Bold
     )
 
     val H2 = TextStyle(
         fontSize = 24.sp,
+        fontWeight = FontWeight.Bold
     )
 
     val H3 = TextStyle(
         fontSize = 18.sp,
+        fontWeight = FontWeight.Bold
     )
 
     val B1 = TextStyle(
@@ -31,7 +34,7 @@ object TextStyle {
     )
 
     val overline = TextStyle(
-        fontSize = 9.sp,
+        fontSize = 10.sp,
         fontWeight = FontWeight.Medium
     )
 
