@@ -13,6 +13,7 @@ dependencies {
     api(project(":common"))
     implementation(project(":base-domain"))
     implementation(project(":podcasts-data"))
+    implementation(project(":genres-domain"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)
