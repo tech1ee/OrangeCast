@@ -48,6 +48,9 @@ object AppDependencies {
         composeImmutableCollections,
     )
 
+    // Splash screen
+    const val splash = "androidx.core:core-splashscreen:${Versions.splash}"
+
     // Material
     const val material = "com.google.android.material:material:${Versions.material}"
 
