@@ -26,6 +26,8 @@ object Versions {
     const val composeLottie = "5.2.0"
     const val composeImmutableCollections: String = "0.3.5"
 
+    const val splash: String = "1.0.1"
+
     const val material: String = "1.6.0"
 
     const val camera: String = "1.1.0-beta02"

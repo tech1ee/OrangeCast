@@ -57,3 +57,9 @@ fun includeGenresModule(name: String) {
 includeGenresModule("genres-data")
 includeGenresModule("genres-domain")
 includeGenresModule("genres-ui")
+
+fun includeSplashModule(name: String) {
+    include(":$name")
+    project(":$name").projectDir = File(rootDir, "modules/splash/$name")
+}
+includeSplashModule("splash-ui")

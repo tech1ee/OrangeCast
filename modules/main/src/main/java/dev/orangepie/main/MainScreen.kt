@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import dev.orangepie.base.ui.navigation.NavRoute
 import dev.orangepie.base.ui.navigation.NavRoutes
 import dev.orangepie.main.model.NavBarScreen
+import dev.orangepie.splash.ui.SplashScreen
 
 object MainScreenRoute : NavRoute {
     override val route = NavRoutes.Main
@@ -49,4 +50,5 @@ fun MainScreen(
             )
         }
     )
+    SplashScreen()
 }

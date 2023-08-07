@@ -26,6 +26,7 @@
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-data" />
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-domain" />
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-ui" />
+            <option value="$PROJECT_DIR$/modules/splash/splash-ui" />
           </set>
         </option>
       </GradleProjectSettings>
