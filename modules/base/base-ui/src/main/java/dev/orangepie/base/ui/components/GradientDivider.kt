@@ -1,5 +1,6 @@
 package dev.orangepie.base.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -8,7 +9,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.orangepie.base.ui.modifier.brush
 
 @Composable
 fun GradientDivider(
@@ -23,6 +23,8 @@ fun GradientDivider(
     Box(
         modifier = modifier
             .height(height)
-            .brush(Brush.horizontalGradient(gradient)),
+            .background(
+                brush = Brush.horizontalGradient(gradient)
+            ),
     )
 }

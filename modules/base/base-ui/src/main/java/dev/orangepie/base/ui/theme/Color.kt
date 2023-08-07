@@ -3,7 +3,7 @@ package dev.orangepie.base.ui.theme
 import androidx.compose.ui.graphics.Color
 
 object Color {
-    val Background = Color(0xFF3B3C40)
+    val Background = Color(0xFF3C3C41)
     val Yellow = Color(0xFFFFC328)
     val Orange = Color(0xFFFF3D00)
     val Red = Color(0xFFD50000)

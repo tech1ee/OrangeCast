@@ -52,7 +52,10 @@ fun PodcastsScreen(
 private fun PodcastsList(
     podcasts: ImmutableList<PodcastsByGenreUiModel>
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         items(podcasts) { genre ->
             PodcastsByGenreList(
                 genre = genre.genre,
@@ -73,7 +76,7 @@ private fun PodcastsByGenreList(
     ) {
         PodcastGenreTitle(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .padding(start = 16.dp, top = 16.dp, bottom = 4.dp)
                 .fillMaxWidth(),
             title = genre.name
         )
@@ -91,7 +94,7 @@ private fun PodcastsByGenreList(
         GradientDivider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 4.dp)
+                .padding(vertical = 8.dp, horizontal = 32.dp)
         )
     }
 }

@@ -36,7 +36,7 @@ fun PodcastChannelListItem(
     ) {
         SubcomposeAsyncImage(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(vertical = 8.dp)
                 .size(120.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop,
