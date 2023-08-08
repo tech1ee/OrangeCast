@@ -17,6 +17,9 @@
             <option value="$PROJECT_DIR$/modules/base/base-domain" />
             <option value="$PROJECT_DIR$/modules/base/base-ui" />
             <option value="$PROJECT_DIR$/modules/common" />
+            <option value="$PROJECT_DIR$/modules/details/details-data" />
+            <option value="$PROJECT_DIR$/modules/details/details-domain" />
+            <option value="$PROJECT_DIR$/modules/details/details-ui" />
             <option value="$PROJECT_DIR$/modules/discover/discover-ui" />
             <option value="$PROJECT_DIR$/modules/genres/genres-data" />
             <option value="$PROJECT_DIR$/modules/genres/genres-domain" />

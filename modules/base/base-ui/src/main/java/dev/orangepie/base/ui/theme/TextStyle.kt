@@ -51,6 +51,6 @@ object TextStyle {
     )
 
     val Button = TextStyle(
-        fontSize = 16.sp,
+        fontSize = 14.sp,
     )
 }

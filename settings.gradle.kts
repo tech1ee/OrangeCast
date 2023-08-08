@@ -63,3 +63,11 @@ fun includeSplashModule(name: String) {
     project(":$name").projectDir = File(rootDir, "modules/splash/$name")
 }
 includeSplashModule("splash-ui")
+
+fun includeDetailsModule(name: String) {
+    include(":$name")
+    project(":$name").projectDir = File(rootDir, "modules/details/$name")
+}
+includeDetailsModule("details-data")
+includeDetailsModule("details-domain")
+includeDetailsModule("details-ui")

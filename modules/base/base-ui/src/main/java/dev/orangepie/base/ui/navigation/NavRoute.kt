@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 
 interface NavRoute {
     val route: Routes
+
     fun getArguments(): List<NamedNavArgument> = listOf()
 
     @Composable

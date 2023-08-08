@@ -4,6 +4,12 @@ import android.os.Bundle
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavHostController
@@ -12,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dev.orangepie.base.ui.navigation.NavRoute
 import dev.orangepie.base.ui.navigation.NavRoutes
+import dev.orangepie.main.model.MainUIState
 import dev.orangepie.main.model.NavBarScreen
 import dev.orangepie.splash.ui.SplashScreen
 
@@ -37,8 +44,11 @@ object MainScreenRoute : NavRoute {
 fun MainScreen(
     navController: NavHostController,
     onBottomNavClick: (NavBarScreen) -> Unit,
+    viewModel: MainViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
+    val uiState = viewModel.uiState.collectAsState()
+
     Scaffold(
         bottomBar = { BottomBar(navController, onBottomNavClick) },
         scaffoldState = scaffoldState,
@@ -50,5 +60,9 @@ fun MainScreen(
             )
         }
     )
-    SplashScreen()
+
+    SplashScreen(
+        visible = uiState.value is MainUIState.Splash,
+        onFinish = viewModel::onSplashShown,
+    )
 }

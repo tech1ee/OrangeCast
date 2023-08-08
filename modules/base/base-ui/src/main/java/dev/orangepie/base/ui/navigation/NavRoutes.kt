@@ -18,6 +18,15 @@ sealed class NavRoutes: Routes {
     object Podcasts : NavRoutes() {
         override fun getRoute() = "podcasts"
     }
+
+    object PodcastDetails : NavRoutes() {
+        const val KEY_PODCAST_ITUNES_ID = "KEY_PODCAST_ITUNES_ID"
+
+        override fun getRoute() = "podcastDetails/{$KEY_PODCAST_ITUNES_ID}"
+
+        fun getNavGraphRoute(iTunesId: Long) =
+            getRoute().replace("{$KEY_PODCAST_ITUNES_ID}", iTunesId.toString())
+    }
 }
 
 sealed class TabNavRoutes : Routes {
