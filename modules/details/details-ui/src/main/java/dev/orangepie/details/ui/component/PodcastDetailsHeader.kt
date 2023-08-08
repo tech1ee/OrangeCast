@@ -33,6 +33,10 @@ import dev.orangepie.base.ui.components.ButtonRoundedWithText
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.details.ui.model.PodcastDetailsUIModel
+import dev.orangepie.details.ui.model.PodcastRSSFeedEnclosureUIModel
+import dev.orangepie.details.ui.model.PodcastRSSFeedImageUIModel
+import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
+import dev.orangepie.details.ui.model.PodcastRSSFeedUIModel
 
 @Composable
 fun PodcastDetailsHeader(
@@ -161,6 +165,10 @@ fun PodcastDetailsHeaderPreview() {
             feedUrl = "feedUrl",
             artworkUrl100 = "artworkUrl100",
             genres = listOf("genre1", "genre2"),
+            feed = PodcastRSSFeedUIModel(
+                description = "description",
+                items = listOf(),
+            )
         ),
         onBackClick = {},
     )

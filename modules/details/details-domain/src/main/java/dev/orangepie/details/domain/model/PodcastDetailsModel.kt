@@ -10,4 +10,5 @@ data class PodcastDetailsModel(
     val feedUrl: String,
     val artworkUrl100: String,
     val genres: List<String>,
+    val feed: PodcastRSSFeedModel,
 )

@@ -6,7 +6,9 @@ import dev.orangepie.details.ui.model.PodcastDetailsUIState
 import dev.orangepie.details.ui.model.PodcastDetailsViewModelState
 import javax.inject.Inject
 
-class PodcastDetailsUIMapper @Inject constructor() {
+class PodcastDetailsUIMapper @Inject constructor(
+    private val feedMapper: PodcastRSSFeedUIMapper,
+) {
 
     suspend fun toUIState(state: PodcastDetailsViewModelState): PodcastDetailsUIState {
         return toUIStateBlocking(state)
@@ -32,6 +34,7 @@ class PodcastDetailsUIMapper @Inject constructor() {
             feedUrl = feedUrl,
             artworkUrl100 = artworkUrl100,
             genres = genres,
+            feed = feedMapper.toUIModel(feed)
         )
     }
 }
