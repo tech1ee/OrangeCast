@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,6 +55,7 @@ class PodcastDetailsViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
+                Timber.e(e)
                 viewModelState.update {
                     it.copy(
                         loading = false,

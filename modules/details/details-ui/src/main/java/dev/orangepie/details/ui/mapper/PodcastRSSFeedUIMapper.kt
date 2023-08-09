@@ -1,9 +1,7 @@
 package dev.orangepie.details.ui.mapper
 
-import dev.orangepie.details.domain.model.PodcastRSSFeedEnclosureModel
 import dev.orangepie.details.domain.model.PodcastRSSFeedItemModel
 import dev.orangepie.details.domain.model.PodcastRSSFeedModel
-import dev.orangepie.details.ui.model.PodcastRSSFeedEnclosureUIModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedUIModel
 import javax.inject.Inject
@@ -22,18 +20,19 @@ class PodcastRSSFeedUIMapper @Inject constructor() {
             title = title,
             description = description,
             link = link,
-            pubDate = pubDate,
-            enclosure = enclosure.toUIModel(),
+            pubDate = pubDate?.formatDate(),
+            episode = episode,
+            season = season,
             itunesDuration = itunesDuration,
             itunesSummary = itunesSummary,
         )
     }
 
-    private fun PodcastRSSFeedEnclosureModel.toUIModel(): PodcastRSSFeedEnclosureUIModel {
-        return PodcastRSSFeedEnclosureUIModel(
-            url = url,
-            length = length,
-            type = type,
-        )
+    private fun String?.formatDate(): String? {
+        return this?.split(", ")
+            ?.get(1)
+            ?.split(" ")
+            ?.take(2)
+            ?.joinToString(" ")
     }
 }

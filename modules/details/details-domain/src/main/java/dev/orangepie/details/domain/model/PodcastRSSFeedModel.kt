@@ -1,11 +1,11 @@
-package dev.orangepie.details.ui.model
+package dev.orangepie.details.domain.model
 
-data class PodcastRSSFeedUIModel(
+data class PodcastRSSFeedModel(
     val description: String?,
-    val items: List<PodcastRSSFeedItemUIModel>,
+    val items: List<PodcastRSSFeedItemModel>,
 )
 
-data class PodcastRSSFeedItemUIModel(
+data class PodcastRSSFeedItemModel(
     val title: String?,
     val description: String?,
     val link: String?,

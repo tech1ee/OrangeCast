@@ -74,9 +74,11 @@ object AppDependencies {
     // Coil
     const val coil = "io.coil-kt:coil-compose:${Versions.coil}"
 
+    // RSS Parser
+    const val rssParser = "com.prof18.rssparser:rssparser:${Versions.rssParser}"
+
     // Network
     private const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
-    private const val retrofitXMLParser = "com.squareup.retrofit2:converter-simplexml:${Versions.retrofit}"
     private const val adapter = "com.squareup.retrofit2:adapter-rxjava3:${Versions.retrofit}"
     private const val converter = "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}"
     private const val okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
@@ -87,7 +89,6 @@ object AppDependencies {
     const val securityCrypto = "androidx.security:security-crypto-ktx:${Versions.securityCrypto}"
     val networkLibs = listOf(
         retrofit,
-        retrofitXMLParser,
         adapter,
         converter,
         okhttp,

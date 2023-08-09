@@ -1,29 +1,25 @@
 package dev.orangepie.details.data.mapper
 
-import dev.orangepie.details.data.model.PodcastRSSFeedEnclosureRepoModel
+import com.prof.rssparser.Channel
 import dev.orangepie.details.data.model.PodcastRSSFeedItemRepoModel
 import dev.orangepie.details.data.model.PodcastRSSFeedRepoModel
-import dev.orangepie.details.data.model.PodcastRSSFeedResponse
 import javax.inject.Inject
 
 class PodcastRSSFeedRepoMapper @Inject constructor() {
 
-    fun toRepoModel(response: PodcastRSSFeedResponse): PodcastRSSFeedRepoModel {
+    fun toRepoModel(response: Channel): PodcastRSSFeedRepoModel {
         return PodcastRSSFeedRepoModel(
-            description = response.channel.description,
-            items = response.channel.items.map { item ->
+            description = response.description,
+            items = response.articles.map { item ->
                 PodcastRSSFeedItemRepoModel(
                     title = item.title,
                     description = item.description,
                     link = item.link,
                     pubDate = item.pubDate,
-                    enclosure = PodcastRSSFeedEnclosureRepoModel(
-                        url = item.enclosure.url,
-                        length = item.enclosure.length,
-                        type = item.enclosure.type,
-                    ),
-                    itunesDuration = item.itunesDuration,
-                    itunesSummary = item.itunesSummary,
+                    episode = item.itunesArticleData?.episode,
+                    season = item.itunesArticleData?.season,
+                    itunesDuration = item.itunesArticleData?.duration,
+                    itunesSummary = item.itunesArticleData?.summary,
                 )
             },
         )

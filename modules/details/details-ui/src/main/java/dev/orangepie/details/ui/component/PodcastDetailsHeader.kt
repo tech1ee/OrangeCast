@@ -33,9 +33,6 @@ import dev.orangepie.base.ui.components.ButtonRoundedWithText
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.details.ui.model.PodcastDetailsUIModel
-import dev.orangepie.details.ui.model.PodcastRSSFeedEnclosureUIModel
-import dev.orangepie.details.ui.model.PodcastRSSFeedImageUIModel
-import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedUIModel
 
 @Composable

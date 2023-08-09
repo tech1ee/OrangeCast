@@ -13,6 +13,7 @@ dependencies {
     api(project(":common"))
     api(project(":base-data"))
     api(AppDependencies.networkLibs)
+    api(AppDependencies.rssParser)
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)
