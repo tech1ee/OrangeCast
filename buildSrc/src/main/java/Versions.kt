@@ -9,6 +9,7 @@ object Versions {
     const val firebaseCrashlyticsGradle: String = "2.8.1"
     const val accompanist: String = "0.26.1-alpha"
     const val coil: String = "2.2.1"
+    const val rssParser: String = "5.0.3"
     const val appUpdate: String = "2.0.0"
 
     //libs

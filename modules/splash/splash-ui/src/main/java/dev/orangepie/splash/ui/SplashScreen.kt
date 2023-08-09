@@ -35,9 +35,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    visible: Boolean,
+    onFinish: () -> Unit,
+) {
 
-    val visibile = remember { mutableStateOf(true) }
     val animatableAngle = remember {
         Animatable(0f)
     }
@@ -45,7 +47,7 @@ fun SplashScreen() {
     AnimatedVisibility(
         modifier = Modifier
             .fillMaxSize(),
-        visible = visibile.value,
+        visible = visible,
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
@@ -115,12 +117,15 @@ fun SplashScreen() {
             )
         }
         delay(1000)
-        visibile.value = false
+        onFinish()
     }
 }
 
 @Preview
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen()
+    SplashScreen(
+        visible = true,
+        onFinish = {}
+    )
 }

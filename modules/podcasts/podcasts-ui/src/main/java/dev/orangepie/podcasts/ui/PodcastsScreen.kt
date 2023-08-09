@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import dev.orangepie.base.ui.components.GradientDivider
+import dev.orangepie.base.ui.components.LoaderCircle
 import dev.orangepie.base.ui.navigation.NavRoute
 import dev.orangepie.base.ui.navigation.NavRoutes
 import dev.orangepie.genres.ui.components.PodcastGenreTitle
@@ -43,14 +44,19 @@ fun PodcastsScreen(
     val uiState = viewModel.uiState.collectAsState()
 
     when (val state = uiState.value) {
-        is PodcastsUIState.PodcastsByGenre -> PodcastsList(state.podcasts)
+        is PodcastsUIState.PodcastsByGenre -> PodcastsList(
+            podcasts = state.podcasts,
+            onItemClick = viewModel::onPodcastClick
+        )
+        is PodcastsUIState.Loading -> LoaderCircle()
         else -> Unit
     }
 }
 
 @Composable
 private fun PodcastsList(
-    podcasts: ImmutableList<PodcastsByGenreUiModel>
+    podcasts: ImmutableList<PodcastsByGenreUiModel>,
+    onItemClick: (itunesId: Long) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -59,7 +65,8 @@ private fun PodcastsList(
         items(podcasts) { genre ->
             PodcastsByGenreList(
                 genre = genre.genre,
-                podcasts = genre.podcasts
+                podcasts = genre.podcasts,
+                onItemClick = onItemClick
             )
         }
     }
@@ -68,7 +75,8 @@ private fun PodcastsList(
 @Composable
 private fun PodcastsByGenreList(
     genre: PodcastGenreUiModel,
-    podcasts: ImmutableList<PodcastChannelUIModel>
+    podcasts: ImmutableList<PodcastChannelUIModel>,
+    onItemClick: (itunesId: Long) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -87,7 +95,7 @@ private fun PodcastsByGenreList(
             items(podcasts) { podcast ->
                 PodcastChannelListItem(
                     model = podcast,
-                    onClick = { /* TODO */ }
+                    onClick = { podcast.itunesId?.let { onItemClick(it) } }
                 )
             }
         }
@@ -122,6 +130,7 @@ private fun PodcastsByGenreListPreview() {
                     )
                 )
             ),
-        ).toPersistentList()
+        ).toPersistentList(),
+        onItemClick = {}
     )
 }

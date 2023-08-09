@@ -3,6 +3,10 @@ package dev.orangepie.podcasts.ui
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.orangepie.base.ui.BaseViewModel
+import dev.orangepie.base.ui.navigation.NavCommand
+import dev.orangepie.base.ui.navigation.NavRoutes
+import dev.orangepie.base.ui.navigation.Navigator
+import dev.orangepie.details.ui.PodcastDetailsScreenRoute
 import dev.orangepie.podcasts.domain.usecase.GetBestPodcastsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -23,6 +27,15 @@ class PodcastsViewModel @Inject constructor(
 
     init {
         getBestPodcasts()
+    }
+
+    fun onPodcastClick(iTunesId: Long){
+        navigate(
+            NavCommand.Navigate(
+                router = Navigator.Router.ROOT,
+                route = NavRoutes.PodcastDetails.getNavGraphRoute(iTunesId = iTunesId)
+            )
+        )
     }
 
     private fun getBestPodcasts() {
