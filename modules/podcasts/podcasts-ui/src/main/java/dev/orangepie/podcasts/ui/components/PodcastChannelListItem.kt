@@ -1,5 +1,6 @@
 package dev.orangepie.podcasts.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,7 +32,8 @@ fun PodcastChannelListItem(
     Column(
         modifier = Modifier
             .width(160.dp)
-            .padding(16.dp),
+            .padding(16.dp)
+            .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SubcomposeAsyncImage(

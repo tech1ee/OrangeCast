@@ -21,6 +21,7 @@ object NetworkModule {
 
     const val ITUNES = "iTunes"
     const val LISTEN_NOTES = "ListenNotes"
+    const val PODCAST_RSS_FEED = "PodcastRSSFeed"
     private const val ITUNES_URL = "https://itunes.apple.com/"
     private const val LISTEN_NOTES_URL = "https://listen-api.listennotes.com/api/v2/"
 
@@ -60,6 +61,16 @@ object NetworkModule {
             .baseUrl(LISTEN_NOTES_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi).withNullSerialization())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .build()
+    }
+
+    @Named(PODCAST_RSS_FEED)
+    @Provides
+    internal fun provideRetrofitInterfacePodcastRSSFeed(client: OkHttpClient, moshi: Moshi): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(LISTEN_NOTES_URL)
+            .client(client)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
     }

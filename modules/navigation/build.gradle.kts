@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":base-ui"))
     implementation(project(":discover-ui"))
     implementation(project(":podcasts-ui"))
+    implementation(project(":details-ui"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)

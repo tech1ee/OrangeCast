@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    // Details
+    <string name="details_subscribe_button">Subscribe</string>
+    <string name="details_unsubscribe_button">Unsubscribe</string>
+</resources>
