@@ -1,6 +1,7 @@
 package dev.orangepie.details.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,17 +9,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orangecast.details.ui.R
+import dev.orangepie.base.ui.components.GradientDivider
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
@@ -27,79 +29,97 @@ import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
 fun PodcastEpisodeListItem(
     item: PodcastRSSFeedItemUIModel,
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color.Background,
+                        Color.BackgroundBlack
+                    ),
+                )
+            )
     ) {
-        Column(
+        Row(
             modifier = Modifier
-                .weight(3f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            Row(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    .weight(3f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                if (!item.season.isNullOrEmpty() && !item.episode.isNullOrEmpty()) {
-                    Text(
-                        text = "S${item.season} E${item.episode}".uppercase(),
-                        style = TextStyle.B5,
-                        color = Color.White50
-                    )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    if (!item.season.isNullOrEmpty() && !item.episode.isNullOrEmpty()) {
+                        Text(
+                            text = "S${item.season} E${item.episode}".uppercase(),
+                            style = TextStyle.B5,
+                            color = Color.White50
+                        )
+                        Image(
+                            modifier = Modifier
+                                .size(2.dp),
+                            painter = painterResource(id = R.drawable.ic_dot),
+                            contentDescription = null
+                        )
+                    }
+                    if (!item.pubDate.isNullOrEmpty()) {
+                        Text(
+                            text = item.pubDate.uppercase(),
+                            style = TextStyle.B5,
+                            color = Color.White50
+                        )
+                    }
+                }
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = item.title ?: "",
+                    style = TextStyle.B2,
+                    color = Color.White,
+                    minLines = 2,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     Image(
                         modifier = Modifier
-                            .size(2.dp),
-                        painter = painterResource(id = R.drawable.ic_dot),
+                            .size(10.dp)
+                            .alpha(.5f),
+                        painter = painterResource(id = R.drawable.ic_clock_white),
                         contentDescription = null
                     )
-                }
-                if (!item.pubDate.isNullOrEmpty()) {
                     Text(
-                        text = item.pubDate.uppercase(),
+                        text = item.itunesDuration?.uppercase() ?: "",
                         style = TextStyle.B5,
                         color = Color.White50
                     )
                 }
             }
-            Text(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                text = item.title ?: "",
-                style = TextStyle.B3,
-                color = Color.White,
-                minLines = 2,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    .weight(1f)
             ) {
-                Image(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .alpha(.5f),
-                    painter = painterResource(id = R.drawable.ic_clock_white),
-                    contentDescription = null
-                )
-                Text(
-                    text = item.itunesDuration?.uppercase() ?: "",
-                    style = TextStyle.B5,
-                    color = Color.White50
-                )
+
             }
         }
-        Box(
+        GradientDivider(
             modifier = Modifier
-                .weight(1f)
-        ) {
-
-        }
+                .fillMaxWidth()
+                .padding(start = 64.dp, end = 64.dp, top = 4.dp)
+        )
     }
 }
 

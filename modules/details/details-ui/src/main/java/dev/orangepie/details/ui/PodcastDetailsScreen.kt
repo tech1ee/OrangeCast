@@ -42,6 +42,7 @@ fun PodcastDetailsScreen(
     when (val state = uiState.value) {
         is PodcastDetailsUIState.Details -> PodcastDetailsScreenContent(
             details = state.details,
+            episodes = state.details.feed.items,
             onBackClick = viewModel::onBackClick
         )
         is PodcastDetailsUIState.Loading -> LoaderCircle()

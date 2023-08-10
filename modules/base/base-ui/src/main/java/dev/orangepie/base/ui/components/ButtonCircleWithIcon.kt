@@ -24,9 +24,10 @@ fun ButtonCircleWithIcon(
     Card(
         modifier = modifier
             .size(44.dp)
+            .clip(CircleShape)
             .clickable(onClick = onClick),
         shape = CircleShape,
-        border = BorderStroke(1.dp, Color.BackgroundBlack),
+        border = BorderStroke(1.dp, Color.BackgroundBlack.copy(alpha = .2f)),
         elevation = 8.dp
     ) {
         Box(

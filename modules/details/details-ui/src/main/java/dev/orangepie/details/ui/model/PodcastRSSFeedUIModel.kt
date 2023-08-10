@@ -1,8 +1,10 @@
 package dev.orangepie.details.ui.model
 
+import kotlinx.collections.immutable.ImmutableList
+
 data class PodcastRSSFeedUIModel(
     val description: String?,
-    val items: List<PodcastRSSFeedItemUIModel>,
+    val items: ImmutableList<PodcastRSSFeedItemUIModel>,
 )
 
 data class PodcastRSSFeedItemUIModel(
