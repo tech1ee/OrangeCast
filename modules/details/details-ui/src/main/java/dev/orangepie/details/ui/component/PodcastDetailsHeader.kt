@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,10 +31,12 @@ import coil.compose.SubcomposeAsyncImage
 import com.orangecast.details.ui.R
 import dev.orangepie.base.ui.components.ButtonCircleWithIcon
 import dev.orangepie.base.ui.components.ButtonRoundedWithText
+import dev.orangepie.base.ui.components.GradientDivider
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.details.ui.model.PodcastDetailsUIModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedUIModel
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun PodcastDetailsHeader(
@@ -61,7 +64,7 @@ fun PodcastDetailsHeader(
                 }
             )
             ButtonCircleWithIcon(
-                onClick = onBackClick,
+                onClick = { /*TODO*/ },
                 icon = {
                     Image(
                         painter = painterResource(id = R.drawable.ic_share),
@@ -97,14 +100,33 @@ fun PodcastDetailsHeader(
                 )
             }
             Spacer(modifier = Modifier.size(16.dp))
+            Text(
+                modifier = Modifier
+                    .height(124.dp)
+                    .padding(top = 16.dp, end = 16.dp),
+                text = details.feed.description ?: "",
+                style = TextStyle.B3,
+                color = Color.Grey1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.End,
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Column(
-                modifier = Modifier.padding(end = 16.dp),
-                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .weight(1f)
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = details.collectionName,
-                    style = TextStyle.H2,
+                    style = TextStyle.B1,
                     color = Color.White,
                     maxLines = 2,
                     minLines = 2,
@@ -120,30 +142,22 @@ fun PodcastDetailsHeader(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    text = details.genres.joinToString(", "),
-                    style = TextStyle.overline,
-                    color = Color.Grey1,
-                    minLines = 1,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.End,
-                )
             }
+            ButtonRoundedWithText(
+                modifier = Modifier
+                    .width(120.dp),
+                text = stringResource(
+                    id =
+                    if (details.isSubscribed) com.orangecast.common.R.string.details_unsubscribe_button
+                    else com.orangecast.common.R.string.details_subscribe_button
+                ),
+                onClick = {},
+            )
         }
-
-        ButtonRoundedWithText(
+        GradientDivider(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .width(120.dp)
-                .align(alignment = Alignment.End),
-            text = stringResource(id =
-            if (details.isSubscribed) com.orangecast.common.R.string.details_unsubscribe_button
-            else com.orangecast.common.R.string.details_subscribe_button),
-            onClick = {},
+                .fillMaxWidth()
+                .padding(start = 32.dp, end = 32.dp, top = 8.dp)
         )
     }
 }
@@ -163,8 +177,10 @@ fun PodcastDetailsHeaderPreview() {
             artworkUrl100 = "artworkUrl100",
             genres = listOf("genre1", "genre2"),
             feed = PodcastRSSFeedUIModel(
-                description = "description",
-                items = listOf(),
+                description = "Lorem ipsum dolor sit amet, " +
+                    "consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                items = persistentListOf(),
             )
         ),
         onBackClick = {},

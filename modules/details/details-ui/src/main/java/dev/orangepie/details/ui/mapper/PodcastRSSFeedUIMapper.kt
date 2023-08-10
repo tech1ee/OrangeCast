@@ -4,6 +4,7 @@ import dev.orangepie.details.domain.model.PodcastRSSFeedItemModel
 import dev.orangepie.details.domain.model.PodcastRSSFeedModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedUIModel
+import kotlinx.collections.immutable.toPersistentList
 import javax.inject.Inject
 
 class PodcastRSSFeedUIMapper @Inject constructor() {
@@ -11,7 +12,7 @@ class PodcastRSSFeedUIMapper @Inject constructor() {
     fun toUIModel(model: PodcastRSSFeedModel): PodcastRSSFeedUIModel {
         return PodcastRSSFeedUIModel(
             description = model.description,
-            items = model.items.map { it.toUIModel() },
+            items = model.items.map { it.toUIModel() }.toPersistentList(),
         )
     }
 

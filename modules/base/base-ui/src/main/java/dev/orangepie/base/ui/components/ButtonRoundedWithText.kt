@@ -29,10 +29,11 @@ fun ButtonRoundedWithText(
     Card(
         modifier = modifier
             .height(44.dp)
+            .clip(RoundedCornerShape(50))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(50),
-        border = if (selected) BorderStroke(1.dp, Color.Yellow)
-        else BorderStroke(1.dp, Color.BackgroundBlack),
+        border = if (selected) BorderStroke(1.dp, Color.Yellow.copy(alpha = .2f))
+        else BorderStroke(1.dp, Color.BackgroundBlack.copy(alpha = .2f)),
         elevation = 8.dp
     ) {
         Box(
