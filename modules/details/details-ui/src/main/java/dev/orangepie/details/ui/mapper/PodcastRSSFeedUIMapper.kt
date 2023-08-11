@@ -1,5 +1,6 @@
 package dev.orangepie.details.ui.mapper
 
+import android.text.Html
 import dev.orangepie.details.domain.model.PodcastRSSFeedItemModel
 import dev.orangepie.details.domain.model.PodcastRSSFeedModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
@@ -11,7 +12,7 @@ class PodcastRSSFeedUIMapper @Inject constructor() {
 
     fun toUIModel(model: PodcastRSSFeedModel): PodcastRSSFeedUIModel {
         return PodcastRSSFeedUIModel(
-            description = model.description,
+            description = Html.fromHtml(model.description, Html.FROM_HTML_MODE_COMPACT).toString(),
             items = model.items.map { it.toUIModel() }.toPersistentList(),
         )
     }
