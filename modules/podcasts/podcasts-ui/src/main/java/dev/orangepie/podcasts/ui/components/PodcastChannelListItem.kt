@@ -1,6 +1,7 @@
 package dev.orangepie.podcasts.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,46 +30,50 @@ fun PodcastChannelListItem(
     model: PodcastChannelUIModel,
     onClick: () -> Unit
 ) {
-    Column(
+    Box(
         modifier = Modifier
-            .width(160.dp)
-            .padding(16.dp)
-            .clickable(onClick = onClick),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .clickable(onClick = onClick)
     ) {
-        SubcomposeAsyncImage(
+        Column(
             modifier = Modifier
-                .padding(vertical = 8.dp)
-                .size(120.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop,
-            model = model.imagePreviewUrl,
-            contentDescription = null
-        )
-        Text(
-            modifier = Modifier
-                .fillMaxWidth(),
-            text = model.title ?: "",
-            style = TextStyle.B2.copy(
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            overflow = TextOverflow.Ellipsis,
-            minLines = 2,
-            maxLines = 2
-        )
-        Text(
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .fillMaxWidth(),
-            text = model.genres.joinToString(", ") { it.name },
-            style = TextStyle.overline,
-            color = Color.White50,
-            textAlign = TextAlign.Center,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
-        )
+                .width(160.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            SubcomposeAsyncImage(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .size(120.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop,
+                model = model.imagePreviewUrl,
+                contentDescription = null
+            )
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = model.title ?: "",
+                style = TextStyle.B2.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                minLines = 2,
+                maxLines = 2
+            )
+            Text(
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .fillMaxWidth(),
+                text = model.genres.joinToString(", ") { it.name },
+                style = TextStyle.overline,
+                color = Color.White50,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        }
     }
 }
 

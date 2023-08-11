@@ -67,6 +67,7 @@ fun PodcastDetailsHeader(
                 onClick = { /*TODO*/ },
                 icon = {
                     Image(
+                        modifier = Modifier.size(22.dp),
                         painter = painterResource(id = R.drawable.ic_share),
                         contentDescription = null
                     )
