@@ -17,16 +17,33 @@ class PodcastRSSFeedUIMapper @Inject constructor() {
         )
     }
 
+    fun toModel(uiModel: PodcastRSSFeedItemUIModel): PodcastRSSFeedItemModel {
+        return PodcastRSSFeedItemModel(
+            title = uiModel.title,
+            description = uiModel.description,
+            audio = uiModel.audio,
+            link = uiModel.link,
+            pubDate = uiModel.pubDate,
+            episode = uiModel.episode,
+            season = uiModel.season,
+            itunesDuration = uiModel.itunesDuration,
+            itunesSummary = uiModel.itunesSummary,
+            isPlaying = uiModel.isPlaying,
+        )
+    }
+
     private fun PodcastRSSFeedItemModel.toUIModel(): PodcastRSSFeedItemUIModel {
         return PodcastRSSFeedItemUIModel(
             title = title,
             description = description,
+            audio = audio,
             link = link,
             pubDate = pubDate?.formatDate(),
             episode = episode,
             season = season,
             itunesDuration = itunesDuration,
             itunesSummary = itunesSummary,
+            isPlaying = isPlaying,
         )
     }
 

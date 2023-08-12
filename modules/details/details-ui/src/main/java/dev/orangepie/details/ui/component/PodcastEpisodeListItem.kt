@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,10 +25,12 @@ import dev.orangepie.base.ui.components.GradientDivider
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
+import dev.orangepie.player.ui.components.PlayButton
 
 @Composable
 fun PodcastEpisodeListItem(
     item: PodcastRSSFeedItemUIModel,
+    onPlayClick: (item: PodcastRSSFeedItemUIModel) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -44,7 +47,8 @@ fun PodcastEpisodeListItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
                 modifier = Modifier
@@ -110,9 +114,15 @@ fun PodcastEpisodeListItem(
             }
             Box(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                contentAlignment = Alignment.CenterEnd
             ) {
-
+                PlayButton(
+                    modifier = Modifier
+                        .padding(start = 8.dp),
+                    isPlaying = item.isPlaying,
+                    onClick = { onPlayClick(item) }
+                )
             }
         }
         GradientDivider(
@@ -130,6 +140,7 @@ fun PodcastEpisodeListItemPreview() {
         item = PodcastRSSFeedItemUIModel(
             title = "Mark Cuban: “And for that reason I’m out” - Shark Tank Podcast - ABC Podcasts - ABC Audio - ABC News - ABC News",
             description = "Description",
+            audio = "",
             link = "Link",
             pubDate = "02 Aug 2023",
             episode = "145",
@@ -137,6 +148,7 @@ fun PodcastEpisodeListItemPreview() {
             itunesDuration = "02:58:45",
             itunesSummary = "iTunesSummary",
         ),
+        onPlayClick = {},
     )
 }
 

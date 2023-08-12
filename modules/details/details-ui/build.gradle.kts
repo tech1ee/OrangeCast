@@ -21,6 +21,8 @@ android {
 dependencies {
     implementation(project(":base-ui"))
     implementation(project(":details-domain"))
+    implementation(project(":player-domain"))
+    implementation(project(":player-ui"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)

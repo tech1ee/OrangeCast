@@ -26,6 +26,9 @@
             <option value="$PROJECT_DIR$/modules/genres/genres-ui" />
             <option value="$PROJECT_DIR$/modules/main" />
             <option value="$PROJECT_DIR$/modules/navigation" />
+            <option value="$PROJECT_DIR$/modules/player/player-data" />
+            <option value="$PROJECT_DIR$/modules/player/player-domain" />
+            <option value="$PROJECT_DIR$/modules/player/player-ui" />
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-data" />
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-domain" />
             <option value="$PROJECT_DIR$/modules/podcasts/podcasts-ui" />

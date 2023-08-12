@@ -14,6 +14,7 @@ class PodcastRSSFeedMapper @Inject constructor() {
                 PodcastRSSFeedItemModel(
                     title = item.title,
                     description = item.description,
+                    audio = item.audio,
                     link = item.link,
                     pubDate = item.pubDate,
                     episode = item.episode,

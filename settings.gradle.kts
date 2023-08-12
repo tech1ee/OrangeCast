@@ -71,3 +71,11 @@ fun includeDetailsModule(name: String) {
 includeDetailsModule("details-data")
 includeDetailsModule("details-domain")
 includeDetailsModule("details-ui")
+
+fun includePlayerModule(name: String) {
+    include(":$name")
+    project(":$name").projectDir = File(rootDir, "modules/player/$name")
+}
+includePlayerModule("player-data")
+includePlayerModule("player-domain")
+includePlayerModule("player-ui")

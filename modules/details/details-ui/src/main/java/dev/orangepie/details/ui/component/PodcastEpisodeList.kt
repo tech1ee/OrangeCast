@@ -9,6 +9,7 @@ import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
 @Composable
 fun PodcastEpisodeList(
     list: List<PodcastRSSFeedItemUIModel>,
+    onPlayClick: (item: PodcastRSSFeedItemUIModel) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -16,7 +17,8 @@ fun PodcastEpisodeList(
     ) {
         items(list.size) { index ->
             PodcastEpisodeListItem(
-                item = list[index]
+                item = list[index],
+                onPlayClick = onPlayClick,
             )
         }
     }
