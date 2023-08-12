@@ -71,6 +71,17 @@ object AppDependencies {
         accompanistPlaceholder,
     )
 
+    // Exo Player
+    const val exoPlayer = "androidx.media3:media3-exoplayer:${Versions.exoPlayer}"
+    const val exoPlayerDash = "androidx.media3:media3-exoplayer-dash:${Versions.exoPlayer}"
+    const val exoPlayerUI = "androidx.media3:media3-ui:${Versions.exoPlayer}"
+
+    val exoPlayerLibs = listOf(
+        exoPlayer,
+        exoPlayerDash,
+        exoPlayerUI,
+    )
+
     // Coil
     const val coil = "io.coil-kt:coil-compose:${Versions.coil}"
 

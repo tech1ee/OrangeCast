@@ -8,6 +8,7 @@ data class PodcastRSSFeedRepoModel(
 data class PodcastRSSFeedItemRepoModel(
     val title: String?,
     val description: String?,
+    val audio: String?,
     val link: String?,
     val pubDate: String?,
     val episode: String?,

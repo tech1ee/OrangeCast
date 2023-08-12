@@ -43,7 +43,8 @@ fun PodcastDetailsScreen(
         is PodcastDetailsUIState.Details -> PodcastDetailsScreenContent(
             details = state.details,
             episodes = state.details.feed.items,
-            onBackClick = viewModel::onBackClick
+            onBackClick = viewModel::onBackClick,
+            onPlayClick = viewModel::onPlayClick,
         )
         is PodcastDetailsUIState.Loading -> LoaderCircle()
         else -> Unit

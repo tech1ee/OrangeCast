@@ -31,8 +31,7 @@ object Versions {
 
     const val material: String = "1.6.0"
 
-    const val camera: String = "1.1.0-beta02"
-    const val cameraBarcodeScanning: String = "17.0.2"
+    const val exoPlayer = "1.1.0"
 
     const val moshi: String = "1.14.0"
     const val retrofit: String = "2.9.0"

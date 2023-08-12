@@ -12,6 +12,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun PodcastDetailsScreenContent(
     details: PodcastDetailsUIModel,
     episodes: ImmutableList<PodcastRSSFeedItemUIModel>,
+    onPlayClick: (item: PodcastRSSFeedItemUIModel) -> Unit,
     onBackClick: () -> Unit,
 ) {
     Column(
@@ -23,7 +24,8 @@ fun PodcastDetailsScreenContent(
             onBackClick = onBackClick
         )
         PodcastEpisodeList(
-            list = episodes
+            list = episodes,
+            onPlayClick = onPlayClick,
         )
     }
 }
