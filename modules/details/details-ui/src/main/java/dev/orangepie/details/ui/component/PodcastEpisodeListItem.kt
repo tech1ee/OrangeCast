@@ -25,6 +25,7 @@ import dev.orangepie.base.ui.components.GradientDivider
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
+import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIState
 import dev.orangepie.player.ui.components.PlayButton
 
 @Composable
@@ -120,7 +121,8 @@ fun PodcastEpisodeListItem(
                 PlayButton(
                     modifier = Modifier
                         .padding(start = 8.dp),
-                    isPlaying = item.isPlaying,
+                    isLoading = item.state is PodcastRSSFeedItemUIState.Loading,
+                    isPlaying = item.state is PodcastRSSFeedItemUIState.Playing,
                     onClick = { onPlayClick(item) }
                 )
             }

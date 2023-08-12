@@ -15,5 +15,12 @@ data class PodcastRSSFeedItemModel(
     val season: String?,
     val itunesDuration: String?,
     val itunesSummary: String?,
-    val isPlaying: Boolean = false,
+    val state: PodcastRSSFeedItemState = PodcastRSSFeedItemState.None,
 )
+
+sealed class PodcastRSSFeedItemState {
+    object None : PodcastRSSFeedItemState()
+    object Loading : PodcastRSSFeedItemState()
+    object Playing : PodcastRSSFeedItemState()
+    object Paused : PodcastRSSFeedItemState()
+}
