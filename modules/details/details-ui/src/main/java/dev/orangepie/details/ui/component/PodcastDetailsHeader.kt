@@ -1,5 +1,7 @@
 package dev.orangepie.details.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,8 +44,12 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun PodcastDetailsHeader(
     details: PodcastDetailsUIModel,
+    scrollOffset: Float,
     onBackClick: () -> Unit,
 ) {
+
+    val animatedSize by animateDpAsState(targetValue = 156.dp * scrollOffset, label = "")
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -51,7 +58,7 @@ fun PodcastDetailsHeader(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 24.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             ButtonCircleWithIcon(
@@ -74,49 +81,56 @@ fun PodcastDetailsHeader(
                 }
             )
         }
-        Row(
+        AnimatedVisibility(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, top = 8.dp)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Background,
-                            Color.BackgroundBlack,
-                        )
-                    ),
-                    shape = RoundedCornerShape(topStart = 70.dp, bottomStart = 70.dp)
-                )
+                .fillMaxWidth(),
+            visible = scrollOffset > 0.8f,
         ) {
-            Card(
+            Row(
                 modifier = Modifier
-                    .size(140.dp)
-                    .clip(CircleShape),
-                elevation = 8.dp
+                    .fillMaxWidth()
+                    .height(animatedSize)
+                    .padding(start = 16.dp, top = 16.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Background,
+                                Color.BackgroundBlack,
+                            )
+                        ),
+                        shape = RoundedCornerShape(topStart = 70.dp, bottomStart = 70.dp)
+                    )
             ) {
-                SubcomposeAsyncImage(
-                    model = details.artworkUrl100,
-                    contentScale = ContentScale.Crop,
-                    contentDescription = null
+                Card(
+                    modifier = Modifier
+                        .size(140.dp)
+                        .clip(CircleShape),
+                    elevation = 8.dp
+                ) {
+                    SubcomposeAsyncImage(
+                        model = details.artworkUrl100,
+                        contentScale = ContentScale.Crop,
+                        contentDescription = null
+                    )
+                }
+                Spacer(modifier = Modifier.size(16.dp))
+                Text(
+                    modifier = Modifier
+                        .height(124.dp)
+                        .padding(top = 16.dp, end = 16.dp),
+                    text = details.feed.description ?: "",
+                    style = TextStyle.B3,
+                    color = Color.Grey1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.End,
                 )
             }
-            Spacer(modifier = Modifier.size(16.dp))
-            Text(
-                modifier = Modifier
-                    .height(124.dp)
-                    .padding(top = 16.dp, end = 16.dp),
-                text = details.feed.description ?: "",
-                style = TextStyle.B3,
-                color = Color.Grey1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.End,
-            )
         }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -125,12 +139,12 @@ fun PodcastDetailsHeader(
                     .weight(1f)
             ) {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     text = details.collectionName,
                     style = TextStyle.B1,
                     color = Color.White,
                     maxLines = 2,
-                    minLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
@@ -146,7 +160,7 @@ fun PodcastDetailsHeader(
             }
             ButtonRoundedWithText(
                 modifier = Modifier
-                    .width(120.dp),
+                    .width(140.dp),
                 text = stringResource(
                     id =
                     if (details.isSubscribed) com.orangecast.common.R.string.details_unsubscribe_button
@@ -179,11 +193,12 @@ fun PodcastDetailsHeaderPreview() {
             genres = listOf("genre1", "genre2"),
             feed = PodcastRSSFeedUIModel(
                 description = "Lorem ipsum dolor sit amet, " +
-                    "consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-                    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                        "consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                 items = persistentListOf(),
             )
         ),
+        scrollOffset = 0f,
         onBackClick = {},
     )
 }

@@ -1,17 +1,14 @@
 package dev.orangepie.base.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.orangepie.base.ui.theme.Color
 
@@ -21,28 +18,29 @@ fun ButtonCircleWithIcon(
     onClick: () -> Unit,
     icon: @Composable () -> Unit = {},
 ) {
-    Card(
+    IconButton(
         modifier = modifier
-            .size(44.dp)
+            .size(32.dp)
             .clip(CircleShape)
-            .clickable(onClick = onClick),
-        shape = CircleShape,
-        border = BorderStroke(1.dp, Color.BackgroundBlack.copy(alpha = .2f)),
-        elevation = 8.dp
+            .background(Color.BackgroundBlack),
+        onClick = onClick,
     ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color.Background,
-                            Color.BackgroundBlack,
-                        )
-                    )
-                ),
-            contentAlignment = Alignment.Center,
-        ) {
-            icon()
-        }
+        icon()
     }
+}
+
+@Preview
+@Composable
+fun ButtonCircleWithIconPreview() {
+    ButtonCircleWithIcon(
+        onClick = {},
+        icon = {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+            )
+        }
+    )
 }
