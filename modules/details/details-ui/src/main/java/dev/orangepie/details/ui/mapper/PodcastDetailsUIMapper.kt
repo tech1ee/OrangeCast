@@ -34,7 +34,8 @@ class PodcastDetailsUIMapper @Inject constructor(
             feedUrl = feedUrl,
             artworkUrl100 = artworkUrl100,
             genres = genres,
-            feed = feedMapper.toUIModel(feed)
+            feed = feedMapper.toUIModel(feed),
+            subscribed = subscribed,
         )
     }
 }

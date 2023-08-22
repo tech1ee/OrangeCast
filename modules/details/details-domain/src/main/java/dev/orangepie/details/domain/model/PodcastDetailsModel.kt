@@ -11,4 +11,5 @@ data class PodcastDetailsModel(
     val artworkUrl100: String,
     val genres: List<String>,
     val feed: PodcastRSSFeedModel,
+    val subscribed: Boolean = false,
 )

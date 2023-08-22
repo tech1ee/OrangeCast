@@ -22,6 +22,8 @@ dependencies {
     implementation(project(":base-ui"))
     implementation(project(":details-domain"))
     implementation(project(":player-domain"))
+    implementation(project(":library-domain"))
+    implementation(project(":podcasts-domain"))
     implementation(project(":player-ui"))
 
     implementation(AppDependencies.hiltAndroid)

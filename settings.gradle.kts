@@ -79,3 +79,17 @@ fun includePlayerModule(name: String) {
 includePlayerModule("player-data")
 includePlayerModule("player-domain")
 includePlayerModule("player-ui")
+
+fun includeLibraryModule(name: String) {
+    include(":$name")
+    project(":$name").projectDir = File(rootDir, "modules/library/$name")
+}
+includeLibraryModule("library-data")
+includeLibraryModule("library-domain")
+includeLibraryModule("library-ui")
+
+fun includeSearchModule(name: String) {
+    include(":$name")
+    project(":$name").projectDir = File(rootDir, "modules/search/$name")
+}
+includeSearchModule("search-ui")

@@ -45,6 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun PodcastDetailsHeader(
     details: PodcastDetailsUIModel,
     scrollOffset: Float,
+    onSubscribeClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
 
@@ -163,10 +164,11 @@ fun PodcastDetailsHeader(
                     .width(140.dp),
                 text = stringResource(
                     id =
-                    if (details.isSubscribed) com.orangecast.common.R.string.details_unsubscribe_button
+                    if (details.subscribed) com.orangecast.common.R.string.details_unsubscribe_button
                     else com.orangecast.common.R.string.details_subscribe_button
                 ),
-                onClick = {},
+                onClick = onSubscribeClick,
+                selected = details.subscribed,
             )
         }
         GradientDivider(
@@ -199,6 +201,7 @@ fun PodcastDetailsHeaderPreview() {
             )
         ),
         scrollOffset = 0f,
+        onSubscribeClick = {},
         onBackClick = {},
     )
 }

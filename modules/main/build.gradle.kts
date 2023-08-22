@@ -22,6 +22,8 @@ dependencies {
     implementation(project(":base-ui"))
     implementation(project(":discover-ui"))
     implementation(project(":splash-ui"))
+    implementation(project(":search-ui"))
+    implementation(project(":library-ui"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)

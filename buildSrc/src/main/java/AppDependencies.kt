@@ -82,6 +82,16 @@ object AppDependencies {
         exoPlayerUI,
     )
 
+    // Room
+    const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
+    const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
+    const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
+
+    val roomLibs = listOf(
+        roomRuntime,
+        roomKtx,
+    )
+
     // Coil
     const val coil = "io.coil-kt:coil-compose:${Versions.coil}"
 

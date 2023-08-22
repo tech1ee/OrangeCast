@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":discover-ui"))
     implementation(project(":podcasts-ui"))
     implementation(project(":details-ui"))
+    implementation(project(":library-ui"))
 
     implementation(AppDependencies.hiltAndroid)
     kapt(AppDependencies.hiltAndroidCompiler)

@@ -43,6 +43,7 @@ fun PodcastDetailsScreen(
         is PodcastDetailsUIState.Details -> PodcastDetailsScreenContent(
             details = state.details,
             episodes = state.details.feed.items,
+            onSubscribeClick = viewModel::onSubscribeClick,
             onBackClick = viewModel::onBackClick,
             onPlayClick = viewModel::onPlayClick,
         )
