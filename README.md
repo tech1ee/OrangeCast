@@ -1,7 +1,7 @@
 # OrangeCast: Android Podcast Player
 
-<img src="https://github.com/tech1ee/OrangeCast/assets/32034127/843b248f-5c62-4ea9-9e1a-cbbb08794268" alt="discover" width="200"/>
-<img src="https://github.com/tech1ee/OrangeCast/assets/32034127/a45cf352-1a35-4e29-a2c5-e4f1a4d8b555" alt="details" width="200"/>
+<img src="https://github.com/tech1ee/OrangeCast/assets/32034127/843b248f-5c62-4ea9-9e1a-cbbb08794268" alt="discover" width="300"/>
+<img src="https://github.com/tech1ee/OrangeCast/assets/32034127/a45cf352-1a35-4e29-a2c5-e4f1a4d8b555" alt="details" width="300"/>
 
 ## Key Features
 
