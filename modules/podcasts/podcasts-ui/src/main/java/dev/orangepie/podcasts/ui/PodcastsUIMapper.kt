@@ -25,7 +25,7 @@ class PodcastsUIMapper @Inject constructor(
                     PodcastsByGenreUiModel(
                         genre = genresMapper.toUIModel(it.genre),
                         podcasts = it.podcasts.map { podcast ->
-                            podcast.toUIModel()
+                            podcast.toUIModelExt()
                         }.toImmutableList()
                     )
                 }.toImmutableList()
@@ -33,8 +33,11 @@ class PodcastsUIMapper @Inject constructor(
         }
     }
 
+    fun toUIModel(podcast: PodcastChannelModel): PodcastChannelUIModel {
+        return podcast.toUIModelExt()
+    }
 
-    private fun PodcastChannelModel.toUIModel(): PodcastChannelUIModel {
+    private fun PodcastChannelModel.toUIModelExt(): PodcastChannelUIModel {
         return PodcastChannelUIModel(
             itunesId = itunesId,
             title = title,

@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    // Bottom bar
+    <string name="bottom_bar_discover">Discover</string>
+    <string name="bottom_bar_library">Library</string>
+    <string name="bottom_bar_search">Search</string>
+
+    // Discover
+    <string name="discover_title">Top Podcasts</string>
+
+    // Search
+    <string name="search_hint">Search</string>
+
     // Details
     <string name="details_subscribe_button">Subscribe</string>
     <string name="details_unsubscribe_button">Unsubscribe</string>
+
+    // Library
+    <string name="library_title">My Subscriptions</string>
+    <string name="library_empty">No subscriptions yet…</string>
+
+    <string name="coming_soon">Coming soon…</string>
 </resources>

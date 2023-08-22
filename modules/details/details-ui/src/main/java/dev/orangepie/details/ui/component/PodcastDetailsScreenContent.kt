@@ -1,12 +1,10 @@
 package dev.orangepie.details.ui.component
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import dev.orangepie.details.ui.model.PodcastDetailsUIModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
@@ -18,6 +16,7 @@ fun PodcastDetailsScreenContent(
     details: PodcastDetailsUIModel,
     episodes: ImmutableList<PodcastRSSFeedItemUIModel>,
     onPlayClick: (item: PodcastRSSFeedItemUIModel) -> Unit,
+    onSubscribeClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -33,6 +32,7 @@ fun PodcastDetailsScreenContent(
             PodcastDetailsHeader(
                 details = details,
                 scrollOffset = scrollOffset,
+                onSubscribeClick = onSubscribeClick,
                 onBackClick = onBackClick
             )
         },

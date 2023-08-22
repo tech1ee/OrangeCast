@@ -12,6 +12,9 @@ import dev.orangepie.details.ui.mapper.PodcastRSSFeedUIMapper
 import dev.orangepie.details.ui.model.PodcastDetailsViewModelState
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIState
+import dev.orangepie.library.domain.usecase.DeletePodcastUseCase
+import dev.orangepie.library.domain.usecase.GetPodcastFromLibraryUseCase
+import dev.orangepie.library.domain.usecase.SavePodcastUseCase
 import dev.orangepie.player.domain.PlayerEvent
 import dev.orangepie.player.domain.PlayerUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +31,9 @@ class PodcastDetailsViewModel @Inject constructor(
     private val player: PlayerUseCase,
     private val detailsUIMapper: PodcastDetailsUIMapper,
     private val feedUIMapper: PodcastRSSFeedUIMapper,
+    private val getPodcastFromLibrary: GetPodcastFromLibraryUseCase,
+    private val savePodcast: SavePodcastUseCase,
+    private val deletePodcast: DeletePodcastUseCase,
 ) : BaseViewModel() {
 
     private val podcastItunesId: Long =
@@ -54,6 +60,30 @@ class PodcastDetailsViewModel @Inject constructor(
         }
     }
 
+    fun onSubscribeClick() {
+        viewModelScope.launch {
+            try {
+                val details = viewModelState.value.details
+                if (details != null) {
+                    if (details.subscribed) {
+                        deletePodcast(details)
+                    } else {
+                        savePodcast(details)
+                    }
+                }
+                viewModelState.update {
+                    it.copy(
+                        details = it.details?.copy(
+                            subscribed = !it.details.subscribed
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
+    }
+
     fun onBackClick() {
         navigate(NavCommand.Back())
     }
@@ -68,7 +98,10 @@ class PodcastDetailsViewModel @Inject constructor(
                 )
             }
             try {
-                val details = getPodcastDetails.invoke(podcastItunesId)
+                val libraryPodcast = getPodcastFromLibrary.invoke(podcastItunesId)
+                val details = getPodcastDetails.invoke(podcastItunesId).copy(
+                    subscribed = libraryPodcast != null
+                )
                 viewModelState.update {
                     it.copy(
                         loading = false,

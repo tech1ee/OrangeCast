@@ -7,11 +7,14 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -23,7 +26,9 @@ import dev.orangepie.base.ui.navigation.NavCommand
 import dev.orangepie.base.ui.navigation.Navigator
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.discover.ui.DiscoverScreenRoute
+import dev.orangepie.library.ui.LibraryScreenRoute
 import dev.orangepie.main.model.NavBarScreen
+import dev.orangepie.search.ui.SearchScreenRoute
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -104,6 +109,8 @@ fun BottomNav(
         startDestination = startTab,
     ) {
         DiscoverScreenRoute.composable(this, navController)
+        SearchScreenRoute.composable(this, navController)
+        LibraryScreenRoute.composable(this, navController)
     }
 }
 
@@ -145,9 +152,19 @@ fun BottomBar(
                             )
                         }
                     },
+                    label = {
+                        Text(
+                            modifier = Modifier.padding(top = 2.dp),
+                            text = when (screen) {
+                                is NavBarScreen.Discover -> stringResource(id = R.string.bottom_bar_discover)
+                                is NavBarScreen.Search -> stringResource(id = R.string.bottom_bar_search)
+                                is NavBarScreen.Library -> stringResource(id = R.string.bottom_bar_library)
+                            }
+                        )
+                    },
                     selected = selected,
                     selectedContentColor = Color.Orange,
-                    unselectedContentColor = Color.Grey2,
+                    unselectedContentColor = Color.White,
                     onClick = { onClick(screen) },
                 )
             }

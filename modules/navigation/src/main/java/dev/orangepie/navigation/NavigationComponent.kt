@@ -12,9 +12,9 @@ import dev.orangepie.base.ui.navigation.NavCommand
 import dev.orangepie.base.ui.navigation.NavRoutes
 import dev.orangepie.base.ui.navigation.Navigator
 import dev.orangepie.base.ui.navigation.TabNavRoutes
-import dev.orangepie.details.ui.PodcastDetailsScreen
 import dev.orangepie.details.ui.PodcastDetailsScreenRoute
 import dev.orangepie.discover.ui.DiscoverScreenRoute
+import dev.orangepie.library.ui.LibraryScreenRoute
 import dev.orangepie.main.MainScreenRoute
 import dev.orangepie.podcasts.ui.PodcastsScreenRoute
 import kotlinx.coroutines.flow.launchIn
@@ -81,5 +81,6 @@ fun NavigationComponent(paddingValues: PaddingValues) {
         DiscoverScreenRoute.composable(this, navController)
         PodcastsScreenRoute.composable(this, navController)
         PodcastDetailsScreenRoute.composable(this, navController)
+        LibraryScreenRoute.composable(this, navController)
     }
 }

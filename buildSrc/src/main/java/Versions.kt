@@ -33,6 +33,8 @@ object Versions {
 
     const val exoPlayer = "1.1.0"
 
+    const val room = "2.4.2"
+
     const val moshi: String = "1.14.0"
     const val retrofit: String = "2.9.0"
     const val okhttp: String = "4.10.0"
