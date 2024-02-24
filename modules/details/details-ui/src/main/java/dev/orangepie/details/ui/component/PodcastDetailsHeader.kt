@@ -34,7 +34,6 @@ import coil.compose.SubcomposeAsyncImage
 import com.orangecast.details.ui.R
 import dev.orangepie.base.ui.components.ButtonCircleWithIcon
 import dev.orangepie.base.ui.components.ButtonRoundedWithText
-import dev.orangepie.base.ui.components.GradientDivider
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.details.ui.model.PodcastDetailsUIModel
@@ -171,11 +170,6 @@ fun PodcastDetailsHeader(
                 selected = details.subscribed,
             )
         }
-        GradientDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 32.dp, end = 32.dp, top = 8.dp)
-        )
     }
 }
 
@@ -200,7 +194,7 @@ fun PodcastDetailsHeaderPreview() {
                 items = persistentListOf(),
             )
         ),
-        scrollOffset = 0f,
+        scrollOffset = 1f,
         onSubscribeClick = {},
         onBackClick = {},
     )

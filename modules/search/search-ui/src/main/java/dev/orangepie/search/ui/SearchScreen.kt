@@ -3,13 +3,13 @@ package dev.orangepie.search.ui
 import android.os.Bundle
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import com.orangecast.common.R
-import dev.orangepie.base.ui.components.GradientText
 import dev.orangepie.base.ui.navigation.NavRoute
 import dev.orangepie.base.ui.navigation.Routes
 import dev.orangepie.base.ui.navigation.TabNavRoutes
@@ -33,12 +33,9 @@ fun SearchScreen() {
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        GradientText(
+       Text(
             text = stringResource(id = R.string.coming_soon),
-            gradient = listOf(
-                Color.Yellow,
-                Color.Orange
-            )
+            color = Color.Orange
         )
     }
 }

@@ -8,20 +8,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.DeviceFontFamilyName
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.SavedStateHandle
 import com.orangecast.common.R
-import dev.orangepie.base.ui.components.GradientDivider
-import dev.orangepie.base.ui.components.GradientScreenTitle
 import dev.orangepie.base.ui.components.LoaderCircle
 import dev.orangepie.base.ui.navigation.NavRoute
 import dev.orangepie.base.ui.navigation.NavRoutes
+import dev.orangepie.base.ui.theme.OrangeCastTypography
 import dev.orangepie.genres.ui.components.PodcastGenreTitle
 import dev.orangepie.genres.ui.model.PodcastGenreUiModel
 import dev.orangepie.podcasts.ui.components.PodcastChannelListItem
@@ -51,6 +56,7 @@ fun PodcastsScreen(
             podcasts = state.podcasts,
             onItemClick = viewModel::onPodcastClick
         )
+
         is PodcastsUIState.Loading -> LoaderCircle()
         else -> Unit
     }
@@ -61,20 +67,22 @@ private fun PodcastsList(
     podcasts: ImmutableList<PodcastsByGenreUiModel>,
     onItemClick: (itunesId: Long) -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        GradientScreenTitle(title = stringResource(id = R.string.discover_title))
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            items(podcasts) { genre ->
-                PodcastsByGenreList(
-                    genre = genre.genre,
-                    podcasts = genre.podcasts,
-                    onItemClick = onItemClick
-                )
-            }
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item {
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = stringResource(id = R.string.discover_title),
+                style = OrangeCastTypography.h1.copy(
+                    fontWeight = FontWeight.ExtraBold
+                ),
+            )
+        }
+        items(podcasts) { genre ->
+            PodcastsByGenreList(
+                genre = genre.genre,
+                podcasts = genre.podcasts,
+                onItemClick = onItemClick
+            )
         }
     }
 }
@@ -106,11 +114,6 @@ private fun PodcastsByGenreList(
                 )
             }
         }
-        GradientDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 32.dp)
-        )
     }
 }
 

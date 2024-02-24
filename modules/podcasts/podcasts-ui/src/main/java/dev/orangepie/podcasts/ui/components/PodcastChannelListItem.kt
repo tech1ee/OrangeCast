@@ -1,18 +1,17 @@
 package dev.orangepie.podcasts.ui.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -20,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import dev.orangepie.base.ui.animation.clickAnimatedScale
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.podcasts.ui.model.PodcastChannelUIModel
@@ -30,25 +30,28 @@ fun PodcastChannelListItem(
     model: PodcastChannelUIModel,
     onClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .clickable(onClick = onClick)
+    Column(
+        modifier = Modifier.clickAnimatedScale(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
+        Card(
             modifier = Modifier
-                .width(160.dp)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(vertical = 8.dp)
+                .size(140.dp),
+            shape = CircleShape,
+            elevation = 8.dp
         ) {
             SubcomposeAsyncImage(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .size(120.dp)
-                    .clip(CircleShape),
                 contentScale = ContentScale.Crop,
                 model = model.imagePreviewUrl,
                 contentDescription = null
             )
+        }
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .widthIn(max = 130.dp)
+        ) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),

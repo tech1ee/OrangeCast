@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.orangecast.details.ui.R
-import dev.orangepie.base.ui.components.GradientDivider
 import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.TextStyle
 import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIModel
@@ -127,11 +126,6 @@ fun PodcastEpisodeListItem(
                 )
             }
         }
-        GradientDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 64.dp, end = 64.dp, top = 4.dp)
-        )
     }
 }
 
