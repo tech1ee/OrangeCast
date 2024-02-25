@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -53,12 +53,14 @@ fun PodcastDetailsHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
+            .background(
+                Brush.verticalGradient(colors = listOf(Color.Black, Color.Background))
+            )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             ButtonCircleWithIcon(
@@ -86,47 +88,41 @@ fun PodcastDetailsHeader(
                 .fillMaxWidth(),
             visible = scrollOffset > 0.8f,
         ) {
-            Row(
+            Card(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
                     .height(animatedSize)
-                    .padding(start = 16.dp, top = 16.dp)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Background,
-                                Color.BackgroundBlack,
-                            )
-                        ),
-                        shape = RoundedCornerShape(topStart = 70.dp, bottomStart = 70.dp)
-                    )
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                backgroundColor = Color.BackgroundDark,
+                elevation = 8.dp
             ) {
-                Card(
+                Row(
                     modifier = Modifier
-                        .size(140.dp)
-                        .clip(CircleShape),
-                    elevation = 8.dp
                 ) {
                     SubcomposeAsyncImage(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .aspectRatio(1f),
                         model = details.artworkUrl100,
                         contentScale = ContentScale.Crop,
                         contentDescription = null
                     )
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(
+                        modifier = Modifier
+                            .height(124.dp)
+                            .padding(top = 16.dp, end = 16.dp),
+                        text = details.feed.description ?: "",
+                        style = TextStyle.B3,
+                        color = Color.Grey1,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.End,
+                    )
                 }
-                Spacer(modifier = Modifier.size(16.dp))
-                Text(
-                    modifier = Modifier
-                        .height(124.dp)
-                        .padding(top = 16.dp, end = 16.dp),
-                    text = details.feed.description ?: "",
-                    style = TextStyle.B3,
-                    color = Color.Grey1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.End,
-                )
             }
         }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()

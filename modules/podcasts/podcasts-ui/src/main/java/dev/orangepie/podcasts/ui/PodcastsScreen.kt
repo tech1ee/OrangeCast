@@ -1,6 +1,7 @@
 package dev.orangepie.podcasts.ui
 
 import android.os.Bundle
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.DeviceFontFamilyName
 import androidx.compose.ui.text.font.Font
@@ -26,6 +28,7 @@ import com.orangecast.common.R
 import dev.orangepie.base.ui.components.LoaderCircle
 import dev.orangepie.base.ui.navigation.NavRoute
 import dev.orangepie.base.ui.navigation.NavRoutes
+import dev.orangepie.base.ui.theme.Color
 import dev.orangepie.base.ui.theme.OrangeCastTypography
 import dev.orangepie.genres.ui.components.PodcastGenreTitle
 import dev.orangepie.genres.ui.model.PodcastGenreUiModel
@@ -67,7 +70,13 @@ private fun PodcastsList(
     podcasts: ImmutableList<PodcastsByGenreUiModel>,
     onItemClick: (itunesId: Long) -> Unit
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(colors = listOf(Color.Black, Color.Background))
+            )
+    ) {
         item {
             Text(
                 modifier = Modifier.padding(16.dp),
@@ -99,7 +108,7 @@ private fun PodcastsByGenreList(
     ) {
         PodcastGenreTitle(
             modifier = Modifier
-                .padding(start = 16.dp, top = 16.dp, bottom = 4.dp)
+                .padding(start = 16.dp, top = 24.dp, bottom = 8.dp)
                 .fillMaxWidth(),
             title = genre.name
         )
