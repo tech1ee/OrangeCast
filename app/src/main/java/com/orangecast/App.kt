@@ -1,23 +1,20 @@
 package com.orangecast
 
 import android.app.Application
-import com.orangecast.app.BuildConfig
-
 import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
+import dev.orangecast.shared.di.sharedModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 @HiltAndroidApp
 class App : Application() {
-
-
+    
     override fun onCreate() {
         super.onCreate()
-        initTimber()
-    }
-
-    private fun initTimber() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+        
+        startKoin {
+            androidContext(this@App)
+            modules(sharedModule)
         }
     }
 }

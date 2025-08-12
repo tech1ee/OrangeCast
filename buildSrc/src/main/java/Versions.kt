@@ -20,7 +20,7 @@ object Versions {
     const val coroutines = "1.6.4"
 
     const val composeBom = "2023.04.01"
-    const val composeCompiler = "1.4.7"
+    const val composeCompiler = "1.4.8"
     const val composeActivity = "1.5.1"
     const val composeNavigation = "2.7.0-alpha01"
     const val hiltNavigationCompose = "1.0.0"

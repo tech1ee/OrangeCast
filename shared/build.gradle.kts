@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     kotlin("plugin.serialization")
+    id("org.jetbrains.compose")
 }
 
 kotlin {
@@ -17,16 +18,29 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
                 implementation("io.insert-koin:koin-core:3.4.2")
+                implementation("io.insert-koin:koin-compose:1.0.4")
+                
+                // Compose Multiplatform
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.ui)
             }
         }
         
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+                implementation("io.ktor:ktor-client-mock:2.3.2")
             }
         }
         
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-okhttp:2.3.2")
+            }
+        }
         val androidUnitTest by getting
     }
 }
@@ -37,6 +51,14 @@ android {
 
     defaultConfig {
         minSdk = 24
+    }
+    
+    buildFeatures {
+        compose = true
+    }
+    
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.8"
     }
     
     compileOptions {
