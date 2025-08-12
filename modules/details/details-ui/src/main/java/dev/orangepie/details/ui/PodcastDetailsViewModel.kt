@@ -15,8 +15,9 @@ import dev.orangepie.details.ui.model.PodcastRSSFeedItemUIState
 import dev.orangepie.library.domain.usecase.DeletePodcastUseCase
 import dev.orangepie.library.domain.usecase.GetPodcastFromLibraryUseCase
 import dev.orangepie.library.domain.usecase.SavePodcastUseCase
-import dev.orangepie.player.domain.PlayerEvent
-import dev.orangepie.player.domain.PlayerUseCase
+// TODO: Restore player imports after fixing DI
+// import dev.orangepie.player.domain.PlayerEvent
+// import dev.orangepie.player.domain.PlayerUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -28,7 +29,8 @@ import javax.inject.Inject
 class PodcastDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getPodcastDetails: GetPodcastDetailsUseCase,
-    private val player: PlayerUseCase,
+    // TODO: Restore player injection after fixing DI
+    // private val player: PlayerUseCase,
     private val detailsUIMapper: PodcastDetailsUIMapper,
     private val feedUIMapper: PodcastRSSFeedUIMapper,
     private val getPodcastFromLibrary: GetPodcastFromLibraryUseCase,
@@ -46,18 +48,21 @@ class PodcastDetailsViewModel @Inject constructor(
 
     init {
         getPodcastDetails()
-        collectPlayerEvents()
+        // TODO: Restore after fixing DI
+        // collectPlayerEvents()
     }
 
     fun onPlayClick(item: PodcastRSSFeedItemUIModel) {
-        viewModelScope.launch {
-            if (item.state is PodcastRSSFeedItemUIState.Playing) {
-                player.pause()
-            } else {
-                val model = feedUIMapper.toModel(item)
-                player.play(model)
-            }
-        }
+        // TODO: Restore player functionality after fixing DI
+        Timber.d("Play button clicked for: ${item.title}")
+        // viewModelScope.launch {
+        //     if (item.state is PodcastRSSFeedItemUIState.Playing) {
+        //         player.pause()
+        //     } else {
+        //         val model = feedUIMapper.toModel(item)
+        //         player.play(model)
+        //     }
+        // }
     }
 
     fun onSubscribeClick() {
@@ -120,46 +125,48 @@ class PodcastDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun collectPlayerEvents() {
-        viewModelScope.launch {
-            player.playerEvents.collect { event ->
-                when (event) {
-                    is PlayerEvent.Loading -> updatePodcastItemsState(
-                        event = event,
-                        state = PodcastRSSFeedItemState.Loading
-                    )
-                    is PlayerEvent.Playing -> updatePodcastItemsState(
-                        event = event,
-                        state = PodcastRSSFeedItemState.Playing
-                    )
-                    is PlayerEvent.Paused -> updatePodcastItemsState(
-                        event = event,
-                        state = PodcastRSSFeedItemState.Paused
-                    )
-                }
-            }
-        }
-    }
+    // TODO: Restore after fixing DI
+    // private fun collectPlayerEvents() {
+    //     viewModelScope.launch {
+    //         player.playerEvents.collect { event ->
+    //             when (event) {
+    //                 is PlayerEvent.Loading -> updatePodcastItemsState(
+    //                     event = event,
+    //                     state = PodcastRSSFeedItemState.Loading
+    //                 )
+    //                 is PlayerEvent.Playing -> updatePodcastItemsState(
+    //                     event = event,
+    //                     state = PodcastRSSFeedItemState.Playing
+    //                 )
+    //                 is PlayerEvent.Paused -> updatePodcastItemsState(
+    //                     event = event,
+    //                     state = PodcastRSSFeedItemState.Paused
+    //                 )
+    //             }
+    //         }
+    //     }
+    // }
 
-    private fun updatePodcastItemsState(event: PlayerEvent, state: PodcastRSSFeedItemState) {
-        viewModelState.update {
-            it.copy(
-                details = it.details?.copy(
-                    feed = it.details.feed.copy(
-                        items = it.details.feed.items.map { feedItem ->
-                            if (feedItem.audio == event.podcast?.audio) {
-                                feedItem.copy(
-                                    state = state
-                                )
-                            } else {
-                                feedItem.copy(
-                                    state = PodcastRSSFeedItemState.None
-                                )
-                            }
-                        }
-                    )
-                )
-            )
-        }
-    }
+    // TODO: Restore after fixing DI
+    // private fun updatePodcastItemsState(event: PlayerEvent, state: PodcastRSSFeedItemState) {
+    //     viewModelState.update {
+    //         it.copy(
+    //             details = it.details?.copy(
+    //                 feed = it.details.feed.copy(
+    //                     items = it.details.feed.items.map { feedItem ->
+    //                         if (feedItem.audio == event.podcast?.audio) {
+    //                             feedItem.copy(
+    //                                 state = state
+    //                             )
+    //                         } else {
+    //                             feedItem.copy(
+    //                                 state = PodcastRSSFeedItemState.None
+    //                             )
+    //                         }
+    //                     }
+    //                 )
+    //             )
+    //         )
+    //     }
+    // }
 }

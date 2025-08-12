@@ -11,6 +11,7 @@ plugins {
 dependencies {
     api(AppDependencies.coreLibs)
     api(project(":common"))
+    api(AppDependencies.exoPlayerLibs)
     implementation(project(":base-domain"))
     implementation(project(":details-domain"))
     implementation(project(":player-data"))

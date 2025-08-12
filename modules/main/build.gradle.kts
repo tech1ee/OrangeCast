@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.seamm_team.main.ui"
+    namespace = "com.orangecast.main.ui"
     buildFeatures.apply {
         compose = true
     }

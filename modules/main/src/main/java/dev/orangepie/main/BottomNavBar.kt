@@ -22,7 +22,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.seamm_team.main.ui.R
+import com.orangecast.main.ui.R
 import dev.orangepie.base.ui.navigation.NavCommand
 import dev.orangepie.base.ui.navigation.Navigator
 import dev.orangepie.base.ui.theme.Color

@@ -54,6 +54,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
     implementation(project(":base-ui"))
     implementation(project(":navigation"))
 
