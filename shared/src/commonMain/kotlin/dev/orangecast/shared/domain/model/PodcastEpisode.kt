@@ -9,8 +9,11 @@ data class PodcastEpisode(
     val description: String,
     val audioUrl: String,
     val thumbnailUrl: String,
-    val duration: Long,
     val publishedAt: Long,
-    val isPlayed: Boolean = false,
-    val playbackPosition: Long = 0L
+    val duration: Long = 0L,
+    val podcastId: String,
+    val podcastTitle: String,
+    val isExplicit: Boolean = false,
+    val episodeNumber: Int? = null,
+    val seasonNumber: Int? = null
 )

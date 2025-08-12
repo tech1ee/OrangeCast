@@ -7,77 +7,36 @@ plugins {
 kotlin {
     android()
     
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "shared"
-        }
-    }
-    
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:${Versions.composeImmutableCollections}")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                implementation("io.ktor:ktor-client-core:2.3.2")
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
+                implementation("io.insert-koin:koin-core:3.4.2")
             }
         }
         
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}")
             }
         }
         
-        val androidMain by getting {
-            dependencies {
-                implementation("androidx.core:core-ktx:${Versions.coreKtx}")
-                implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleKtx}")
-                implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleKtx}")
-                implementation("androidx.activity:activity-compose:${Versions.composeActivity}")
-                implementation("io.coil-kt:coil-compose:${Versions.coil}")
-                implementation("androidx.media3:media3-exoplayer:${Versions.exoPlayer}")
-            }
-        }
-        
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
-        
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
-        
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
+        val androidMain by getting
+        val androidUnitTest by getting
     }
 }
 
 android {
     namespace = "dev.orangecast.shared"
-    compileSdk = AppConfig.compileSdk
+    compileSdk = 34
 
     defaultConfig {
-        minSdk = AppConfig.minSdk
+        minSdk = 24
     }
     
     compileOptions {
