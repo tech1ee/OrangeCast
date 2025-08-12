@@ -1,0 +1,310 @@
+{
+  "project": "OrangeCast Audio Player Implementation",
+  "phases": [
+    {
+      "id": "phase1",
+      "name": "Core Player Enhancement",
+      "priority": "critical",
+      "timeframe": "Week 1-2",
+      "tasks": [
+        {
+          "id": "task1.1",
+          "title": "Optimize ExoPlayer Buffer Configuration",
+          "description": "Configure optimal ExoPlayer buffering parameters for fast startup and smooth playback",
+          "priority": "critical",
+          "status": "pending",
+          "files": [
+            "modules/player/player-data/src/main/java/dev/orangepie/player/data/PlayerInstance.kt",
+            "shared/src/androidMain/kotlin/dev/orangecast/shared/media/AudioPlaybackService.kt"
+          ],
+          "subtasks": [
+            "Update ExoPlayer LoadControl with 1s startup buffer",
+            "Set maximum buffer to 20s for optimal memory usage", 
+            "Enable asynchronous buffer queueing for Android 12+",
+            "Add adaptive buffering based on network conditions",
+            "Test buffer performance on slow networks"
+          ],
+          "acceptance_criteria": [
+            "Audio starts within 1.5s on good network",
+            "Memory usage stays under 50MB during playback",
+            "No audio gaps during network fluctuations"
+          ]
+        },
+        {
+          "id": "task1.2", 
+          "title": "Enhance iOS Background Audio Integration",
+          "description": "Complete Now Playing Info Center and Remote Control Center integration for iOS",
+          "priority": "critical",
+          "status": "pending",
+          "files": [
+            "shared/src/iosMain/kotlin/dev/orangecast/shared/media/BackgroundAudioManager.ios.kt"
+          ],
+          "subtasks": [
+            "Implement MPNowPlayingInfoCenter metadata updates",
+            "Add Remote Control Center command handlers",
+            "Configure audio session for podcast playback",
+            "Test background playback and lock screen controls",
+            "Ensure proper audio interruption handling"
+          ],
+          "acceptance_criteria": [
+            "Lock screen shows podcast metadata and controls",
+            "Control Center integration works fully",
+            "Background playback reliability > 99.5%"
+          ]
+        },
+        {
+          "id": "task1.3",
+          "title": "Create Shared Player State Management",
+          "description": "Implement cross-platform player state synchronization in shared module",
+          "priority": "high",
+          "status": "pending", 
+          "files": [
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/model/PlayerState.kt",
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/repository/PlayerStateRepository.kt",
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/usecase/PlayerStateUseCase.kt"
+          ],
+          "subtasks": [
+            "Define PlayerState data model with all playback properties",
+            "Create PlayerStateRepository interface and implementation",
+            "Implement state synchronization via Kotlin Flow",
+            "Add state persistence for app restart recovery", 
+            "Create unit tests for state management"
+          ],
+          "acceptance_criteria": [
+            "Player state syncs instantly between UI and service",
+            "State persists correctly across app restarts",
+            "90%+ code sharing maintained in state logic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phase2",
+      "name": "Advanced Playback Features", 
+      "priority": "high",
+      "timeframe": "Week 3-5",
+      "tasks": [
+        {
+          "id": "task2.1",
+          "title": "Implement Variable Speed Playback",
+          "description": "Add playback speed control (0.5x to 3x) with platform-specific optimizations",
+          "priority": "high",
+          "status": "pending",
+          "files": [
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/model/PlaybackSpeed.kt",
+            "shared/src/androidMain/kotlin/dev/orangecast/shared/media/AudioPlaybackService.kt",
+            "shared/src/iosMain/kotlin/dev/orangecast/shared/media/BackgroundAudioManager.ios.kt",
+            "modules/player/player-ui/src/main/java/dev/orangepie/player/ui/components/SpeedSelector.kt"
+          ],
+          "subtasks": [
+            "Create PlaybackSpeed enum with supported speeds",
+            "Implement Android speed control via PlaybackParameters", 
+            "Implement iOS speed control via AVPlayer rate",
+            "Add speed persistence per podcast",
+            "Create speed selector UI component",
+            "Test audio quality at different speeds"
+          ],
+          "acceptance_criteria": [
+            "Speed changes apply instantly without audio gaps",
+            "Audio quality remains clear at all speeds", 
+            "Speed preferences persist per podcast",
+            "UI shows current speed clearly"
+          ]
+        },
+        {
+          "id": "task2.2",
+          "title": "Implement Skip Silence Feature",
+          "description": "Add intelligent silence detection and trimming during podcast playback", 
+          "priority": "high",
+          "status": "pending",
+          "files": [
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/model/SilenceDetection.kt",
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/usecase/SkipSilenceUseCase.kt",
+            "shared/src/androidMain/kotlin/dev/orangecast/shared/media/SilenceProcessor.android.kt",
+            "shared/src/iosMain/kotlin/dev/orangecast/shared/media/SilenceProcessor.ios.kt"
+          ],
+          "subtasks": [
+            "Implement audio stream analysis for silence detection",
+            "Create three aggressiveness levels (Mild/Medium/Aggressive)",
+            "Add dynamic silence skipping during playback",
+            "Optimize processing to stay under 100ms latency",
+            "Add user toggle for skip silence feature"
+          ],
+          "acceptance_criteria": [
+            "Silence processing completes under 100ms",
+            "No false positives on normal speech pauses",
+            "User can adjust aggressiveness levels",
+            "Feature can be toggled on/off per podcast"
+          ]
+        },
+        {
+          "id": "task2.3", 
+          "title": "Enhanced Seek Controls Implementation",
+          "description": "Implement configurable skip intervals and smart rewind functionality",
+          "priority": "medium",
+          "status": "pending",
+          "files": [
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/model/SeekConfiguration.kt",
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/usecase/SeekControlUseCase.kt", 
+            "modules/player/player-ui/src/main/java/dev/orangepie/player/ui/components/SeekControls.kt"
+          ],
+          "subtasks": [
+            "Create configurable skip intervals (15s/30s forward, 10s/15s back)",
+            "Implement smart rewind (progressive back skip)",
+            "Add haptic feedback for seek operations",
+            "Create gesture controls for progress bar",
+            "Test seek accuracy and responsiveness"
+          ],
+          "acceptance_criteria": [
+            "Skip intervals are user-configurable",
+            "Smart rewind works progressively",
+            "Seek operations complete within 200ms", 
+            "Haptic feedback enhances user experience"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phase3",
+      "name": "Premium Features",
+      "priority": "medium", 
+      "timeframe": "Week 6-7",
+      "tasks": [
+        {
+          "id": "task3.1",
+          "title": "Sleep Timer Implementation",
+          "description": "Add configurable sleep timer with smooth fade-out functionality",
+          "priority": "medium",
+          "status": "pending",
+          "files": [
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/model/SleepTimer.kt",
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/usecase/SleepTimerUseCase.kt",
+            "modules/player/player-ui/src/main/java/dev/orangepie/player/ui/components/SleepTimerSelector.kt"
+          ],
+          "subtasks": [
+            "Create SleepTimer model with configurable durations",
+            "Implement countdown timer with UI updates",
+            "Add smooth audio fade-out before stopping",
+            "Create sleep timer UI with visual countdown",
+            "Test timer accuracy and fade-out smoothness"
+          ],
+          "acceptance_criteria": [
+            "Timer stops playback at exact configured time",
+            "Audio fades out smoothly over 10 seconds",
+            "UI shows remaining time clearly",
+            "Timer can be cancelled or adjusted"
+          ]
+        },
+        {
+          "id": "task3.2",
+          "title": "Chapter Support Implementation", 
+          "description": "Add MP3/M4A chapter parsing and navigation controls",
+          "priority": "medium",
+          "status": "pending",
+          "files": [
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/model/Chapter.kt",
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/data/parser/ChapterParser.kt",
+            "modules/player/player-ui/src/main/java/dev/orangepie/player/ui/components/ChapterList.kt"
+          ],
+          "subtasks": [
+            "Implement MP3 and M4A metadata parsing",
+            "Create Chapter model with title and timestamps", 
+            "Add chapter navigation controls to player",
+            "Display embedded chapter artwork",
+            "Add chapter markers to progress timeline"
+          ],
+          "acceptance_criteria": [
+            "Chapters parse correctly from metadata",
+            "Navigation jumps precisely to chapter starts",
+            "Timeline shows chapter boundaries",
+            "Chapter artwork displays when available"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "phase4", 
+      "name": "Polish & Testing",
+      "priority": "medium",
+      "timeframe": "Week 8-10", 
+      "tasks": [
+        {
+          "id": "task4.1",
+          "title": "Audio Enhancement Features",
+          "description": "Implement volume boost, voice boost, and audio normalization",
+          "priority": "low",
+          "status": "pending",
+          "files": [
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/model/AudioEnhancement.kt",
+            "shared/src/commonMain/kotlin/dev/orangecast/shared/domain/usecase/AudioEnhancementUseCase.kt"
+          ],
+          "subtasks": [
+            "Implement volume boost for quiet podcasts",
+            "Add voice boost for speech clarity",
+            "Create audio normalization across episodes",
+            "Add user controls for audio enhancements",
+            "Test audio quality improvements"
+          ],
+          "acceptance_criteria": [
+            "Volume boost improves quiet podcast audibility",
+            "Voice boost enhances speech without distortion",
+            "Normalization works across different podcast sources"
+          ]
+        },
+        {
+          "id": "task4.2",
+          "title": "Comprehensive Testing Suite",
+          "description": "Create complete test coverage for all audio player functionality",
+          "priority": "high", 
+          "status": "pending",
+          "files": [
+            "shared/src/test/kotlin/PlayerStateTest.kt",
+            "shared/src/test/kotlin/PlaybackSpeedTest.kt", 
+            "shared/src/test/kotlin/SilenceDetectionTest.kt",
+            "app/src/androidTest/kotlin/AudioPlayerIntegrationTest.kt"
+          ],
+          "subtasks": [
+            "Write unit tests for all use cases",
+            "Create integration tests for platform-specific code",
+            "Add performance tests for buffer optimization", 
+            "Test memory usage and battery drain",
+            "Verify accessibility compliance"
+          ],
+          "acceptance_criteria": [
+            "90%+ test coverage for shared code",
+            "All performance metrics meet requirements",
+            "No memory leaks detected",
+            "Accessibility tests pass"
+          ]
+        },
+        {
+          "id": "task4.3",
+          "title": "UI/UX Polish and Documentation",
+          "description": "Final UI refinements and comprehensive documentation updates",
+          "priority": "medium",
+          "status": "pending", 
+          "files": [
+            "README.md",
+            "CLAUDE.md",
+            "modules/player/player-ui/src/main/java/dev/orangepie/player/ui/components/"
+          ],
+          "subtasks": [
+            "Polish player UI components for consistency",
+            "Update documentation with new features",
+            "Create user guide for advanced features",
+            "Verify CLAUDE.md compliance",
+            "Update project screenshots"
+          ],
+          "acceptance_criteria": [
+            "UI maintains 95% cross-platform consistency", 
+            "Documentation is complete and accurate",
+            "All CLAUDE.md rules followed",
+            "New screenshots reflect current features"
+          ]
+        }
+      ]
+    }
+  ],
+  "current_phase": "phase1",
+  "next_task": "task1.1"
+}

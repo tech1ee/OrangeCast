@@ -16,6 +16,7 @@ rootProject.name = "OrangeCast"
 
 include(
         ":app",
+        ":shared",
 )
 
 fun includeCommonModule(name: String) {
