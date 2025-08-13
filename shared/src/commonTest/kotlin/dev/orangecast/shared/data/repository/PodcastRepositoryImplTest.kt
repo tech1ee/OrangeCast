@@ -3,6 +3,7 @@ package dev.orangecast.shared.data.repository
 import dev.orangecast.shared.data.api.ITunesApiService
 import dev.orangecast.shared.data.api.model.ITunesPodcast
 import dev.orangecast.shared.data.api.model.ITunesSearchResponse
+import dev.orangecast.shared.data.local.LocalStorageManager
 import dev.orangecast.shared.domain.repository.PodcastRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -68,7 +69,9 @@ class PodcastRepositoryImplTest {
         }
 
         val apiService = ITunesApiService(httpClient)
-        return PodcastRepositoryImpl(apiService)
+        val rssFeedParser = dev.orangecast.shared.data.rss.RssFeedParser(httpClient)
+        val localStorageManager = LocalStorageManager()
+        return PodcastRepositoryImpl(apiService, rssFeedParser, localStorageManager)
     }
 
     @Test

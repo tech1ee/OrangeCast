@@ -1,40 +1,46 @@
 package dev.orangecast.shared.di
 
 import dev.orangecast.shared.data.api.ITunesApiService
+import dev.orangecast.shared.data.local.LocalStorageManager
 import dev.orangecast.shared.data.repository.PodcastRepositoryImpl
+import dev.orangecast.shared.data.rss.RssFeedParser
 import dev.orangecast.shared.domain.repository.PodcastRepository
 import dev.orangecast.shared.domain.usecase.GetPodcastDetailsUseCase
 import dev.orangecast.shared.domain.usecase.SearchPodcastsUseCase
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
+import dev.orangecast.shared.domain.usecase.GetNewEpisodesUseCase
+import dev.orangecast.shared.domain.usecase.SubscribeToPodcastUseCase
+import dev.orangecast.shared.domain.usecase.UnsubscribeFromPodcastUseCase
+import dev.orangecast.shared.presentation.viewmodel.NewEpisodesViewModel
+import dev.orangecast.shared.presentation.viewmodel.PodcastDetailViewModel
+import dev.orangecast.shared.presentation.viewmodel.LibraryViewModel
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
+expect val platformModule: Module
+
 val sharedModule = module {
-    
-    // Network
-    single {
-        HttpClient {
-            install(ContentNegotiation) {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    isLenient = true
-                })
-            }
-        }
-    }
+    includes(platformModule)
     
     // API Services
     single { ITunesApiService(get()) }
+    single { RssFeedParser(get()) }
+    
+    // Local Storage
+    single { LocalStorageManager() }
     
     // Repositories
-    single<PodcastRepository> { PodcastRepositoryImpl(get()) }
+    single<PodcastRepository> { PodcastRepositoryImpl(get(), get(), get()) }
     
     // Use Cases
     single { SearchPodcastsUseCase(get()) }
     single { GetPodcastDetailsUseCase(get()) }
+    single { GetNewEpisodesUseCase(get()) }
+    single { SubscribeToPodcastUseCase(get()) }
+    single { UnsubscribeFromPodcastUseCase(get()) }
     
     // ViewModels
     single { dev.orangecast.shared.presentation.viewmodel.PodcastListViewModel(get()) }
+    single { NewEpisodesViewModel(get()) }
+    single { PodcastDetailViewModel(get(), get(), get()) }
+    single { LibraryViewModel(get()) }
 }

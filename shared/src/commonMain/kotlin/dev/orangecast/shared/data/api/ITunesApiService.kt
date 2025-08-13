@@ -5,24 +5,36 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.statement.bodyAsText
+import kotlinx.serialization.json.Json
 
 class ITunesApiService(
     private val httpClient: HttpClient
 ) {
+    private val json = Json { 
+        ignoreUnknownKeys = true
+        isLenient = true 
+    }
+    
     suspend fun searchPodcasts(
         query: String,
         limit: Int = 50
     ): ITunesSearchResponse {
-        return httpClient.get("https://itunes.apple.com/search") {
+        val response = httpClient.get("https://itunes.apple.com/search") {
             parameter("term", query)
             parameter("media", "podcast")
             parameter("limit", limit)
-        }.body()
+        }
+        
+        val jsonString = response.bodyAsText()
+        return json.decodeFromString<ITunesSearchResponse>(jsonString)
     }
 
     suspend fun lookupPodcast(podcastId: String): ITunesSearchResponse {
-        return httpClient.get("https://itunes.apple.com/lookup") {
+        val response = httpClient.get("https://itunes.apple.com/lookup") {
             parameter("id", podcastId)
-        }.body()
+        }
+        val jsonString = response.bodyAsText()
+        return json.decodeFromString<ITunesSearchResponse>(jsonString)
     }
 }

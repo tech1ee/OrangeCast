@@ -204,6 +204,76 @@ After implementing any feature, verify:
 - **Accessibility**: WCAG 2.1 AA compliance
 - **Performance**: <200ms response times, smooth 60fps UI
 
+## 📝 TASK MANAGEMENT INTEGRATION
+
+### Task Status Tracking
+- ✅ **Primary Source**: `TASKS.md` contains all active development tasks
+- ✅ **Task Format**: TASK-XXX with detailed descriptions and acceptance criteria
+- ✅ **Status Updates**: Must be reflected in TASKS.md after each work session
+- ✅ **Dependencies**: Clear task dependency mapping to avoid conflicts
+
+### Task Execution Rules
+- ❌ **NO** starting new tasks without updating previous task status
+- ✅ **ALWAYS** mark tasks as "IN_PROGRESS" before beginning work
+- ✅ **IMMEDIATELY** update status to "COMPLETED" when finished  
+- ✅ **Document** any blockers or issues encountered in task notes
+- ✅ **Test** each task completion against its acceptance criteria
+
+### Priority Enforcement
+1. **CRITICAL**: Must be completed before any other work
+2. **HIGH**: Complete after all critical tasks
+3. **MEDIUM**: Background/parallel work when possible
+4. **LOW**: Future iteration planning only
+
+### Task Documentation Standards
+- ✅ Each task must have clear technical solution steps
+- ✅ All affected files must be explicitly listed
+- ✅ Acceptance criteria must be testable and specific
+- ✅ Time estimates should be realistic and trackable
+- ✅ Dependencies must be clearly mapped
+
+### Current Project State Integration
+- ✅ **Active Task Source**: `/TASKS.md` 
+- ✅ **Status Reports**: `/PROJECT_STATUS_REPORT.md`
+- ✅ **Action Plans**: `/ACTION_PLAN.md`
+- ✅ **Testing Results**: `/screenshots/` directory for UI validation
+
+## 🧪 AUTOMATED TESTING RULES
+
+### UI Testing Standards
+- ✅ **Use UI Automator over ADB coordinates** - Element-based selectors are reliable
+- ✅ **Use element properties** - resource-id, text, content-desc for stable tests
+- ✅ **Generate UI hierarchy dumps** for test analysis and debugging
+- ❌ **NO** hardcoded coordinates - they break across devices and updates
+- ❌ **NO** pixel-perfect coordinate testing - use bounds-based center calculations
+
+### Testing Workflow
+1. **Build and Install**: `./gradlew assembleDebug && adb install -r app/build/outputs/apk/debug/app-debug.apk`
+2. **Launch App**: `adb shell am start -n com.orangecast.app.debug/com.orangecast.ui.MainActivity`
+3. **Dump UI**: `adb shell uiautomator dump /sdcard/ui_dump.xml && adb pull /sdcard/ui_dump.xml`
+4. **Analyze Elements**: Parse XML for bounds, text, resource-id properties
+5. **Calculate Centers**: Use bounds `[left,top][right,bottom]` to get center coordinates
+6. **Execute Tests**: `adb shell input tap X Y` with calculated centers
+7. **Verify Results**: Take screenshots and validate UI state changes
+
+### Element Selection Priority
+1. **resource-id** (highest priority) - Most stable identifier
+2. **text** (medium priority) - Works for buttons and labels  
+3. **content-desc** (medium priority) - Accessibility descriptions
+4. **bounds** (lowest priority) - Only for coordinate calculation
+
+### Test Data Management
+- ✅ **Real screenshots** in `/screenshots/` with descriptive names
+- ✅ **UI dumps** in `/tmp/` for analysis (not committed to git)
+- ✅ **Test results** documented with before/after evidence
+- ❌ **NO** mock or synthetic test data in UI testing
+
+### Performance Standards
+- ✅ **Fast execution** - UI Automator tests should complete in <30 seconds
+- ✅ **Reliable results** - 99%+ success rate on repeated runs
+- ✅ **Clear output** - Screenshot evidence for every major test step
+- ✅ **Efficient debugging** - UI dumps available for troubleshooting
+
 ---
 
-**Remember: These rules are non-negotiable. Every line of code must comply with these standards to maintain the project's high quality and cross-platform consistency.**
+**Remember: These rules are non-negotiable. Every line of code must comply with these standards to maintain the project's high quality and cross-platform consistency. TASKS.md is the single source of truth for development priorities.**

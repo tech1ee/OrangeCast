@@ -13,18 +13,24 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
                 implementation("io.ktor:ktor-client-core:2.3.2")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
                 implementation("io.insert-koin:koin-core:3.4.2")
                 implementation("io.insert-koin:koin-compose:1.0.4")
                 
+                // XML parsing for RSS feeds
+                implementation("com.fleeksoft.ksoup:ksoup:0.1.2")
+                
                 // Compose Multiplatform
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 implementation(compose.ui)
+                
+                // Navigation
+                implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
             }
         }
         
@@ -39,6 +45,8 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:2.3.2")
+                implementation("io.ktor:ktor-client-logging:2.3.2")
+                implementation("io.coil-kt:coil-compose:2.4.0")
             }
         }
         val androidUnitTest by getting

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,7 +23,9 @@ import dev.orangecast.shared.presentation.ui.components.PodcastListItem
 fun PodcastListScreen(
     podcasts: List<Podcast>,
     isLoading: Boolean = false,
-    onPodcastClick: (Podcast) -> Unit = {}
+    error: String? = null,
+    onPodcastClick: (Podcast) -> Unit = {},
+    onRetryClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -34,23 +37,59 @@ fun PodcastListScreen(
             modifier = Modifier.padding(16.dp)
         )
         
-        if (isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(podcasts) { podcast ->
-                    PodcastListItem(
-                        podcast = podcast,
-                        onClick = { onPodcastClick(podcast) }
+        when {
+            error != null -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "Error loading podcasts",
+                        style = MaterialTheme.typography.headlineSmall
                     )
+                    Text(
+                        text = error,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                    Button(onClick = onRetryClick) {
+                        Text("Retry")
+                    }
+                }
+            }
+            isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            podcasts.isEmpty() -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No podcasts found",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            }
+            else -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(podcasts) { podcast ->
+                        PodcastListItem(
+                            podcast = podcast,
+                            onClick = { onPodcastClick(podcast) }
+                        )
+                    }
                 }
             }
         }

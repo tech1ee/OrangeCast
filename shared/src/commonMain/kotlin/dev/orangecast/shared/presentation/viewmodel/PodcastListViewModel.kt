@@ -5,6 +5,8 @@ import dev.orangecast.shared.domain.usecase.SearchPodcastsUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,12 +19,32 @@ class PodcastListViewModel(
     
     private val _uiState = MutableStateFlow(PodcastListUiState())
     val uiState: StateFlow<PodcastListUiState> = _uiState.asStateFlow()
+    
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+    
+    private var searchJob: Job? = null
 
     init {
         loadFeaturedPodcasts()
     }
 
-    fun searchPodcasts(query: String) {
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
+        searchJob?.cancel()
+        
+        if (query.isBlank()) {
+            loadFeaturedPodcasts()
+            return
+        }
+        
+        searchJob = viewModelScope.launch {
+            delay(300) // Debounce 300ms
+            searchPodcasts(query)
+        }
+    }
+    
+    private fun searchPodcasts(query: String) {
         _uiState.value = _uiState.value.copy(isLoading = true)
         
         viewModelScope.launch {
@@ -45,6 +67,15 @@ class PodcastListViewModel(
 
     private fun loadFeaturedPodcasts() {
         searchPodcasts("comedy")
+    }
+    
+    fun retrySearch() {
+        val currentQuery = _searchQuery.value
+        if (currentQuery.isBlank()) {
+            loadFeaturedPodcasts()
+        } else {
+            searchPodcasts(currentQuery)
+        }
     }
 
     fun clearError() {
