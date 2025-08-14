@@ -122,3 +122,4 @@ iosApp/.build/
 
 # KMP
 shared/.build/
+.idea/deviceManager.xml

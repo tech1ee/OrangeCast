@@ -129,6 +129,13 @@ modules/
 - ✅ Consistent navigation patterns
 - ✅ Unified design system and theming
 
+### Loading States and Animation Standards
+- ✅ **Shimmer effects** for all loading states instead of circular progress indicators
+- ✅ Shimmer components for cards, images, and text placeholders
+- ✅ Consistent loading animation timing (1200ms duration with LinearEasing)
+- ✅ Platform-agnostic shimmer implementation in shared/commonMain
+- ✅ Real image loading with shimmer fallback (SubcomposeAsyncImage on Android, custom implementation on iOS)
+
 ### Accessibility
 - ✅ Screen reader support for all interactive elements
 - ✅ Proper semantic descriptions

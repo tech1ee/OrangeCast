@@ -34,6 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dev.orangecast.shared.presentation.ui.navigation.BottomNavItem
+import dev.orangecast.shared.presentation.ui.theme.OrangeCastColors
 
 @Composable
 fun MainScreen() {
@@ -131,7 +132,7 @@ private fun BottomNavButton(
             Box(
                 modifier = Modifier
                     .background(
-                        color = if (isSelected) Color(0xFFFF5722) else Color.Transparent,
+                        color = if (isSelected) OrangeCastColors.PrimaryOrange else Color.Transparent,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(horizontal = 16.dp, vertical = 4.dp),
@@ -145,7 +146,7 @@ private fun BottomNavButton(
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.labelSmall,
-                color = if (isSelected) Color(0xFFFF5722) else Color.Gray,
+                color = if (isSelected) OrangeCastColors.PrimaryOrange else Color.Gray,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
             )
         }

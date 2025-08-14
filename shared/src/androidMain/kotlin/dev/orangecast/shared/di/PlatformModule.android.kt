@@ -2,10 +2,10 @@ package dev.orangecast.shared.di
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -13,8 +13,9 @@ import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
 actual val platformModule = module {
-    single {
+    single<HttpClient> {
         HttpClient(OkHttp) {
+            // Engine configuration
             engine {
                 config {
                     connectTimeout(30, TimeUnit.SECONDS)
@@ -22,23 +23,37 @@ actual val platformModule = module {
                 }
             }
             
+            // Install common plugins from createCachedHttpClient
             install(ContentNegotiation) {
                 json(Json {
                     ignoreUnknownKeys = true
-                    isLenient = true
                     coerceInputValues = true
-                    encodeDefaults = true
                 })
             }
             
-            install(Logging) {
-                level = LogLevel.HEADERS
+            install(HttpCache) {
+                // Configure HTTP caching
             }
+            
+            install(HttpRequestRetry) {
+                retryOnServerErrors(maxRetries = 3)
+                retryIf { _, response ->
+                    response.status.value >= 500
+                }
+                exponentialDelay()
+            }
+            
+            // Production - no logging
+            // if (enableLogging) {
+            //     install(Logging) { level = LogLevel.INFO }
+            // }
             
             defaultRequest {
                 header("Accept", "application/json")
                 header("User-Agent", "OrangeCast/1.0")
             }
+            
+            expectSuccess = true
         }
     }
 }

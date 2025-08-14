@@ -50,8 +50,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.orangecast.shared.domain.model.PodcastEpisode
 import dev.orangecast.shared.presentation.ui.components.AsyncImage
+import dev.orangecast.shared.presentation.ui.components.ShimmerPodcastDetailScreen
 import dev.orangecast.shared.presentation.viewmodel.PodcastDetailViewModel
 import org.koin.compose.koinInject
+import dev.orangecast.shared.presentation.ui.theme.OrangeCastColors
 
 @Composable
 fun PodcastDetailScreen(
@@ -96,9 +98,7 @@ fun PodcastDetailScreen(
                 )
             }
             uiState.isLoading -> {
-                LoadingContent(
-                    modifier = Modifier.padding(paddingValues)
-                )
+                ShimmerPodcastDetailScreen()
             }
             uiState.podcastDetails != null -> {
                 PodcastDetailContent(
@@ -277,7 +277,7 @@ private fun PodcastHeader(
                 onClick = onSubscribeClick,
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isSubscribed) Color.Gray else Color(0xFFFF5722),
+                    containerColor = if (isSubscribed) Color.Gray else OrangeCastColors.PrimaryOrange,
                     contentColor = Color.White
                 )
             ) {
@@ -316,7 +316,7 @@ private fun EpisodeCard(
                 onClick = onPlayClick,
                 modifier = Modifier
                     .background(
-                        Color(0xFFFF5722),
+                        OrangeCastColors.PrimaryOrange,
                         RoundedCornerShape(8.dp)
                     )
                     .size(40.dp)

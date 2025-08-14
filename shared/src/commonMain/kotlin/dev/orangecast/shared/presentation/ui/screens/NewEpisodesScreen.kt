@@ -14,10 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import dev.orangecast.shared.presentation.ui.theme.OrangeCastColors
+import dev.orangecast.shared.presentation.ui.components.ShimmerBox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,13 +50,26 @@ fun NewEpisodesScreen() {
 
     when {
         uiState.isLoading -> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                CircularProgressIndicator(
-                    color = Color(0xFFFF5722)
-                )
+                item {
+                    Text(
+                        text = "New Episodes",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                }
+                
+                items(5) {
+                    ShimmerEpisodeCard()
+                }
             }
         }
         
@@ -198,16 +215,17 @@ private fun EpisodeCard(
                 modifier = Modifier
                     .size(40.dp)
                     .background(
-                        Color(0xFFFF5722),
+                        OrangeCastColors.PrimaryOrange,
                         shape = RoundedCornerShape(20.dp)
                     )
                     .clickable { onPlayClick() },
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "▶",
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleMedium
+                Icon(
+                    imageVector = Icons.Filled.PlayArrow,
+                    contentDescription = "Play",
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }
@@ -228,5 +246,69 @@ private fun formatDuration(durationSeconds: Long): String {
         "${hours}h ${minutes}m"
     } else {
         "${minutes}m"
+    }
+}
+
+@Composable
+private fun ShimmerEpisodeCard() {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ShimmerBox(
+                modifier = Modifier
+                    .size(80.dp),
+                shape = RoundedCornerShape(8.dp)
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ShimmerBox(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .size(height = 20.dp, width = 200.dp),
+                    shape = RoundedCornerShape(4.dp)
+                )
+                
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    ShimmerBox(
+                        modifier = Modifier
+                            .size(height = 14.dp, width = 60.dp),
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    ShimmerBox(
+                        modifier = Modifier
+                            .size(height = 14.dp, width = 40.dp),
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                }
+                
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    repeat(2) {
+                        ShimmerBox(
+                            modifier = Modifier
+                                .fillMaxWidth(if (it == 1) 0.7f else 1f)
+                                .size(height = 14.dp, width = 200.dp),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                    }
+                }
+            }
+
+            ShimmerBox(
+                modifier = Modifier.size(40.dp),
+                shape = RoundedCornerShape(20.dp)
+            )
+        }
     }
 }

@@ -1,6 +1,7 @@
 package dev.orangecast.shared.di
 
 import dev.orangecast.shared.data.api.ITunesApiService
+import dev.orangecast.shared.data.cache.PodcastCacheManager
 import dev.orangecast.shared.data.local.LocalStorageManager
 import dev.orangecast.shared.data.repository.PodcastRepositoryImpl
 import dev.orangecast.shared.data.rss.RssFeedParser
@@ -21,6 +22,11 @@ expect val platformModule: Module
 val sharedModule = module {
     includes(platformModule)
     
+    // HTTP Client is provided by platform modules with proper configuration
+    
+    // Cache Manager
+    single { PodcastCacheManager() }
+    
     // API Services
     single { ITunesApiService(get()) }
     single { RssFeedParser(get()) }
@@ -29,7 +35,7 @@ val sharedModule = module {
     single { LocalStorageManager() }
     
     // Repositories
-    single<PodcastRepository> { PodcastRepositoryImpl(get(), get(), get()) }
+    single<PodcastRepository> { PodcastRepositoryImpl(get(), get(), get(), get()) }
     
     // Use Cases
     single { SearchPodcastsUseCase(get()) }
@@ -39,7 +45,7 @@ val sharedModule = module {
     single { UnsubscribeFromPodcastUseCase(get()) }
     
     // ViewModels
-    single { dev.orangecast.shared.presentation.viewmodel.PodcastListViewModel(get()) }
+    single { dev.orangecast.shared.presentation.viewmodel.PodcastListViewModel(get(), get()) }
     single { NewEpisodesViewModel(get()) }
     single { PodcastDetailViewModel(get(), get(), get()) }
     single { LibraryViewModel(get()) }

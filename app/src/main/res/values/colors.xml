@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Orange theme colors for OrangeCast -->
-    <color name="orange_primary">#FF6B35</color>
-    <color name="orange_primary_dark">#E55A2B</color>
-    <color name="orange_accent">#FFB366</color>
+    <!-- OrangeCast Design System Colors - Soft Orange Palette -->
+    <color name="orange_primary">#FF8A65</color>
+    <color name="orange_primary_dark">#FF7043</color>
+    <color name="orange_secondary">#FFAB91</color>
+    <color name="orange_accent">#FF7043</color>
+    <color name="orange_accent_dark">#FFB74D</color>
     
     <!-- Light theme colors -->
     <color name="background_light">#FFFFFF</color>

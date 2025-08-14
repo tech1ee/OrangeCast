@@ -14,4 +14,5 @@ interface PodcastRepository {
     fun getSubscribedPodcasts(): Flow<List<Podcast>>
     suspend fun getFeaturedPodcasts(): Result<List<Podcast>>
     suspend fun getCategoriesPodcasts(category: String): Result<List<Podcast>>
+    suspend fun getAvailableCategories(): List<String>
 }

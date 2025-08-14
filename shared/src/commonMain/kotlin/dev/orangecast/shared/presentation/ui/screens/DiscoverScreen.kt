@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -46,6 +48,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.orangecast.shared.presentation.ui.components.AsyncImage
+import dev.orangecast.shared.presentation.ui.components.ShimmerPodcastCard
+import dev.orangecast.shared.presentation.ui.components.PodcastGrid
 import dev.orangecast.shared.presentation.viewmodel.PodcastListViewModel
 import org.koin.compose.koinInject
 
@@ -56,6 +60,7 @@ fun DiscoverScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
+    val categorySections by viewModel.categorySections.collectAsState()
     
     LazyColumn(
         modifier = Modifier
@@ -81,8 +86,46 @@ fun DiscoverScreen(
                 }
             }
             uiState.isLoading -> {
+                // Featured Podcasts shimmer
                 item {
-                    LoadingSection()
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Text(
+                            text = "Featured Podcasts",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                        LazyRow(
+                            contentPadding = PaddingValues(horizontal = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(6) {
+                                ShimmerPodcastCard()
+                            }
+                        }
+                    }
+                }
+                
+                // Category sections shimmer
+                repeat(3) { categoryIndex ->
+                    item {
+                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Text(
+                                text = listOf("Comedy", "Technology", "Business")[categoryIndex],
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                            LazyRow(
+                                contentPadding = PaddingValues(horizontal = 4.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(5) {
+                                    ShimmerPodcastCard()
+                                }
+                            }
+                        }
+                    }
                 }
             }
             searchQuery.isNotBlank() && uiState.podcasts.isNotEmpty() -> {
@@ -91,15 +134,16 @@ fun DiscoverScreen(
                         text = "Search Results (${uiState.podcasts.size})",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = Color.Black,
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 }
-                items(uiState.podcasts) { podcast ->
-                    PodcastSearchResultCard(
-                        title = podcast.title,
-                        author = podcast.author,
-                        imageUrl = podcast.imageUrl,
-                        onClick = { onPodcastClick(podcast) }
+                item {
+                    PodcastGrid(
+                        podcasts = uiState.podcasts,
+                        onPodcastClick = onPodcastClick,
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = PaddingValues(0.dp)
                     )
                 }
             }
@@ -109,21 +153,28 @@ fun DiscoverScreen(
                 }
             }
             else -> {
-                item {
-                    Text(
-                        text = "Featured Podcasts",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
+                // Featured Podcasts Section
+                if (uiState.podcasts.isNotEmpty()) {
+                    item {
+                        PodcastGenreSection(
+                            title = "Featured Podcasts",
+                            podcasts = uiState.podcasts,
+                            onPodcastClick = onPodcastClick
+                        )
+                    }
                 }
-                items(uiState.podcasts) { podcast ->
-                    PodcastSearchResultCard(
-                        title = podcast.title,
-                        author = podcast.author,
-                        imageUrl = podcast.imageUrl,
-                        onClick = { onPodcastClick(podcast) }
-                    )
+                
+                // Category Sections from real API data
+                categorySections.forEach { (category, podcasts) ->
+                    if (podcasts.isNotEmpty()) {
+                        item {
+                            PodcastGenreSection(
+                                title = category,
+                                podcasts = podcasts,
+                                onPodcastClick = onPodcastClick
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -249,6 +300,88 @@ private fun EmptySearchSection(query: String) {
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Gray
         )
+    }
+}
+
+@Composable
+private fun PodcastGenreSection(
+    title: String,
+    podcasts: List<dev.orangecast.shared.domain.model.Podcast>,
+    onPodcastClick: (dev.orangecast.shared.domain.model.Podcast) -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+        
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(podcasts) { podcast ->
+                PodcastVerticalCard(
+                    title = podcast.title,
+                    author = podcast.author,
+                    imageUrl = podcast.imageUrl,
+                    onClick = { onPodcastClick(podcast) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PodcastVerticalCard(
+    title: String,
+    author: String,
+    imageUrl: String,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .width(150.dp)
+            .height(220.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
+            AsyncImage(
+                url = imageUrl,
+                contentDescription = title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(8.dp))
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.Black
+            )
+            
+            Text(
+                text = author,
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Gray,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
 
