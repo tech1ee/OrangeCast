@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 
 class PodcastListViewModel(
     private val searchPodcastsUseCase: SearchPodcastsUseCase,
@@ -95,13 +98,18 @@ class PodcastListViewModel(
     private fun loadCategorySections() {
         viewModelScope.launch {
             val categories = podcastRepository.getAvailableCategories().take(4) // Load first 4 categories
-            val categorySections = mutableMapOf<String, List<Podcast>>()
+            val categoryResults = categories.map { category ->
+                async {
+                    category to podcastRepository.getCategoriesPodcasts(category)
+                }
+            }.awaitAll()
             
-            categories.forEach { category ->
-                podcastRepository.getCategoriesPodcasts(category)
-                    .onSuccess { podcasts ->
-                        categorySections[category] = podcasts.take(8) // Limit to 8 podcasts per category
-                    }
+            val categorySections = mutableMapOf<String, List<Podcast>>()
+            categoryResults.forEach { (category, result) ->
+                result.onSuccess { podcasts ->
+                    categorySections[category] = podcasts.take(8) // Limit to 8 podcasts per category
+                }
+            }
             }
             
             _categorySections.value = categorySections

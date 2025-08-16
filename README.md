@@ -21,19 +21,18 @@ A modern, cross-platform podcast player built with Kotlin Multiplatform Mobile (
 
 ## 📱 Screenshots
 
-### Current Application State (Latest Update: August 2025)
+### Current Application State (Latest Update: December 2024)
 
-| Platform | Main Discovery | Library Screen | Podcast Details |
-|----------|----------------|----------------|----------------|
-| **Android** | ![Android Main](screenshots/android_main_screen_2025.png) | ![Android Library](screenshots/android_library_screen_2025.png) | ![Android Details](screenshots/android_podcast_details_2025.png) |
-| **iOS** | ![iOS Main](screenshots/ios_current_state.png) | ![iOS Library](screenshots/ios_library_screen.png) | ![iOS Details](screenshots/jay_shetty_details.png) |
+| Platform | Main Discovery |
+|----------|----------------|
+| **Android** | ![Android Main](screenshots/android_main_current.png) |
 
-### Additional Screens
-
-| Feature | Android | iOS |
-|---------|---------|-----|
-| **New Episodes** | ![New Episodes](screenshots/android_new_episodes_2025.png) | ![iOS Before Tap](screenshots/ios_before_tap.png) |
-| **Library with Subscriptions** | ![Library Full](screenshots/android_library_with_subscription.png) | - |
+#### Current Features Demonstrated:
+- ✅ **Category-based Discovery** - Featured Podcasts, Arts, Business sections
+- ✅ **Grid Layout** - 2-column podcast display with proper aspect ratios
+- ✅ **Real Podcast Data** - Live iTunes API integration showing actual podcasts
+- ✅ **Search Functionality** - Working search bar (crash fixed)
+- ✅ **Navigation** - Discover, New Episodes, Library tabs functional
 
 ### 📋 Current Status
 - ✅ **Cross-Platform Consistency**: 95% identical UI rendering across platforms
