@@ -93,37 +93,10 @@ class LocalStorageManager {
     }
     
     private fun loadSubscriptions() {
-        
-        // Sample data for demonstration - will be replaced with real persistence
-        val samplePodcasts = mapOf(
-            "1565853546" to Podcast(
-                id = "1565853546",
-                title = "SmartLess",
-                description = "New episodes every Monday",
-                imageUrl = "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=600&h=600&fit=crop&crop=center",
-                author = "Jason Bateman, Sean Hayes, Will Arnett",
-                category = "Comedy",
-                language = "en",
-                isExplicit = false,
-                episodeCount = 100,
-                lastUpdated = System.currentTimeMillis()
-            ),
-            "1441923632" to Podcast(
-                id = "1441923632", 
-                title = "Wait Wait... Don't Tell Me!",
-                description = "NPR's news quiz show",
-                imageUrl = "https://images.unsplash.com/photo-1589903308904-1010c2294adc?w=600&h=600&fit=crop&crop=center",
-                author = "NPR",
-                category = "Comedy",
-                language = "en",
-                isExplicit = false,
-                episodeCount = 200,
-                lastUpdated = System.currentTimeMillis()
-            )
-        )
-        
-        _subscribedPodcasts.value = samplePodcasts.keys
-        _podcastCache.value = samplePodcasts
+        // Start with empty subscriptions - users will add their own
+        // This could be extended to load from platform-specific persistent storage
+        _subscribedPodcasts.value = emptySet()
+        _podcastCache.value = emptyMap()
     }
     
     private fun saveSubscriptions() {

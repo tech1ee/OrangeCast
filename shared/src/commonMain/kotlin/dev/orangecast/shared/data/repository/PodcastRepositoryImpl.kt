@@ -49,9 +49,9 @@ class PodcastRepositoryImpl(
 
     override suspend fun getPodcastDetails(podcastId: String): Result<PodcastDetails> {
         return try {
-            // Check cache first
+            // Check cache first - but don't return empty episode results immediately  
             val cachedDetails = cacheManager.getPodcastDetails(podcastId)
-            if (cachedDetails != null) {
+            if (cachedDetails != null && cachedDetails.episodes.isNotEmpty()) {
                 return Result.success(cachedDetails)
             }
             
@@ -59,16 +59,29 @@ class PodcastRepositoryImpl(
             val podcast = response.results.firstOrNull()?.toDomainModel()
                 ?: return Result.failure(Exception("Podcast not found"))
             
-            val episodes = getEpisodes(podcastId).getOrElse { emptyList() }
+            // Get episodes with better error reporting
+            val episodesResult = getEpisodes(podcastId)
+            val episodes = when {
+                episodesResult.isSuccess -> {
+                    episodesResult.getOrNull() ?: emptyList()
+                }
+                else -> {
+                    emptyList() // Still create podcast details even without episodes
+                }
+            }
+            
             val isSubscribed = localStorageManager.isSubscribed(podcastId)
+            
             val details = PodcastDetails(
                 podcast = podcast,
                 episodes = episodes,
                 isSubscribed = isSubscribed
             )
             
-            // Cache the details
-            cacheManager.putPodcastDetails(podcastId, details)
+            // Only cache details if we have episodes
+            if (episodes.isNotEmpty()) {
+                cacheManager.putPodcastDetails(podcastId, details)
+            }
             
             Result.success(details)
         } catch (e: Exception) {
@@ -84,27 +97,52 @@ class PodcastRepositoryImpl(
 
     override suspend fun getEpisodes(podcastId: String): Result<List<PodcastEpisode>> {
         return try {
-            // Check cache first
+            // Check cache first - but don't return empty results immediately
             val cachedEpisodes = cacheManager.getEpisodes(podcastId)
-            if (cachedEpisodes != null) {
+            if (cachedEpisodes != null && cachedEpisodes.isNotEmpty()) {
                 return Result.success(cachedEpisodes)
+            }
+            
+            // Clear any empty cached results to force refresh
+            if (cachedEpisodes != null && cachedEpisodes.isEmpty()) {
+                cacheManager.removeEpisodes(podcastId)
             }
             
             val podcastResponse = apiService.lookupPodcast(podcastId)
             val podcast = podcastResponse.results.firstOrNull()
                 ?: return Result.failure(Exception("Podcast not found"))
             
-            val feedUrl = podcast.feedUrl
-                ?: return Result.failure(Exception("No RSS feed URL available"))
+            // First try the feedUrl from iTunes API if available
+            var feedUrl = podcast.feedUrl
+            var episodes: Result<List<PodcastEpisode>> = Result.failure(Exception("No feed URL"))
             
-            val episodes = rssFeedParser.parseEpisodes(feedUrl, podcastId, podcast.trackName)
-            
-            // Cache the episodes if successful
-            episodes.onSuccess { episodeList ->
-                cacheManager.putEpisodes(podcastId, episodeList)
+            if (feedUrl != null) {
+                episodes = rssFeedParser.parseEpisodes(feedUrl, podcastId, podcast.trackName)
             }
             
-            episodes
+            // If iTunes feedUrl failed or wasn't available, try alternative sources
+            if (episodes.isFailure) {
+                val alternativeFeedUrl = tryAlternativeFeedSources(podcast.trackName, podcast.artistName)
+                if (alternativeFeedUrl != null) {
+                    feedUrl = alternativeFeedUrl
+                    episodes = rssFeedParser.parseEpisodes(feedUrl, podcastId, podcast.trackName)
+                } else {
+                    return Result.failure(Exception("No RSS feed URL available for ${podcast.trackName}"))
+                }
+            }
+            
+            episodes.fold(
+                onSuccess = { episodeList ->
+                    // Only cache non-empty results
+                    if (episodeList.isNotEmpty()) {
+                        cacheManager.putEpisodes(podcastId, episodeList)
+                    }
+                    Result.success(episodeList)
+                },
+                onFailure = { error ->
+                    Result.failure(error)
+                }
+            )
         } catch (e: Exception) {
             // Try to return cached episodes even if expired in case of network error
             val cachedEpisodes = cacheManager.getEpisodes(podcastId)
@@ -217,6 +255,54 @@ class PodcastRepositoryImpl(
             "TV & Film"
         )
     }
+
+    private suspend fun tryAlternativeFeedSources(podcastName: String, artistName: String?): String? {
+        return try {
+            // First try known popular podcasts with reliable RSS feeds
+            val knownFeed = getKnownPodcastFeed(podcastName)
+            if (knownFeed != null) return knownFeed
+            
+            // Try searching for the podcast again with different parameters to get feedUrl
+            val searchQuery = if (!artistName.isNullOrBlank()) {
+                "$podcastName $artistName"
+            } else {
+                podcastName
+            }
+            
+            val searchResponse = apiService.searchPodcasts(searchQuery, limit = 10)
+            searchResponse.results
+                .firstOrNull { it.feedUrl != null && it.trackName.contains(podcastName, ignoreCase = true) }
+                ?.feedUrl
+        } catch (e: Exception) {
+            null
+        }
+    }
+    
+    private fun getKnownPodcastFeed(podcastName: String): String? {
+        // Popular podcasts with known working RSS feeds
+        return when {
+            podcastName.contains("Serial", ignoreCase = true) -> 
+                "https://feeds.serialpodcast.org/serialpodcast"
+            podcastName.contains("This American Life", ignoreCase = true) -> 
+                "https://feeds.thisamericanlife.org/talpodcast"
+            podcastName.contains("The Daily", ignoreCase = true) -> 
+                "https://feeds.nytimes.com/nyt/rss/podcasts/the-daily"
+            podcastName.contains("Conan", ignoreCase = true) -> 
+                "https://feeds.simplecast.com/dHoohVNH"
+            podcastName.contains("RadioLab", ignoreCase = true) -> 
+                "https://feeds.wnyc.org/radiolab"
+            podcastName.contains("Planet Money", ignoreCase = true) -> 
+                "https://feeds.npr.org/510289/podcast.xml"
+            podcastName.contains("Fresh Air", ignoreCase = true) -> 
+                "https://feeds.npr.org/381444908/podcast.xml"
+            podcastName.contains("TED Radio Hour", ignoreCase = true) -> 
+                "https://feeds.npr.org/510298/podcast.xml"
+            podcastName.contains("How I Built This", ignoreCase = true) -> 
+                "https://feeds.npr.org/510313/podcast.xml"
+            else -> null
+        }
+    }
+    
 
     private fun ITunesPodcast.toDomainModel(): Podcast {
         return Podcast(

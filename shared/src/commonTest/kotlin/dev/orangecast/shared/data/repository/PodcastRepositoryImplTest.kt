@@ -71,7 +71,8 @@ class PodcastRepositoryImplTest {
         val apiService = ITunesApiService(httpClient)
         val rssFeedParser = dev.orangecast.shared.data.rss.RssFeedParser(httpClient)
         val localStorageManager = LocalStorageManager()
-        return PodcastRepositoryImpl(apiService, rssFeedParser, localStorageManager)
+        val cacheManager = dev.orangecast.shared.data.cache.PodcastCacheManager()
+        return PodcastRepositoryImpl(apiService, rssFeedParser, localStorageManager, cacheManager)
     }
 
     @Test

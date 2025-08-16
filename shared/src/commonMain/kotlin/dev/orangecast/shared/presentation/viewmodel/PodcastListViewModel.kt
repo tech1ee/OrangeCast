@@ -110,7 +110,6 @@ class PodcastListViewModel(
                     categorySections[category] = podcasts.take(8) // Limit to 8 podcasts per category
                 }
             }
-            }
             
             _categorySections.value = categorySections
         }

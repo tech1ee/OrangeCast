@@ -37,7 +37,7 @@ class PodcastDetailViewModel(
                 .onFailure { error ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        error = error.message ?: "Unknown error occurred"
+                        error = error.message
                     )
                 }
         }
@@ -65,6 +65,7 @@ class PodcastDetailViewModel(
             }
         }
     }
+    
 }
 
 data class PodcastDetailUiState(

@@ -47,14 +47,14 @@ fun LibraryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(androidx.compose.ui.graphics.Color.White)
             .padding(16.dp)
     ) {
         Text(
             text = "Library",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            color = androidx.compose.ui.graphics.Color.Black,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -106,13 +106,13 @@ private fun EmptyLibraryState() {
                 text = "Your Library",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = androidx.compose.ui.graphics.Color.Black
             )
             
             Text(
                 text = "Subscribe to podcasts to build your personal library. Go to Discover to find podcasts you love!",
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.Gray,
+                color = androidx.compose.ui.graphics.Color.Gray,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(0.9f)
             )
@@ -126,7 +126,7 @@ private fun ShimmerPodcastListItem() {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         androidx.compose.foundation.layout.Row(

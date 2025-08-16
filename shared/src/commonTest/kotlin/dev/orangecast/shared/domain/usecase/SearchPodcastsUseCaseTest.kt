@@ -42,6 +42,7 @@ class SearchPodcastsUseCaseTest {
         override fun getSubscribedPodcasts() = flowOf(emptyList<Podcast>())
         override suspend fun getFeaturedPodcasts() = Result.failure<List<Podcast>>(NotImplementedError())
         override suspend fun getCategoriesPodcasts(category: String) = Result.failure<List<Podcast>>(NotImplementedError())
+        override suspend fun getAvailableCategories(): List<String> = listOf("Comedy", "Technology", "News")
     }
 
     @Test

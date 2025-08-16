@@ -56,6 +56,8 @@ class PodcastCacheManager {
         episodesCache.put(podcastId, episodes, CacheEntry.EPISODE_TTL)
     }
     
+    fun removeEpisodes(podcastId: String) = episodesCache.remove(podcastId)
+    
     // Cache management
     fun clearSearchCache() = searchCache.clear()
     

@@ -54,6 +54,7 @@ import dev.orangecast.shared.presentation.ui.components.ShimmerPodcastDetailScre
 import dev.orangecast.shared.presentation.viewmodel.PodcastDetailViewModel
 import org.koin.compose.koinInject
 import dev.orangecast.shared.presentation.ui.theme.OrangeCastColors
+import kotlinx.datetime.Clock
 
 @Composable
 fun PodcastDetailScreen(
@@ -380,16 +381,29 @@ private fun EpisodeCard(
 }
 
 private fun formatTimestamp(timestamp: Long): String {
-    // Simple date formatting - in production would use proper date formatting
-    return "Recently"
+    val now = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
+    val diffMs = now - timestamp
+    val diffDays = diffMs / (24 * 60 * 60 * 1000)
+    
+    return when {
+        diffDays == 0L -> "Today"
+        diffDays == 1L -> "Yesterday" 
+        diffDays < 7 -> "${diffDays} days ago"
+        diffDays < 30 -> "${diffDays / 7} weeks ago"
+        diffDays < 365 -> "${diffDays / 30} months ago"
+        else -> "${diffDays / 365} years ago"
+    }
 }
 
 private fun formatDuration(durationMs: Long): String {
-    val minutes = durationMs / (1000 * 60)
+    // RSS feeds typically provide duration in seconds, but some might provide milliseconds
+    val seconds = if (durationMs > 86400) durationMs / 1000 else durationMs
+    val minutes = seconds / 60
     val hours = minutes / 60
-    return if (hours > 0) {
-        "${hours}h ${minutes % 60}m"
-    } else {
-        "${minutes}m"
+    
+    return when {
+        hours > 0 -> "${hours}h ${minutes % 60}m"
+        minutes > 0 -> "${minutes}m"
+        else -> "${seconds}s"
     }
 }

@@ -7,6 +7,7 @@ import dev.orangecast.shared.domain.model.PodcastEpisode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
@@ -14,46 +15,84 @@ class RssFeedParser(private val httpClient: HttpClient) {
     
     suspend fun parseEpisodes(feedUrl: String, podcastId: String, podcastTitle: String): Result<List<PodcastEpisode>> {
         return try {
-            val feedContent: String = httpClient.get(feedUrl).body()
-            val document: Document = Ksoup.parse(feedContent)
+            val feedContent: String = httpClient.get(feedUrl) {
+                // Override default JSON Accept header for RSS feeds
+                header("Accept", "application/rss+xml, application/xml, text/xml, */*")
+                header("User-Agent", "OrangeCast/1.0 (compatible; podcast client)")
+            }.body()
             
-            val episodes = document.select("item").mapNotNull { item ->
+            if (feedContent.isBlank()) {
+                return Result.failure(Exception("Empty RSS feed content from $feedUrl"))
+            }
+            
+            val document: Document = Ksoup.parse(feedContent)
+            val items = document.select("item")
+            
+            if (items.isEmpty()) {
+                return Result.failure(Exception("No episodes found in RSS feed from $feedUrl"))
+            }
+            
+            val episodes = items.mapNotNull { item ->
                 parseEpisodeItem(item, podcastId, podcastTitle)
+            }
+            
+            if (episodes.isEmpty()) {
+                return Result.failure(Exception("Failed to parse any episodes from ${items.size} items in RSS feed"))
             }
             
             Result.success(episodes)
         } catch (e: Exception) {
-            Result.failure(e)
+            Result.failure(Exception("RSS parsing failed for $feedUrl: ${e.message}", e))
         }
     }
     
     private fun parseEpisodeItem(item: Element, podcastId: String, podcastTitle: String): PodcastEpisode? {
         try {
-            val title = item.selectFirst("title")?.text() ?: return null
+            val title = item.selectFirst("title")?.text()
+            if (title.isNullOrBlank()) {
+                return null
+            }
+            
             val description = item.selectFirst("description")?.text() ?: ""
             
+            // Try multiple ways to find the audio URL - now more flexible
             val enclosure = item.selectFirst("enclosure")
-            val audioUrl = enclosure?.attr("url") ?: return null
+            val audioUrl = enclosure?.attr("url") 
+                ?: enclosure?.attr("href")
+                ?: item.selectFirst("link")?.attr("href")
+                ?: item.getElementsByTag("content").firstOrNull()?.attr("url")
+                ?: "" // Allow empty audio URL
+            
+            // Allow episodes without audio URLs (for text episodes, transcripts, etc.)
             
             val pubDate = item.selectFirst("pubDate")?.text()
             val publishedAt = parsePubDate(pubDate) ?: Clock.System.now().toEpochMilliseconds()
             
-            val durationElement = item.selectFirst("itunes:duration") 
-                ?: item.selectFirst("duration")
+            // Fix namespace-prefixed element selection for iTunes tags
+            val durationElement = item.getElementsByTag("duration").firstOrNull()
             val duration = parseDuration(durationElement?.text())
             
-            val thumbnailUrl = item.selectFirst("itunes:image")?.attr("href")
-                ?: item.selectFirst("media:thumbnail")?.attr("url")
+            val thumbnailUrl = item.getElementsByTag("image").firstOrNull()?.attr("href")
+                ?: item.getElementsByTag("thumbnail").firstOrNull()?.attr("url")
+                ?: item.selectFirst("image")?.attr("href")
+                ?: item.selectFirst("image")?.text()
                 ?: ""
             
-            val isExplicit = item.selectFirst("itunes:explicit")?.text()
+            val isExplicit = item.getElementsByTag("explicit").firstOrNull()?.text()
                 ?.lowercase() in listOf("yes", "true", "explicit")
             
-            val episodeNumber = item.selectFirst("itunes:episode")?.text()?.toIntOrNull()
-            val seasonNumber = item.selectFirst("itunes:season")?.text()?.toIntOrNull()
+            val episodeNumber = item.getElementsByTag("episode").firstOrNull()?.text()?.toIntOrNull()
+            val seasonNumber = item.getElementsByTag("season").firstOrNull()?.text()?.toIntOrNull()
+            
+            // Create episode even without audio URL (for text episodes, transcripts, etc.)
+            val episodeId = if (audioUrl.isNotBlank()) {
+                generateEpisodeId(audioUrl)
+            } else {
+                generateEpisodeId("$podcastId-$title-$publishedAt")
+            }
             
             return PodcastEpisode(
-                id = generateEpisodeId(audioUrl),
+                id = episodeId,
                 title = title,
                 description = cleanDescription(description),
                 audioUrl = audioUrl,
@@ -75,21 +114,62 @@ class RssFeedParser(private val httpClient: HttpClient) {
         if (pubDateString.isNullOrBlank()) return null
         
         return try {
+            // Try ISO format first
             val instant = Instant.parse(pubDateString)
             instant.toEpochMilliseconds()
         } catch (e: Exception) {
             try {
-                val formats = listOf(
-                    "EEE, dd MMM yyyy HH:mm:ss Z",
-                    "EEE, dd MMM yyyy HH:mm:ss zzz",
-                    "yyyy-MM-dd'T'HH:mm:ss'Z'",
-                    "yyyy-MM-dd'T'HH:mm:ssZ"
-                )
+                // Try RFC 2822 format common in RSS feeds
+                val cleaned = pubDateString.trim()
+                    .replace(Regex("\\s+"), " ")
+                    .replace(" GMT", " +0000")
+                    .replace(" UTC", " +0000")
+                    .replace(" EST", " -0500")
+                    .replace(" PST", " -0800")
+                    .replace(" MST", " -0700")
+                    .replace(" CST", " -0600")
                 
-                Clock.System.now().toEpochMilliseconds()
+                // Simple parsing for common RSS date patterns
+                when {
+                    cleaned.matches(Regex("\\w{3}, \\d{1,2} \\w{3} \\d{4} \\d{2}:\\d{2}:\\d{2}.*")) -> {
+                        // Extract date components and create a reasonable timestamp
+                        val parts = cleaned.split(" ")
+                        if (parts.size >= 4) {
+                            val year = parts[3].toIntOrNull() ?: 2024
+                            val month = getMonthNumber(parts[2])
+                            val day = parts[1].toIntOrNull() ?: 1
+                            
+                            // Create approximate timestamp (not perfect but better than current time)
+                            val baseYear = 1970
+                            val approximateTimestamp = ((year - baseYear) * 365L + month * 30L + day) * 24L * 60L * 60L * 1000L
+                            approximateTimestamp
+                        } else {
+                            null
+                        }
+                    }
+                    else -> null
+                }
             } catch (e: Exception) {
                 null
             }
+        }
+    }
+    
+    private fun getMonthNumber(monthName: String): Int {
+        return when (monthName.lowercase()) {
+            "jan" -> 1
+            "feb" -> 2
+            "mar" -> 3
+            "apr" -> 4
+            "may" -> 5
+            "jun" -> 6
+            "jul" -> 7
+            "aug" -> 8
+            "sep" -> 9
+            "oct" -> 10
+            "nov" -> 11
+            "dec" -> 12
+            else -> 1
         }
     }
     

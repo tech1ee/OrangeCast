@@ -20,6 +20,8 @@ actual val platformModule = module {
                 config {
                     connectTimeout(30, TimeUnit.SECONDS)
                     readTimeout(30, TimeUnit.SECONDS)
+                    followRedirects(true)
+                    followSslRedirects(true)
                 }
             }
             
@@ -49,8 +51,8 @@ actual val platformModule = module {
             // }
             
             defaultRequest {
-                header("Accept", "application/json")
-                header("User-Agent", "OrangeCast/1.0")
+                header("Accept", "application/xml, application/rss+xml, text/xml, application/json, */*")
+                header("User-Agent", "OrangeCast/1.0 (compatible; podcast client)")
             }
             
             expectSuccess = true
