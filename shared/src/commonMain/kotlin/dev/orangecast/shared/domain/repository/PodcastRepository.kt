@@ -15,4 +15,5 @@ interface PodcastRepository {
     suspend fun getFeaturedPodcasts(): Result<List<Podcast>>
     suspend fun getCategoriesPodcasts(category: String): Result<List<Podcast>>
     suspend fun getAvailableCategories(): List<String>
+    suspend fun syncEpisodesForSubscribedPodcasts(): Result<Unit>
 }

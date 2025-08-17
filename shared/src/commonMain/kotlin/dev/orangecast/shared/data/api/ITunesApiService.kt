@@ -27,7 +27,6 @@ class ITunesApiService(
             parameter("media", "podcast")
             parameter("limit", limit)
             headers {
-                // Add cache control headers for better caching
                 append(HttpHeaders.CacheControl, "max-age=600") // 10 minutes
             }
         }
@@ -40,7 +39,6 @@ class ITunesApiService(
         val response = httpClient.get("https://itunes.apple.com/lookup") {
             parameter("id", podcastId)
             headers {
-                // Podcast details change rarely, cache for 1 hour
                 append(HttpHeaders.CacheControl, "max-age=3600")
             }
         }

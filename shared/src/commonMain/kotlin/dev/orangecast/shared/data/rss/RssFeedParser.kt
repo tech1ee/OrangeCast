@@ -15,14 +15,30 @@ class RssFeedParser(private val httpClient: HttpClient) {
     
     suspend fun parseEpisodes(feedUrl: String, podcastId: String, podcastTitle: String): Result<List<PodcastEpisode>> {
         return try {
-            val feedContent: String = httpClient.get(feedUrl) {
-                // Override default JSON Accept header for RSS feeds
+            val response = httpClient.get(feedUrl) {
                 header("Accept", "application/rss+xml, application/xml, text/xml, */*")
                 header("User-Agent", "OrangeCast/1.0 (compatible; podcast client)")
-            }.body()
+            }
+            
+            val contentLength = response.headers["Content-Length"]?.toLongOrNull()
+            if (contentLength != null && contentLength > 5_000_000) { // 5MB limit to be safe
+                return Result.failure(Exception("RSS feed too large: ${contentLength / 1_000_000}MB (max 5MB)"))
+            }
+            
+            val feedContent: String = try {
+                response.body()
+            } catch (e: OutOfMemoryError) {
+                return Result.failure(Exception("RSS feed too large for memory"))
+            } catch (e: Exception) {
+                return Result.failure(Exception("Failed to read RSS content: ${e.message}"))
+            }
             
             if (feedContent.isBlank()) {
                 return Result.failure(Exception("Empty RSS feed content from $feedUrl"))
+            }
+            
+            if (feedContent.length > 5_000_000) { // 5MB string limit
+                return Result.failure(Exception("RSS feed content too large: ${feedContent.length / 1_000_000}MB (max 5MB)"))
             }
             
             val document: Document = Ksoup.parse(feedContent)
@@ -32,7 +48,7 @@ class RssFeedParser(private val httpClient: HttpClient) {
                 return Result.failure(Exception("No episodes found in RSS feed from $feedUrl"))
             }
             
-            val episodes = items.mapNotNull { item ->
+            val episodes = items.take(50).mapNotNull { item ->
                 parseEpisodeItem(item, podcastId, podcastTitle)
             }
             

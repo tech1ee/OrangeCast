@@ -1,0 +1,93 @@
+CREATE TABLE EpisodeEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    podcastId TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    audioUrl TEXT NOT NULL,
+    duration INTEGER, -- Duration in seconds
+    publishedAt INTEGER NOT NULL, -- Unix timestamp
+    episodeNumber INTEGER,
+    seasonNumber INTEGER,
+    episodeType TEXT, -- full, trailer, bonus
+    
+    -- Playback state
+    isPlayed INTEGER NOT NULL DEFAULT 0,
+    playbackPosition INTEGER NOT NULL DEFAULT 0, -- Position in seconds
+    isDownloaded INTEGER NOT NULL DEFAULT 0,
+    downloadPath TEXT,
+    
+    -- Metadata
+    fileSize INTEGER, -- File size in bytes
+    createdAt INTEGER NOT NULL, -- Unix timestamp
+    updatedAt INTEGER NOT NULL, -- Unix timestamp
+    
+    FOREIGN KEY (podcastId) REFERENCES PodcastEntity(id) ON DELETE CASCADE
+);
+
+-- Indexes for performance
+CREATE INDEX idx_episode_podcast_id ON EpisodeEntity(podcastId);
+CREATE INDEX idx_episode_published_at ON EpisodeEntity(publishedAt);
+CREATE INDEX idx_episode_is_played ON EpisodeEntity(isPlayed);
+CREATE INDEX idx_episode_is_downloaded ON EpisodeEntity(isDownloaded);
+
+-- Queries
+selectAllEpisodes:
+SELECT * FROM EpisodeEntity ORDER BY publishedAt DESC;
+
+selectEpisodesByPodcast:
+SELECT * FROM EpisodeEntity WHERE podcastId = ? ORDER BY publishedAt DESC;
+
+selectEpisodeById:
+SELECT * FROM EpisodeEntity WHERE id = ?;
+
+selectUnplayedEpisodes:
+SELECT * FROM EpisodeEntity WHERE isPlayed = 0 ORDER BY publishedAt DESC;
+
+selectRecentEpisodes:
+SELECT e.*, p.title AS podcastTitle, p.imageUrl AS podcastImageUrl
+FROM EpisodeEntity e
+JOIN PodcastEntity p ON e.podcastId = p.id
+WHERE p.isSubscribed = 1
+ORDER BY e.publishedAt DESC
+LIMIT ?;
+
+selectNewEpisodesFromSubscribedPodcasts:
+SELECT e.*, p.title AS podcastTitle, p.imageUrl AS podcastImageUrl
+FROM EpisodeEntity e
+JOIN PodcastEntity p ON e.podcastId = p.id
+WHERE p.isSubscribed = 1 AND e.isPlayed = 0
+ORDER BY e.publishedAt DESC
+LIMIT ?;
+
+selectDownloadedEpisodes:
+SELECT * FROM EpisodeEntity WHERE isDownloaded = 1 ORDER BY publishedAt DESC;
+
+selectEpisodesByPlaybackPosition:
+SELECT * FROM EpisodeEntity WHERE playbackPosition > 0 AND isPlayed = 0 ORDER BY updatedAt DESC;
+
+insertEpisode:
+INSERT OR REPLACE INTO EpisodeEntity (
+    id, podcastId, title, description, audioUrl, duration, publishedAt,
+    episodeNumber, seasonNumber, episodeType, isPlayed, playbackPosition,
+    isDownloaded, downloadPath, fileSize, createdAt, updatedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateEpisodePlaybackState:
+UPDATE EpisodeEntity SET 
+    isPlayed = ?, playbackPosition = ?, updatedAt = ? 
+WHERE id = ?;
+
+updateEpisodeDownloadState:
+UPDATE EpisodeEntity SET 
+    isDownloaded = ?, downloadPath = ?, fileSize = ?, updatedAt = ? 
+WHERE id = ?;
+
+deleteEpisode:
+DELETE FROM EpisodeEntity WHERE id = ?;
+
+deleteEpisodesByPodcast:
+DELETE FROM EpisodeEntity WHERE podcastId = ?;
+
+deleteOldPlayedEpisodes:
+DELETE FROM EpisodeEntity 
+WHERE isPlayed = 1 AND isDownloaded = 0 AND publishedAt < ?;

@@ -64,7 +64,9 @@ fun MainScreen() {
                             isSelected = currentRoute == item.route,
                             onClick = {
                                 navController.navigate(item.route) {
-                                    popUpTo("discover")
+                                    popUpTo("discover") {
+                                        inclusive = false
+                                    }
                                     launchSingleTop = true
                                 }
                             }
@@ -132,7 +134,7 @@ private fun BottomNavButton(
             Box(
                 modifier = Modifier
                     .background(
-                        color = if (isSelected) OrangeCastColors.PrimaryOrange else Color.Transparent,
+                        color = if (isSelected) OrangeCastColors.primary else Color.Transparent,
                         shape = RoundedCornerShape(16.dp)
                     )
                     .padding(horizontal = 16.dp, vertical = 4.dp),
@@ -146,7 +148,7 @@ private fun BottomNavButton(
             Text(
                 text = item.title,
                 style = MaterialTheme.typography.labelSmall,
-                color = if (isSelected) OrangeCastColors.PrimaryOrange else Color.Gray,
+                color = if (isSelected) OrangeCastColors.primary else Color.Gray,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
             )
         }

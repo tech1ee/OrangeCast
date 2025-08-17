@@ -1,0 +1,19 @@
+CREATE TABLE UserSettingsEntity (
+    key TEXT NOT NULL PRIMARY KEY,
+    value TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL -- Unix timestamp
+);
+
+-- Queries
+selectSetting:
+SELECT value FROM UserSettingsEntity WHERE key = ?;
+
+selectAllSettings:
+SELECT * FROM UserSettingsEntity;
+
+insertOrUpdateSetting:
+INSERT OR REPLACE INTO UserSettingsEntity (key, value, updatedAt) 
+VALUES (?, ?, ?);
+
+deleteSetting:
+DELETE FROM UserSettingsEntity WHERE key = ?;

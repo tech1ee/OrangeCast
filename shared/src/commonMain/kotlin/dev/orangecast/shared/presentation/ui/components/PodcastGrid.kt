@@ -33,9 +33,10 @@ fun PodcastGrid(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 rowPodcasts.forEach { podcast ->
-                    PodcastGridCard(
+                    PodcastCard(
                         podcast = podcast,
                         onClick = { onPodcastClick(podcast) },
+                        layoutStyle = PodcastCardLayoutStyle.Grid,
                         modifier = Modifier
                             .weight(1f)
                             .aspectRatio(0.75f)

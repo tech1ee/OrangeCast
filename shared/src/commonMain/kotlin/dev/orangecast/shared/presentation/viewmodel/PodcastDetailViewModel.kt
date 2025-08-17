@@ -47,6 +47,9 @@ class PodcastDetailViewModel(
         val currentDetails = _uiState.value.podcastDetails ?: return
         
         viewModelScope.launch {
+            val optimisticState = currentDetails.copy(isSubscribed = !currentDetails.isSubscribed)
+            _uiState.value = _uiState.value.copy(podcastDetails = optimisticState)
+            
             val result = if (currentDetails.isSubscribed) {
                 unsubscribeFromPodcastUseCase(currentDetails.podcast.id)
             } else {
@@ -54,14 +57,10 @@ class PodcastDetailViewModel(
             }
             
             result.onSuccess {
-                _uiState.value = _uiState.value.copy(
-                    podcastDetails = currentDetails.copy(
-                        isSubscribed = !currentDetails.isSubscribed
-                    )
-                )
-            }.onFailure { error ->
-                // Could show a toast or error message for subscription failure
-                // For now, we'll just ignore the error
+                kotlinx.coroutines.delay(300)
+                loadPodcastDetails(currentDetails.podcast.id)
+            }.onFailure {
+                _uiState.value = _uiState.value.copy(podcastDetails = currentDetails)
             }
         }
     }

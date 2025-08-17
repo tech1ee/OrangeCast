@@ -32,24 +32,21 @@ class NewEpisodesViewModel(
         scope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             
-            getNewEpisodesUseCase()
-                .collect { result ->
-                    result.fold(
-                        onSuccess = { episodes ->
-                            _uiState.value = _uiState.value.copy(
-                                episodes = episodes,
-                                isLoading = false,
-                                error = null
-                            )
-                        },
-                        onFailure = { throwable ->
-                            _uiState.value = _uiState.value.copy(
-                                isLoading = false,
-                                error = throwable.message ?: "Failed to load episodes"
-                            )
-                        }
-                    )
-                }
+            try {
+                getNewEpisodesUseCase.getNewEpisodes()
+                    .collect { episodes ->
+                        _uiState.value = _uiState.value.copy(
+                            episodes = episodes,
+                            isLoading = false,
+                            error = null
+                        )
+                    }
+            } catch (throwable: Throwable) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = throwable.message ?: "Failed to load episodes"
+                )
+            }
         }
     }
     

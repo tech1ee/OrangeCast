@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,7 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.orangecast.shared.domain.model.Podcast
-import dev.orangecast.shared.presentation.ui.components.PodcastListItem
+import dev.orangecast.shared.presentation.ui.components.PodcastCard
+import dev.orangecast.shared.presentation.ui.components.PodcastCardShimmer
+import dev.orangecast.shared.presentation.ui.components.PodcastCardLayoutStyle
 
 @Composable
 fun PodcastListScreen(
@@ -61,11 +63,14 @@ fun PodcastListScreen(
                 }
             }
             isLoading -> {
-                Box(
+                LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    CircularProgressIndicator()
+                    items(8) {
+                        PodcastCardShimmer(layoutStyle = PodcastCardLayoutStyle.List)
+                    }
                 }
             }
             podcasts.isEmpty() -> {
@@ -85,9 +90,10 @@ fun PodcastListScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(podcasts) { podcast ->
-                        PodcastListItem(
+                        PodcastCard(
                             podcast = podcast,
-                            onClick = { onPodcastClick(podcast) }
+                            onClick = { onPodcastClick(podcast) },
+                            layoutStyle = PodcastCardLayoutStyle.List
                         )
                     }
                 }

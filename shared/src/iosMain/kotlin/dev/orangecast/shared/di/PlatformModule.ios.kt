@@ -1,5 +1,7 @@
 package dev.orangecast.shared.di
 
+import dev.orangecast.shared.data.database.DatabaseFactory
+import dev.orangecast.shared.domain.player.AudioPlayer
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin
 import io.ktor.client.plugins.HttpRequestRetry
@@ -48,4 +50,10 @@ actual val platformModule = module {
             expectSuccess = true
         }
     }
+    
+    // Audio Player
+    single { AudioPlayer() }
+    
+    // Database
+    single { DatabaseFactory() }
 }

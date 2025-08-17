@@ -3,10 +3,22 @@ plugins {
     id("com.android.library")
     kotlin("plugin.serialization")
     id("org.jetbrains.compose")
+    id("app.cash.sqldelight") version "2.0.0"
 }
 
 kotlin {
     android()
+    
+    // iOS targets temporarily disabled during development
+    // listOf(
+    //     iosX64(),
+    //     iosArm64(),
+    //     iosSimulatorArm64()
+    // ).forEach {
+    //     it.binaries.framework {
+    //         baseName = "shared"
+    //     }
+    // }
     
     sourceSets {
         val commonMain by getting {
@@ -33,25 +45,43 @@ kotlin {
                 
                 // Navigation
                 implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
+                
+                // SQLDelight
+                implementation("app.cash.sqldelight:runtime:2.0.0")
+                implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
             }
         }
         
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
-                implementation("io.ktor:ktor-client-mock:2.3.2")
-            }
-        }
         
         val androidMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:2.3.2")
                 implementation("io.ktor:ktor-client-logging:2.3.2")
                 implementation("io.coil-kt:coil-compose:2.4.0")
+                implementation("app.cash.sqldelight:android-driver:2.0.0")
+                implementation("io.insert-koin:koin-android:3.4.2")
+                
+                // ExoPlayer dependencies
+                implementation("androidx.media3:media3-exoplayer:1.1.0")
+                implementation("androidx.media3:media3-ui:1.1.0")
+                implementation("androidx.media3:media3-common:1.1.0")
             }
         }
-        val androidUnitTest by getting
+        
+        // iOS source sets temporarily disabled
+        // val iosX64Main by getting
+        // val iosArm64Main by getting
+        // val iosSimulatorArm64Main by getting
+        // val iosMain by creating {
+        //     dependsOn(commonMain)
+        //     iosX64Main.dependsOn(this)
+        //     iosArm64Main.dependsOn(this)
+        //     iosSimulatorArm64Main.dependsOn(this)
+        //     
+        //     dependencies {
+        //         implementation("app.cash.sqldelight:native-driver:2.0.0")
+        //     }
+        // }
     }
 }
 
@@ -74,5 +104,13 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+sqldelight {
+    databases {
+        create("OrangeCastDatabase") {
+            packageName.set("dev.orangecast.shared.database")
+        }
     }
 }

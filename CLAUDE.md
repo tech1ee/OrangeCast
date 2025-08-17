@@ -6,11 +6,20 @@
 - ❌ **NEVER** create mock, fake, or placeholder implementations
 - ✅ **ALWAYS** connect to real APIs, real data, real functionality
 - ✅ Every feature must work with actual podcast content
-- ✅ All network calls must hit real endpoints (iTunes API, RSS feeds)
+- ✅ All network calls must hit real endpoints (iTunes API, RSS feeds, PodcastIndex)
 - ✅ Database operations must use real SQLite/SQLDelight
 - ✅ Audio playback must use real ExoPlayer/AVPlayer with actual audio files
+- ✅ Google Drive sync must use real Google Auth and Drive API
 
-### 2. CODE SHARING REQUIREMENTS
+### 2. CLEAN CODE ARCHITECTURE
+- ✅ **SOLID Principles** - Single responsibility, Open/closed, Liskov substitution, Interface segregation, Dependency inversion
+- ✅ **Clean Architecture** - Clear layer separation (UI, Presentation, Domain, Data)
+- ✅ **Clean Code Practices** - Meaningful names, small functions, no side effects
+- ❌ **NO** overcomplicated abstractions or unnecessary complexity
+- ❌ **NO** premature optimization or over-engineering
+- ✅ Simple, readable, maintainable code that follows best practices
+
+### 3. CODE SHARING REQUIREMENTS
 - ✅ **90%+ shared code** between Android and iOS platforms
 - ✅ Business logic, data models, use cases in `shared/src/commonMain/`
 - ✅ Platform-specific code only in `androidMain/` and `iosMain/`
@@ -18,7 +27,7 @@
 - ✅ Repository pattern with platform-specific implementations
 - ✅ Single source of truth for all business rules
 
-### 3. NO DEBUG ARTIFACTS IN PRODUCTION
+### 4. NO DEBUG ARTIFACTS IN PRODUCTION
 - ❌ **NO** `println()`, `console.log()`, or debug print statements
 - ❌ **NO** hardcoded test data or development shortcuts  
 - ❌ **NO** `// TODO:` comments left in production code
@@ -26,7 +35,7 @@
 - ✅ Remove all development artifacts before committing
 - ✅ Clean, production-ready code only
 
-### 4. SELF-DOCUMENTING CODE
+### 5. SELF-DOCUMENTING CODE
 - ❌ **NO** explanatory comments in code
 - ✅ Code must be self-explanatory through naming
 - ✅ Clear class names, function names, variable names
@@ -34,13 +43,75 @@
 - ✅ Use meaningful domain language in naming
 - ✅ Prefer longer descriptive names over comments
 
-### 5. DRY PRINCIPLE (Don't Repeat Yourself)
+### 6. DRY PRINCIPLE (Don't Repeat Yourself)
 - ❌ **NO** duplicate business logic across platforms
 - ❌ **NO** copy-pasted code blocks
 - ✅ Extract common functionality to shared modules
 - ✅ Single implementation of business rules
 - ✅ Platform-specific adapters only when necessary
 - ✅ Reusable components and utilities
+
+### 7. NO TESTING FRAMEWORK
+- ❌ **NO** unit tests, integration tests, or test frameworks
+- ❌ **NO** test dependencies in build.gradle
+- ❌ **NO** test directories (commonTest, androidTest, iosTest)
+- ✅ **REAL TESTING ONLY** - Test with actual devices and real data
+- ✅ Manual QA and user acceptance testing
+- ✅ Production deployment validation
+
+## 🤖 MCP SERVER INTEGRATION (MANDATORY)
+
+### Perplexity Research Requirements
+- ✅ **ALWAYS** use `mcp__perplexity-mcp__perplexity_search_web` before implementing complex features
+- ✅ **RESEARCH FIRST** - Investigate best practices, libraries, and solutions before coding
+- ✅ **VALIDATE APPROACHES** - Confirm technical decisions with current industry standards
+- ✅ **AVOID REINVENTING** - Find existing solutions and adapt them intelligently
+- ❌ **NO** implementing complex features without prior research
+- ❌ **NO** guessing at technical solutions when research is available
+
+### Taskmaster Project Management (MANDATORY SETUP)
+- ✅ **CRITICAL**: Taskmaster MCP requires proper configuration in 2025
+- ✅ **API Keys**: Set `ANTHROPIC_API_KEY` environment variable for AI model access
+- ✅ **Configuration**: Create `.mcp.json` with Taskmaster server config in project root
+- ✅ **Tag-based Sessions**: Use tag-attached project context for isolation
+- ✅ **Task Files**: Store tasks in `.taskmaster/tasks/tasks.json` structure
+- ✅ **Always initialize** with `mcp__taskmaster-ai__initialize_project` first
+- ✅ **Parse PRD** using `mcp__taskmaster-ai__parse_prd` to generate tasks
+- ✅ **Track everything** with real-time status updates
+- ❌ **NO** manual task tracking outside of Taskmaster
+- ❌ **NO** working without proper MCP configuration
+
+### Research-Driven Development Workflow
+1. **Identify complexity** - Recognize when a feature requires research
+2. **Research thoroughly** - Use Perplexity to investigate solutions
+3. **Document findings** - Store research results in Taskmaster tasks
+4. **Implement cleanly** - Apply Clean Code principles to the solution
+5. **Validate results** - Ensure implementation matches research recommendations
+
+### MCP Configuration Requirements (2025)
+Create `.mcp.json` in project root:
+```json
+{
+  "servers": {
+    "taskmaster": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@taskmaster-ai/mcp-server"],
+      "env": {
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}",
+        "PROJECT_ROOT": "${workspaceFolder}"
+      }
+    }
+  }
+}
+```
+
+Environment Variables Required:
+- `ANTHROPIC_API_KEY`: For AI task generation and updates
+- `PERPLEXITY_API_KEY`: For research-backed development
+- Tag-based session isolation via `.taskmaster/state.json`
+- Tasks stored in `.taskmaster/tasks/tasks.json` structure
 
 ## 🏗️ Architecture Rules
 
@@ -69,6 +140,64 @@ modules/
 - Platform-specific DI only where absolutely necessary
 - Clear separation between interface and implementation
 
+## 🤖 AI FEATURES ARCHITECTURE
+
+### Local-First AI Processing
+- ✅ **On-device Whisper model** for transcription privacy
+- ✅ **TensorFlow Lite** for local ML inference
+- ✅ **Local vector database** for semantic search
+- ✅ **Privacy-centric approach** - no cloud processing of personal data
+- ❌ **NO** sending user content to external AI services without consent
+- ✅ Fallback to cloud only for non-personal data processing
+
+### AI Feature Implementation
+- ✅ **Transcription** - Local Whisper integration for episode transcripts
+- ✅ **Semantic Search** - Natural language queries across content
+- ✅ **Smart Recommendations** - ML-based content discovery
+- ✅ **Audio Enhancement** - AI-optimized playback speed and noise reduction
+- ✅ **Content Analysis** - Chapter detection and quote extraction
+- ✅ All AI features must work offline with local models
+
+## 📱 NAVIGATION ARCHITECTURE (MANDATORY)
+
+### Core Navigation Structure
+- ✅ **EXACTLY 3 MAIN TABS** - No more, no less
+- ✅ **Bottom navigation** with consistent icons and labels
+- ❌ **NO DUPLICATE FUNCTIONALITY** between tabs
+- ❌ **NO NESTED TABS** within main navigation
+
+### Tab 1: Discover
+- ✅ **Search bar** at top for podcast discovery
+- ✅ **Content type tabs** below search: Popular, Recommendations, New
+- ✅ **Genre-based sections** with horizontal scrolling podcast lists
+- ✅ **Real iTunes API data** with actual podcast content
+- ❌ **NO** separate search tab - search is integrated here
+
+### Tab 2: New Episodes  
+- ✅ **NEW episodes from user's subscribed podcasts** - Recent/unplayed episodes only
+- ✅ **Sorted by publish date** (newest first)
+- ✅ **Episode cards** with podcast info, title, description, duration
+- ✅ **Play button** integration with audio player
+- ✅ **Mark as played/unplayed** functionality
+- ✅ **Empty state**: "No new episodes from your subscriptions"
+- ❌ **NO** episodes from non-subscribed podcasts
+- ❌ **NO** old/played episodes - only fresh content
+
+### Tab 3: Library
+- ✅ **ALL subscribed podcasts** - Complete user collection
+- ✅ **Grid layout** with podcast covers and titles
+- ✅ **Quick access** to full podcast details and episode list
+- ✅ **Subscription management** (unsubscribe from here)
+- ✅ **Download management** for offline episodes
+- ✅ **Empty state**: "Your subscribed podcasts will appear here"
+- ❌ **NO** discovery content - only user's subscriptions
+
+### Navigation Rules
+- ✅ **Single responsibility** per tab - no functional overlap
+- ✅ **Intuitive user flow** - discovery → subscription → consumption
+- ✅ **Consistent UI patterns** across all tabs
+- ✅ **Deep linking support** for podcast and episode details
+
 ## 🔐 Security Requirements
 
 ### API Security
@@ -77,12 +206,14 @@ modules/
 - ✅ Input validation and sanitization
 - ✅ Secure storage for sensitive data
 - ❌ **NO** API keys in source code or version control
+- ✅ Google Auth integration for secure Drive sync
 
 ### Data Protection
 - ✅ Encrypt user preferences and sensitive data
 - ✅ Secure database transactions
 - ✅ Handle network failures gracefully
 - ✅ Validate all external data sources
+- ✅ Privacy-first approach for all user data
 
 ## 📊 Performance Standards
 
@@ -106,12 +237,13 @@ modules/
 
 ## 🧪 Quality Assurance
 
-### Testing Requirements
-- ✅ Unit tests for all use cases and repositories
-- ✅ Integration tests for API interactions
-- ✅ Platform-specific testing for audio playback
-- ✅ Performance testing under various conditions
-- ❌ **NO** tests with mocked business logic
+### Pragmatic Testing Approach
+- ✅ **Test critical paths only** - Focus on business-critical functionality
+- ✅ **Real integration tests** - Test with actual APIs and services
+- ✅ **Manual testing first** - Validate features work before writing tests
+- ❌ **NO** tests for tests' sake - Avoid unnecessary test coverage
+- ❌ **NO** mocked business logic tests
+- ✅ Write tests only when they add real value and prevent regressions
 
 ### Code Quality
 - ✅ Kotlin coding conventions
@@ -119,8 +251,17 @@ modules/
 - ✅ Error handling for all external dependencies
 - ✅ Proper resource management and cleanup
 - ✅ Thread safety for shared state
+- ✅ Focus on code correctness over test coverage metrics
 
 ## 🎨 UI/UX Standards
+
+### OrangeCast Design System
+- ✅ **Soft Orange Accent Strategy** - Orange (#FF8A50) for primary actions and key navigation
+- ✅ **Secondary Orange (#FFB380)** - For hover states and subtle highlights
+- ✅ **Minimalist Clarity** - Clean interface prioritizing content over visual complexity
+- ✅ **Content-First Typography** - Clear fonts that don't compete with orange accents
+- ✅ **Generous Whitespace** - Breathing room to reduce cognitive load
+- ✅ **Material Design 3** with OrangeCast design language adaptations
 
 ### Cross-Platform Consistency
 - ✅ 95%+ identical user experience on both platforms
@@ -128,6 +269,7 @@ modules/
 - ✅ Platform-specific adaptations only for native feel
 - ✅ Consistent navigation patterns
 - ✅ Unified design system and theming
+- ✅ Dark/light theme support with adjusted orange opacity
 
 ### Loading States and Animation Standards
 - ✅ **Shimmer effects** for all loading states instead of circular progress indicators
@@ -142,6 +284,7 @@ modules/
 - ✅ Keyboard navigation support
 - ✅ High contrast mode compatibility
 - ✅ Text scaling support
+- ✅ WCAG 2.1 AA compliance target
 
 ## 🚀 Deployment Standards
 
@@ -211,39 +354,36 @@ After implementing any feature, verify:
 - **Accessibility**: WCAG 2.1 AA compliance
 - **Performance**: <200ms response times, smooth 60fps UI
 
-## 📝 TASK MANAGEMENT INTEGRATION
+## 📝 TASKMASTER INTEGRATION
 
-### Task Status Tracking
-- ✅ **Primary Source**: `TASKS.md` contains all active development tasks
-- ✅ **Task Format**: TASK-XXX with detailed descriptions and acceptance criteria
-- ✅ **Status Updates**: Must be reflected in TASKS.md after each work session
-- ✅ **Dependencies**: Clear task dependency mapping to avoid conflicts
+### Task Management Requirements
+- ✅ **Primary Source**: Taskmaster MCP server for ALL task tracking
+- ✅ **Initialize First**: Run `mcp__taskmaster-ai__initialize_project` at project start
+- ✅ **Parse PRD**: Use `mcp__taskmaster-ai__parse_prd` to generate tasks from PRD
+- ✅ **Track Everything**: All work must be tracked in Taskmaster
+- ❌ **NO** manual task files or external tracking
 
-### Task Execution Rules
-- ❌ **NO** starting new tasks without updating previous task status
-- ✅ **ALWAYS** mark tasks as "IN_PROGRESS" before beginning work
-- ✅ **IMMEDIATELY** update status to "COMPLETED" when finished  
-- ✅ **Document** any blockers or issues encountered in task notes
-- ✅ **Test** each task completion against its acceptance criteria
+### Task Execution Workflow
+1. **Get next task**: `mcp__taskmaster-ai__next_task`
+2. **Set status**: `mcp__taskmaster-ai__set_task_status` to "in-progress"
+3. **Research if complex**: Use Perplexity MCP for research
+4. **Implement**: Follow Clean Code principles
+5. **Complete**: Update status to "done" immediately
+6. **Document**: Add findings to task with `mcp__taskmaster-ai__update_task`
 
-### Priority Enforcement
-1. **CRITICAL**: Must be completed before any other work
-2. **HIGH**: Complete after all critical tasks
-3. **MEDIUM**: Background/parallel work when possible
-4. **LOW**: Future iteration planning only
+### Task Priority Rules
+- ✅ **Dependencies first** - Respect task dependency chains
+- ✅ **Complexity analysis** - Use `mcp__taskmaster-ai__analyze_project_complexity`
+- ✅ **Expand complex tasks** - Use `mcp__taskmaster-ai__expand_task` for subtasks
+- ✅ **Real-time updates** - Status changes immediately after work
+- ❌ **NO** working on tasks out of order without justification
 
-### Task Documentation Standards
-- ✅ Each task must have clear technical solution steps
-- ✅ All affected files must be explicitly listed
-- ✅ Acceptance criteria must be testable and specific
-- ✅ Time estimates should be realistic and trackable
-- ✅ Dependencies must be clearly mapped
-
-### Current Project State Integration
-- ✅ **Active Task Source**: `/TASKS.md` 
-- ✅ **Status Reports**: `/PROJECT_STATUS_REPORT.md`
-- ✅ **Action Plans**: `/ACTION_PLAN.md`
-- ✅ **Testing Results**: `/screenshots/` directory for UI validation
+### Research Integration
+- ✅ **Complex features** require research via `mcp__perplexity-mcp__perplexity_search_web`
+- ✅ **Store research** in tasks using `mcp__taskmaster-ai__update_task`
+- ✅ **Reference research** when implementing solutions
+- ✅ **Validate approaches** against research findings
+- ❌ **NO** implementing without research for complex features
 
 ## 🧪 AUTOMATED TESTING RULES
 
@@ -283,4 +423,8 @@ After implementing any feature, verify:
 
 ---
 
-**Remember: These rules are non-negotiable. Every line of code must comply with these standards to maintain the project's high quality and cross-platform consistency. TASKS.md is the single source of truth for development priorities.**
+**Remember: These rules are non-negotiable. Every line of code must comply with these standards to maintain the project's high quality and cross-platform consistency. Taskmaster MCP is the single source of truth for development priorities and task management.**
+
+## Task Master AI Instructions
+**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
+@./.taskmaster/CLAUDE.md

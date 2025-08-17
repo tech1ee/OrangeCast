@@ -58,6 +58,8 @@ class PodcastCacheManager {
     
     fun removeEpisodes(podcastId: String) = episodesCache.remove(podcastId)
     
+    fun removePodcastDetails(podcastId: String) = detailsCache.remove(podcastId)
+    
     // Cache management
     fun clearSearchCache() = searchCache.clear()
     

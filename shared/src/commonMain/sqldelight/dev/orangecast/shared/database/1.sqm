@@ -1,0 +1,5 @@
+-- Migration from version 0 to 1
+-- Initial database schema creation
+
+-- These tables are created automatically from the .sq files
+-- This migration file exists for future reference and version tracking

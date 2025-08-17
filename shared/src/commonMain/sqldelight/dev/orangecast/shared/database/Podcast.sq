@@ -1,0 +1,48 @@
+CREATE TABLE PodcastEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL,
+    description TEXT,
+    imageUrl TEXT,
+    rssUrl TEXT NOT NULL,
+    websiteUrl TEXT,
+    language TEXT,
+    genres TEXT, -- JSON array as string
+    isSubscribed INTEGER NOT NULL DEFAULT 0,
+    lastUpdated INTEGER NOT NULL, -- Unix timestamp
+    createdAt INTEGER NOT NULL -- Unix timestamp
+);
+
+-- Queries
+selectAllPodcasts:
+SELECT * FROM PodcastEntity;
+
+selectSubscribedPodcasts:
+SELECT * FROM PodcastEntity WHERE isSubscribed = 1;
+
+selectPodcastById:
+SELECT * FROM PodcastEntity WHERE id = ?;
+
+selectPodcastByRssUrl:
+SELECT * FROM PodcastEntity WHERE rssUrl = ?;
+
+insertPodcast:
+INSERT OR REPLACE INTO PodcastEntity (
+    id, title, author, description, imageUrl, rssUrl, websiteUrl, 
+    language, genres, isSubscribed, lastUpdated, createdAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updatePodcastSubscription:
+UPDATE PodcastEntity SET isSubscribed = ?, lastUpdated = ? WHERE id = ?;
+
+updatePodcastDetails:
+UPDATE PodcastEntity SET 
+    title = ?, author = ?, description = ?, imageUrl = ?, 
+    websiteUrl = ?, language = ?, genres = ?, lastUpdated = ? 
+WHERE id = ?;
+
+deletePodcast:
+DELETE FROM PodcastEntity WHERE id = ?;
+
+deleteUnsubscribedPodcasts:
+DELETE FROM PodcastEntity WHERE isSubscribed = 0;

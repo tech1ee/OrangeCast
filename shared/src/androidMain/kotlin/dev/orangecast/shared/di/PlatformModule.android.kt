@@ -1,5 +1,8 @@
 package dev.orangecast.shared.di
 
+import android.content.Context
+import dev.orangecast.shared.data.database.DatabaseFactory
+import dev.orangecast.shared.domain.player.AudioPlayer
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpRequestRetry
@@ -9,6 +12,7 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
@@ -58,4 +62,10 @@ actual val platformModule = module {
             expectSuccess = true
         }
     }
+    
+    // Audio Player
+    single { AudioPlayer(androidContext()) }
+    
+    // Database
+    single { DatabaseFactory(androidContext()) }
 }
