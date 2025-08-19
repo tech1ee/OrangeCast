@@ -97,21 +97,25 @@ class PodcastListViewModel(
     
     private fun loadCategorySections() {
         viewModelScope.launch {
-            val categories = podcastRepository.getAvailableCategories().take(4) // Load first 4 categories
-            val categoryResults = categories.map { category ->
-                async {
-                    category to podcastRepository.getCategoriesPodcasts(category)
+            // Use dynamic genres from API
+            val genresResult = podcastRepository.getGenres()
+            genresResult.onSuccess { genres ->
+                val topGenres = genres.filter { it.parentId == null }.take(4)
+                val categoryResults = topGenres.map { genre ->
+                    async {
+                        genre.name to podcastRepository.getPodcastsByGenre(genre.id)
+                    }
+                }.awaitAll()
+                
+                val categorySections = mutableMapOf<String, List<Podcast>>()
+                categoryResults.forEach { (genreName, result) ->
+                    result.onSuccess { podcasts ->
+                        categorySections[genreName] = podcasts.take(8)
+                    }
                 }
-            }.awaitAll()
-            
-            val categorySections = mutableMapOf<String, List<Podcast>>()
-            categoryResults.forEach { (category, result) ->
-                result.onSuccess { podcasts ->
-                    categorySections[category] = podcasts.take(8) // Limit to 8 podcasts per category
-                }
+                
+                _categorySections.value = categorySections
             }
-            
-            _categorySections.value = categorySections
         }
     }
     

@@ -75,8 +75,8 @@
 - ✅ **Configuration**: Create `.mcp.json` with Taskmaster server config in project root
 - ✅ **Tag-based Sessions**: Use tag-attached project context for isolation
 - ✅ **Task Files**: Store tasks in `.taskmaster/tasks/tasks.json` structure
-- ✅ **Always initialize** with `mcp__taskmaster-ai__initialize_project` first
-- ✅ **Parse PRD** using `mcp__taskmaster-ai__parse_prd` to generate tasks
+- ✅ **Always initialize** with `mcp__task-master-ai__initialize_project` first
+- ✅ **Parse PRD** using `mcp__task-master-ai__parse_prd` to generate tasks
 - ✅ **Track everything** with real-time status updates
 - ❌ **NO** manual task tracking outside of Taskmaster
 - ❌ **NO** working without proper MCP configuration
@@ -89,29 +89,16 @@
 5. **Validate results** - Ensure implementation matches research recommendations
 
 ### MCP Configuration Requirements (2025)
-Create `.mcp.json` in project root:
-```json
-{
-  "servers": {
-    "taskmaster": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["@taskmaster-ai/mcp-server"],
-      "env": {
-        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
-        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}",
-        "PROJECT_ROOT": "${workspaceFolder}"
-      }
-    }
-  }
-}
-```
+Taskmaster MCP is configured globally in Claude Code. No local `.mcp.json` file is needed.
 
-Environment Variables Required:
-- `ANTHROPIC_API_KEY`: For AI task generation and updates
-- `PERPLEXITY_API_KEY`: For research-backed development
+**Global MCP Setup:**
+- Taskmaster MCP server runs globally via Claude Code
+- API keys are configured in Claude Code's global settings
+- Project-specific context via `projectRoot` parameter
 - Tag-based session isolation via `.taskmaster/state.json`
 - Tasks stored in `.taskmaster/tasks/tasks.json` structure
+
+**Note:** Do NOT create a local `.mcp.json` file as it will create duplicate MCP instances.
 
 ## 🏗️ Architecture Rules
 
@@ -358,29 +345,29 @@ After implementing any feature, verify:
 
 ### Task Management Requirements
 - ✅ **Primary Source**: Taskmaster MCP server for ALL task tracking
-- ✅ **Initialize First**: Run `mcp__taskmaster-ai__initialize_project` at project start
-- ✅ **Parse PRD**: Use `mcp__taskmaster-ai__parse_prd` to generate tasks from PRD
+- ✅ **Initialize First**: Run `mcp__task-master-ai__initialize_project` at project start
+- ✅ **Parse PRD**: Use `mcp__task-master-ai__parse_prd` to generate tasks from PRD
 - ✅ **Track Everything**: All work must be tracked in Taskmaster
 - ❌ **NO** manual task files or external tracking
 
 ### Task Execution Workflow
-1. **Get next task**: `mcp__taskmaster-ai__next_task`
-2. **Set status**: `mcp__taskmaster-ai__set_task_status` to "in-progress"
+1. **Get next task**: `mcp__task-master-ai__next_task`
+2. **Set status**: `mcp__task-master-ai__set_task_status` to "in-progress"
 3. **Research if complex**: Use Perplexity MCP for research
 4. **Implement**: Follow Clean Code principles
 5. **Complete**: Update status to "done" immediately
-6. **Document**: Add findings to task with `mcp__taskmaster-ai__update_task`
+6. **Document**: Add findings to task with `mcp__task-master-ai__update_task`
 
 ### Task Priority Rules
 - ✅ **Dependencies first** - Respect task dependency chains
-- ✅ **Complexity analysis** - Use `mcp__taskmaster-ai__analyze_project_complexity`
-- ✅ **Expand complex tasks** - Use `mcp__taskmaster-ai__expand_task` for subtasks
+- ✅ **Complexity analysis** - Use `mcp__task-master-ai__analyze_project_complexity`
+- ✅ **Expand complex tasks** - Use `mcp__task-master-ai__expand_task` for subtasks
 - ✅ **Real-time updates** - Status changes immediately after work
 - ❌ **NO** working on tasks out of order without justification
 
 ### Research Integration
 - ✅ **Complex features** require research via `mcp__perplexity-mcp__perplexity_search_web`
-- ✅ **Store research** in tasks using `mcp__taskmaster-ai__update_task`
+- ✅ **Store research** in tasks using `mcp__task-master-ai__update_task`
 - ✅ **Reference research** when implementing solutions
 - ✅ **Validate approaches** against research findings
 - ❌ **NO** implementing without research for complex features

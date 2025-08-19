@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,7 +49,10 @@ fun NewEpisodesScreen() {
     val viewModel: NewEpisodesViewModel = koinInject()
     val uiState by viewModel.uiState.collectAsState()
 
-    when {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        when {
         uiState.isLoading -> {
             LazyColumn(
                 modifier = Modifier
@@ -103,13 +107,24 @@ fun NewEpisodesScreen() {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "No new episodes from your subscriptions",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Gray,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 32.dp)
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "No new episodes from your subscriptions",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.Gray,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 32.dp)
+                    )
+                    Button(
+                        onClick = { viewModel.refreshEpisodes() },
+                        enabled = !uiState.isRefreshing
+                    ) {
+                        Text(if (uiState.isRefreshing) "Refreshing..." else "Refresh Episodes")
+                    }
+                }
             }
         }
         
@@ -138,6 +153,7 @@ fun NewEpisodesScreen() {
                     )
                 }
             }
+        }
         }
     }
 }

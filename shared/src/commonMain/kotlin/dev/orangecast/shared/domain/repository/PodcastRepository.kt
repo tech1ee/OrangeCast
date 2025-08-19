@@ -3,6 +3,7 @@ package dev.orangecast.shared.domain.repository
 import dev.orangecast.shared.domain.model.Podcast
 import dev.orangecast.shared.domain.model.PodcastDetails
 import dev.orangecast.shared.domain.model.PodcastEpisode
+import dev.orangecast.shared.domain.model.Genre
 import kotlinx.coroutines.flow.Flow
 
 interface PodcastRepository {
@@ -13,7 +14,7 @@ interface PodcastRepository {
     suspend fun unsubscribeFromPodcast(podcastId: String): Result<Unit>
     fun getSubscribedPodcasts(): Flow<List<Podcast>>
     suspend fun getFeaturedPodcasts(): Result<List<Podcast>>
-    suspend fun getCategoriesPodcasts(category: String): Result<List<Podcast>>
-    suspend fun getAvailableCategories(): List<String>
+    suspend fun getGenres(): Result<List<Genre>>
+    suspend fun getPodcastsByGenre(genreId: Int): Result<List<Podcast>>
     suspend fun syncEpisodesForSubscribedPodcasts(): Result<Unit>
 }

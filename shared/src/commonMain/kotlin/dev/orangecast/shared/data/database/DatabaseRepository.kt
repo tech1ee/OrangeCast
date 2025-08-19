@@ -39,39 +39,115 @@ class DatabaseRepository(
         }
     }
 
-    suspend fun insertPodcast(podcast: PodcastEntity) {
-        withContext(Dispatchers.Default) {
-            podcastQueries.insertPodcast(
-                id = podcast.id,
-                title = podcast.title,
-                author = podcast.author,
-                description = podcast.description,
-                imageUrl = podcast.imageUrl,
-                rssUrl = podcast.rssUrl,
-                websiteUrl = podcast.websiteUrl,
-                language = podcast.language,
-                genres = podcast.genres,
-                isSubscribed = podcast.isSubscribed,
-                lastUpdated = podcast.lastUpdated,
-                createdAt = podcast.createdAt
-            )
+    suspend fun insertPodcast(podcast: PodcastEntity): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    podcastQueries.insertPodcast(
+                        id = podcast.id,
+                        title = podcast.title,
+                        author = podcast.author,
+                        description = podcast.description,
+                        imageUrl = podcast.imageUrl,
+                        rssUrl = podcast.rssUrl,
+                        websiteUrl = podcast.websiteUrl,
+                        language = podcast.language,
+                        genres = podcast.genres,
+                        listenNotesId = podcast.listenNotesId,
+                        genreIds = podcast.genreIds,
+                        episodeCount = podcast.episodeCount,
+                        isSubscribed = podcast.isSubscribed,
+                        lastUpdated = podcast.lastUpdated,
+                        createdAt = podcast.createdAt
+                    )
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 
-    suspend fun updatePodcastSubscription(id: String, isSubscribed: Boolean) {
-        withContext(Dispatchers.Default) {
-            val timestamp = Clock.System.now().epochSeconds
-            podcastQueries.updatePodcastSubscription(
-                isSubscribed = if (isSubscribed) 1L else 0L,
-                lastUpdated = timestamp,
-                id = id
-            )
+    suspend fun updatePodcastSubscription(id: String, isSubscribed: Boolean): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    val timestamp = Clock.System.now().epochSeconds
+                    podcastQueries.updatePodcastSubscription(
+                        isSubscribed = if (isSubscribed) 1L else 0L,
+                        lastUpdated = timestamp,
+                        id = id
+                    )
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+    
+    suspend fun updatePodcastRssUrl(id: String, rssUrl: String): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    val timestamp = Clock.System.now().epochSeconds
+                    podcastQueries.updatePodcastRssUrl(
+                        rssUrl = rssUrl,
+                        lastUpdated = timestamp,
+                        id = id
+                    )
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 
-    suspend fun deletePodcast(id: String) {
-        withContext(Dispatchers.Default) {
-            podcastQueries.deletePodcast(id)
+    suspend fun deletePodcast(id: String): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    podcastQueries.deletePodcast(id)
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun updatePodcastWithListenNotesData(
+        id: String,
+        listenNotesId: String,
+        genreIds: String,
+        description: String,
+        episodeCount: Long,
+        lastUpdated: Long
+    ): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    podcastQueries.updatePodcastWithListenNotesData(
+                        listenNotesId = listenNotesId,
+                        genreIds = genreIds,
+                        description = description,
+                        episodeCount = episodeCount,
+                        lastUpdated = lastUpdated,
+                        id = id
+                    )
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun getPodcastByListenNotesId(listenNotesId: String): PodcastEntity? {
+        return withContext(Dispatchers.Default) {
+            podcastQueries.selectPodcastByListenNotesId(listenNotesId)
+                .executeAsOneOrNull()
         }
     }
 
@@ -107,30 +183,33 @@ class DatabaseRepository(
         }
     }
 
-    suspend fun insertEpisode(episode: EpisodeEntity) {
-        withContext(Dispatchers.Default) {
+    suspend fun insertEpisode(episode: EpisodeEntity): Result<Unit> {
+        return withContext(Dispatchers.Default) {
             try {
-                episodeQueries.insertEpisode(
-                    id = episode.id,
-                    podcastId = episode.podcastId,
-                    title = episode.title,
-                    description = episode.description,
-                    audioUrl = episode.audioUrl,
-                    duration = episode.duration,
-                    publishedAt = episode.publishedAt,
-                    episodeNumber = episode.episodeNumber,
-                    seasonNumber = episode.seasonNumber,
-                    episodeType = episode.episodeType,
-                    isPlayed = episode.isPlayed,
-                    playbackPosition = episode.playbackPosition,
-                    isDownloaded = episode.isDownloaded,
-                    downloadPath = episode.downloadPath,
-                    fileSize = episode.fileSize,
-                    createdAt = episode.createdAt,
-                    updatedAt = episode.updatedAt
-                )
+                database.transaction {
+                    episodeQueries.insertEpisode(
+                        id = episode.id,
+                        podcastId = episode.podcastId,
+                        title = episode.title,
+                        description = episode.description,
+                        audioUrl = episode.audioUrl,
+                        duration = episode.duration,
+                        publishedAt = episode.publishedAt,
+                        episodeNumber = episode.episodeNumber,
+                        seasonNumber = episode.seasonNumber,
+                        episodeType = episode.episodeType,
+                        isPlayed = episode.isPlayed,
+                        playbackPosition = episode.playbackPosition,
+                        isDownloaded = episode.isDownloaded,
+                        downloadPath = episode.downloadPath,
+                        fileSize = episode.fileSize,
+                        createdAt = episode.createdAt,
+                        updatedAt = episode.updatedAt
+                    )
+                }
+                Result.success(Unit)
             } catch (e: Exception) {
-                // Handle database constraint violations or other insertion errors
+                Result.failure(e)
             }
         }
     }
@@ -139,21 +218,35 @@ class DatabaseRepository(
         id: String, 
         isPlayed: Boolean, 
         playbackPosition: Long
-    ) {
-        withContext(Dispatchers.Default) {
-            val timestamp = Clock.System.now().epochSeconds
-            episodeQueries.updateEpisodePlaybackState(
-                isPlayed = if (isPlayed) 1L else 0L,
-                playbackPosition = playbackPosition,
-                updatedAt = timestamp,
-                id = id
-            )
+    ): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    val timestamp = Clock.System.now().epochSeconds
+                    episodeQueries.updateEpisodePlaybackState(
+                        isPlayed = if (isPlayed) 1L else 0L,
+                        playbackPosition = playbackPosition,
+                        updatedAt = timestamp,
+                        id = id
+                    )
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 
-    suspend fun deleteEpisode(id: String) {
-        withContext(Dispatchers.Default) {
-            episodeQueries.deleteEpisode(id)
+    suspend fun deleteEpisode(id: String): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    episodeQueries.deleteEpisode(id)
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 
@@ -165,20 +258,34 @@ class DatabaseRepository(
         }
     }
 
-    suspend fun setSetting(key: String, value: String) {
-        withContext(Dispatchers.Default) {
-            val timestamp = Clock.System.now().epochSeconds
-            settingsQueries.insertOrUpdateSetting(
-                key,
-                value,
-                timestamp
-            )
+    suspend fun setSetting(key: String, value: String): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    val timestamp = Clock.System.now().epochSeconds
+                    settingsQueries.insertOrUpdateSetting(
+                        key,
+                        value,
+                        timestamp
+                    )
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 
-    suspend fun deleteSetting(key: String) {
-        withContext(Dispatchers.Default) {
-            settingsQueries.deleteSetting(key)
+    suspend fun deleteSetting(key: String): Result<Unit> {
+        return withContext(Dispatchers.Default) {
+            try {
+                database.transaction {
+                    settingsQueries.deleteSetting(key)
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 }

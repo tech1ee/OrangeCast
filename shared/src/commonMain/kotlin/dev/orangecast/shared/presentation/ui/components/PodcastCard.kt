@@ -254,10 +254,12 @@ private fun ListPodcastCardShimmer(modifier: Modifier = Modifier) {
 @Composable
 private fun Modifier.shimmerEffect(): Modifier {
     return this.then(
-        Modifier.background(
-            brush = ShimmerBrush(),
-            shape = RoundedCornerShape(4.dp)
-        )
+        Modifier
+            .background(
+                Color(0xFFE0E0E0),
+                shape = RoundedCornerShape(4.dp)
+            )
+            .shimmer()
     )
 }
 

@@ -1,5 +1,6 @@
 package dev.orangecast.shared.di
 
+import dev.orangecast.shared.data.config.ApiKeyProvider
 import dev.orangecast.shared.data.database.DatabaseFactory
 import dev.orangecast.shared.domain.player.AudioPlayer
 import io.ktor.client.HttpClient
@@ -56,4 +57,13 @@ actual val platformModule = module {
     
     // Database
     single { DatabaseFactory() }
+    
+    // API Key Provider
+    single<ApiKeyProvider> {
+        object : ApiKeyProvider {
+            override fun getListenNotesApiKey(): String = "f9cfc7b4369d4ecbb285a385da034fd0"
+            override fun getPodcastIndexApiKey(): String = ""
+            override fun getPodcastIndexApiSecret(): String = ""
+        }
+    }
 }

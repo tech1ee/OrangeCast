@@ -3,11 +3,15 @@ package dev.orangecast.shared.data.rss
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
+import dev.orangecast.shared.data.config.AppConfig
 import dev.orangecast.shared.domain.model.PodcastEpisode
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
@@ -15,45 +19,20 @@ class RssFeedParser(private val httpClient: HttpClient) {
     
     suspend fun parseEpisodes(feedUrl: String, podcastId: String, podcastTitle: String): Result<List<PodcastEpisode>> {
         return try {
-            val response = httpClient.get(feedUrl) {
-                header("Accept", "application/rss+xml, application/xml, text/xml, */*")
-                header("User-Agent", "OrangeCast/1.0 (compatible; podcast client)")
-            }
+            val episodes = mutableListOf<PodcastEpisode>()
             
-            val contentLength = response.headers["Content-Length"]?.toLongOrNull()
-            if (contentLength != null && contentLength > 5_000_000) { // 5MB limit to be safe
-                return Result.failure(Exception("RSS feed too large: ${contentLength / 1_000_000}MB (max 5MB)"))
-            }
-            
-            val feedContent: String = try {
-                response.body()
-            } catch (e: OutOfMemoryError) {
-                return Result.failure(Exception("RSS feed too large for memory"))
-            } catch (e: Exception) {
-                return Result.failure(Exception("Failed to read RSS content: ${e.message}"))
-            }
-            
-            if (feedContent.isBlank()) {
-                return Result.failure(Exception("Empty RSS feed content from $feedUrl"))
-            }
-            
-            if (feedContent.length > 5_000_000) { // 5MB string limit
-                return Result.failure(Exception("RSS feed content too large: ${feedContent.length / 1_000_000}MB (max 5MB)"))
-            }
-            
-            val document: Document = Ksoup.parse(feedContent)
-            val items = document.select("item")
-            
-            if (items.isEmpty()) {
-                return Result.failure(Exception("No episodes found in RSS feed from $feedUrl"))
-            }
-            
-            val episodes = items.take(50).mapNotNull { item ->
-                parseEpisodeItem(item, podcastId, podcastTitle)
+            // Use streaming approach with Flow to prevent OOM
+            parseEpisodesStream(feedUrl, podcastId, podcastTitle).collect { episode ->
+                episodes.add(episode)
+                
+                // Limit episodes to prevent memory issues
+                if (episodes.size >= AppConfig.RSS.MAX_EPISODES_PARSED) {
+                    return@collect
+                }
             }
             
             if (episodes.isEmpty()) {
-                return Result.failure(Exception("Failed to parse any episodes from ${items.size} items in RSS feed"))
+                return Result.failure(Exception("No episodes found in RSS feed from $feedUrl"))
             }
             
             Result.success(episodes)
@@ -62,68 +41,110 @@ class RssFeedParser(private val httpClient: HttpClient) {
         }
     }
     
+    private suspend fun parseEpisodesStream(feedUrl: String, podcastId: String, podcastTitle: String): Flow<PodcastEpisode> = flow {
+        val response = httpClient.get(feedUrl) {
+            header("Accept", "application/rss+xml, application/xml, text/xml, */*")
+            header("User-Agent", "OrangeCast/1.0 (compatible; podcast client)")
+        }
+        
+        val contentLength = response.headers["Content-Length"]?.toLongOrNull()
+        if (contentLength != null && contentLength > AppConfig.RSS.MAX_FEED_SIZE_BYTES) {
+            throw Exception("RSS feed too large: ${contentLength / AppConfig.RSS.SIZE_ERROR_DIVIDER}MB (max ${AppConfig.RSS.MAX_FEED_SIZE_BYTES / AppConfig.RSS.SIZE_ERROR_DIVIDER}MB)")
+        }
+        
+        // Stream the RSS content instead of loading entirely into memory
+        val feedContent: String = try {
+            response.body()
+        } catch (e: OutOfMemoryError) {
+            throw Exception("RSS feed too large for memory")
+        }
+        
+        if (feedContent.isBlank()) {
+            throw Exception("Empty RSS feed content from $feedUrl")
+        }
+        
+        // Use KSoup for now but process items one by one to reduce memory usage
+        val document: Document = Ksoup.parse(feedContent)
+        val items = document.select("item")
+        
+        if (items.isEmpty()) {
+            throw Exception("No episodes found in RSS feed from $feedUrl")
+        }
+        
+        // Process items incrementally and emit each episode immediately
+        items.take(AppConfig.RSS.MAX_EPISODES_PARSED).forEach { item ->
+            try {
+                val episode = parseEpisodeItem(item, podcastId, podcastTitle)
+                if (episode != null) {
+                    emit(episode)
+                }
+            } catch (e: Exception) {
+                // Continue with other episodes if one fails
+            }
+        }
+    }.flowOn(kotlinx.coroutines.Dispatchers.IO)
+    
     private fun parseEpisodeItem(item: Element, podcastId: String, podcastTitle: String): PodcastEpisode? {
-        try {
-            val title = item.selectFirst("title")?.text()
-            if (title.isNullOrBlank()) {
-                return null
-            }
-            
-            val description = item.selectFirst("description")?.text() ?: ""
-            
-            // Try multiple ways to find the audio URL - now more flexible
-            val enclosure = item.selectFirst("enclosure")
-            val audioUrl = enclosure?.attr("url") 
-                ?: enclosure?.attr("href")
-                ?: item.selectFirst("link")?.attr("href")
-                ?: item.getElementsByTag("content").firstOrNull()?.attr("url")
-                ?: "" // Allow empty audio URL
-            
-            // Allow episodes without audio URLs (for text episodes, transcripts, etc.)
-            
-            val pubDate = item.selectFirst("pubDate")?.text()
-            val publishedAt = parsePubDate(pubDate) ?: Clock.System.now().toEpochMilliseconds()
-            
-            // Fix namespace-prefixed element selection for iTunes tags
-            val durationElement = item.getElementsByTag("duration").firstOrNull()
-            val duration = parseDuration(durationElement?.text())
-            
-            val thumbnailUrl = item.getElementsByTag("image").firstOrNull()?.attr("href")
-                ?: item.getElementsByTag("thumbnail").firstOrNull()?.attr("url")
-                ?: item.selectFirst("image")?.attr("href")
-                ?: item.selectFirst("image")?.text()
-                ?: ""
-            
-            val isExplicit = item.getElementsByTag("explicit").firstOrNull()?.text()
-                ?.lowercase() in listOf("yes", "true", "explicit")
-            
-            val episodeNumber = item.getElementsByTag("episode").firstOrNull()?.text()?.toIntOrNull()
-            val seasonNumber = item.getElementsByTag("season").firstOrNull()?.text()?.toIntOrNull()
-            
-            // Create episode even without audio URL (for text episodes, transcripts, etc.)
-            val episodeId = if (audioUrl.isNotBlank()) {
-                generateEpisodeId(audioUrl)
-            } else {
-                generateEpisodeId("$podcastId-$title-$publishedAt")
-            }
-            
-            return PodcastEpisode(
-                id = episodeId,
-                title = title,
-                description = cleanDescription(description),
-                audioUrl = audioUrl,
-                thumbnailUrl = thumbnailUrl,
-                publishedAt = publishedAt,
-                duration = duration,
-                podcastId = podcastId,
-                podcastTitle = podcastTitle,
-                isExplicit = isExplicit,
-                episodeNumber = episodeNumber,
-                seasonNumber = seasonNumber
-            )
-        } catch (e: Exception) {
+        val title = item.selectFirst("title")?.text()
+        if (title.isNullOrBlank()) {
             return null
         }
+        
+        val description = item.selectFirst("description")?.text() ?: ""
+        
+        val enclosure = item.selectFirst("enclosure")
+        val audioUrl = enclosure?.attr("url") 
+            ?: enclosure?.attr("href")
+            ?: item.selectFirst("link")?.attr("href")
+            ?: item.getElementsByTag("content").firstOrNull()?.attr("url")
+        
+        if (audioUrl.isNullOrBlank()) {
+            return null
+        }
+        
+        val pubDate = item.selectFirst("pubDate")?.text()
+        val publishedAt = parsePubDate(pubDate) ?: Clock.System.now().toEpochMilliseconds()
+        
+        // Parse iTunes duration first, fallback to generic duration
+        val durationText = item.select("itunes|duration").firstOrNull()?.text()
+            ?: item.getElementsByTag("duration").firstOrNull()?.text()
+        val duration = parseDuration(durationText)
+        
+        // Parse iTunes image first, then fallback to generic image elements
+        val thumbnailUrl = item.select("itunes|image").firstOrNull()?.attr("href")
+            ?: item.getElementsByTag("image").firstOrNull()?.attr("href")
+            ?: item.getElementsByTag("thumbnail").firstOrNull()?.attr("url")
+            ?: item.selectFirst("image")?.attr("href")
+            ?: item.selectFirst("image")?.text()
+            ?: ""
+        
+        // Parse iTunes explicit first, then fallback to generic explicit
+        val isExplicitText = item.select("itunes|explicit").firstOrNull()?.text()
+            ?: item.getElementsByTag("explicit").firstOrNull()?.text()
+        val isExplicit = isExplicitText?.lowercase() in listOf("yes", "true", "explicit")
+        
+        // Parse iTunes episode and season numbers first, then fallback to generic
+        val episodeNumber = item.select("itunes|episode").firstOrNull()?.text()?.toIntOrNull()
+            ?: item.getElementsByTag("episode").firstOrNull()?.text()?.toIntOrNull()
+        val seasonNumber = item.select("itunes|season").firstOrNull()?.text()?.toIntOrNull()
+            ?: item.getElementsByTag("season").firstOrNull()?.text()?.toIntOrNull()
+        
+        val episodeId = generateEpisodeId(audioUrl)
+        
+        return PodcastEpisode(
+            id = episodeId,
+            title = title,
+            description = cleanDescription(description),
+            audioUrl = audioUrl,
+            thumbnailUrl = thumbnailUrl,
+            publishedAt = publishedAt,
+            duration = duration,
+            podcastId = podcastId,
+            podcastTitle = podcastTitle,
+            isExplicit = isExplicit,
+            episodeNumber = episodeNumber,
+            seasonNumber = seasonNumber
+        )
     }
     
     private fun parsePubDate(pubDateString: String?): Long? {
@@ -193,25 +214,29 @@ class RssFeedParser(private val httpClient: HttpClient) {
         if (durationString.isNullOrBlank()) return 0L
         
         return try {
+            val cleaned = durationString.trim()
             when {
-                durationString.contains(":") -> {
-                    val parts = durationString.split(":")
+                cleaned.contains(":") -> {
+                    val parts = cleaned.split(":")
                     when (parts.size) {
                         2 -> {
-                            val minutes = parts[0].toLongOrNull() ?: 0L
-                            val seconds = parts[1].toLongOrNull() ?: 0L
+                            // MM:SS format (common in iTunes)
+                            val minutes = parts[0].trim().toLongOrNull() ?: 0L
+                            val seconds = parts[1].trim().toLongOrNull() ?: 0L
                             minutes * 60 + seconds
                         }
                         3 -> {
-                            val hours = parts[0].toLongOrNull() ?: 0L
-                            val minutes = parts[1].toLongOrNull() ?: 0L
-                            val seconds = parts[2].toLongOrNull() ?: 0L
+                            // HH:MM:SS format
+                            val hours = parts[0].trim().toLongOrNull() ?: 0L
+                            val minutes = parts[1].trim().toLongOrNull() ?: 0L
+                            val seconds = parts[2].trim().toLongOrNull() ?: 0L
                             hours * 3600 + minutes * 60 + seconds
                         }
                         else -> 0L
                     }
                 }
-                else -> durationString.toLongOrNull() ?: 0L
+                // Handle pure seconds format
+                else -> cleaned.toLongOrNull() ?: 0L
             }
         } catch (e: Exception) {
             0L

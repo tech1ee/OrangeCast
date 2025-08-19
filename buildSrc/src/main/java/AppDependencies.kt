@@ -148,17 +148,6 @@ object AppDependencies {
         }
     }
 
-    fun DependencyHandler.androidTestImplementation(list: List<String>) {
-        list.forEach { dependency ->
-            add("androidTestImplementation", dependency)
-        }
-    }
-
-    fun DependencyHandler.testImplementation(list: List<String>) {
-        list.forEach { dependency ->
-            add("testImplementation", dependency)
-        }
-    }
 
     fun DependencyHandler.api(list: List<String>) {
         list.forEach { dependency ->

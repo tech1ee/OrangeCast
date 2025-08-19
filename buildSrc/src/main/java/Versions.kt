@@ -43,10 +43,4 @@ object Versions {
 
     const val workRuntime: String = "2.7.1"
     const val workHilt: String = "1.0.0"
-
-    //test
-    const val junit = "4.13.2"
-    const val junitExt = "1.1.3"
-    const val espresso = "3.4.0"
-    const val mockito = "4.8.1"
 }

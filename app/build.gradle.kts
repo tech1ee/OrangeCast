@@ -75,6 +75,9 @@ dependencies {
     
     // Koin
     implementation("io.insert-koin:koin-android:3.4.2")
+    
+    // Napier for logging
+    implementation("io.github.aakira:napier:2.7.1")
 
     implementation(AppDependencies.lifecycleProcess)
 

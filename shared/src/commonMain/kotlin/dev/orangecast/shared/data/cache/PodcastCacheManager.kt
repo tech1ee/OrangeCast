@@ -3,6 +3,7 @@ package dev.orangecast.shared.data.cache
 import dev.orangecast.shared.domain.model.Podcast
 import dev.orangecast.shared.domain.model.PodcastDetails
 import dev.orangecast.shared.domain.model.PodcastEpisode
+import dev.orangecast.shared.domain.model.Genre
 
 class PodcastCacheManager {
     
@@ -20,6 +21,9 @@ class PodcastCacheManager {
     
     // Episodes cache: podcastId -> list of episodes
     private val episodesCache = InMemoryDataCache<String, List<PodcastEpisode>>(maxSize = 100)
+    
+    // Genres cache
+    private val genresCache = InMemoryDataCache<String, List<Genre>>(maxSize = 10)
     
     // Search Results
     fun getSearchResults(query: String): List<Podcast>? = searchCache.get(query)
@@ -60,6 +64,13 @@ class PodcastCacheManager {
     
     fun removePodcastDetails(podcastId: String) = detailsCache.remove(podcastId)
     
+    // Genres
+    fun getGenres(): List<Genre>? = genresCache.get(GENRES_KEY)
+    
+    fun putGenres(genres: List<Genre>) {
+        genresCache.put(GENRES_KEY, genres, CacheEntry.FEATURED_TTL) // Cache for 24 hours like featured
+    }
+    
     // Cache management
     fun clearSearchCache() = searchCache.clear()
     
@@ -69,6 +80,7 @@ class PodcastCacheManager {
         categoryCache.clear()
         detailsCache.clear()
         episodesCache.clear()
+        genresCache.clear()
     }
     
     fun getCacheStats(): CacheStats {
@@ -77,12 +89,14 @@ class PodcastCacheManager {
             featuredCacheSize = featuredCache.size(),
             categoryCacheSize = categoryCache.size(),
             detailsCacheSize = detailsCache.size(),
-            episodesCacheSize = episodesCache.size()
+            episodesCacheSize = episodesCache.size(),
+            genresCacheSize = genresCache.size()
         )
     }
     
     companion object {
         private const val FEATURED_KEY = "featured_podcasts"
+        private const val GENRES_KEY = "all_genres"
     }
 }
 
@@ -91,7 +105,8 @@ data class CacheStats(
     val featuredCacheSize: Int,
     val categoryCacheSize: Int,
     val detailsCacheSize: Int,
-    val episodesCacheSize: Int
+    val episodesCacheSize: Int,
+    val genresCacheSize: Int
 ) {
-    val totalCacheSize: Int get() = searchCacheSize + featuredCacheSize + categoryCacheSize + detailsCacheSize + episodesCacheSize
+    val totalCacheSize: Int get() = searchCacheSize + featuredCacheSize + categoryCacheSize + detailsCacheSize + episodesCacheSize + genresCacheSize
 }

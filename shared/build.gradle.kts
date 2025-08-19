@@ -30,8 +30,13 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
                 implementation("io.ktor:ktor-client-cio:2.3.2")
+                implementation("io.ktor:ktor-client-logging:2.3.2")
+                implementation("io.ktor:ktor-client-resources:2.3.2")
                 implementation("io.insert-koin:koin-core:3.4.2")
                 implementation("io.insert-koin:koin-compose:1.0.4")
+                
+                // Logging
+                implementation("io.github.aakira:napier:2.7.1")
                 
                 // XML parsing for RSS feeds
                 implementation("com.fleeksoft.ksoup:ksoup:0.1.2")
@@ -65,6 +70,9 @@ kotlin {
                 implementation("androidx.media3:media3-exoplayer:1.1.0")
                 implementation("androidx.media3:media3-ui:1.1.0")
                 implementation("androidx.media3:media3-common:1.1.0")
+                
+                // WorkManager for background sync
+                implementation("androidx.work:work-runtime-ktx:2.8.1")
             }
         }
         

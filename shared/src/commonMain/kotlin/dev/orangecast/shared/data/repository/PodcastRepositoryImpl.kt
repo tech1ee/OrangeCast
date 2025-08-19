@@ -1,10 +1,9 @@
 package dev.orangecast.shared.data.repository
 
-import dev.orangecast.shared.data.api.ITunesApiService
-import dev.orangecast.shared.data.api.model.ITunesPodcast
+import dev.orangecast.shared.data.api.ListenNotesApiService
+import dev.orangecast.shared.data.api.model.ListenNotesPodcast
 import dev.orangecast.shared.data.cache.PodcastCacheManager
 import dev.orangecast.shared.data.database.DatabaseRepository
-import dev.orangecast.shared.data.local.LocalStorageManager
 import dev.orangecast.shared.data.rss.RssFeedParser
 import dev.orangecast.shared.database.EpisodeEntity
 import dev.orangecast.shared.database.PodcastEntity
@@ -12,16 +11,17 @@ import kotlinx.datetime.Clock
 import dev.orangecast.shared.domain.model.Podcast
 import dev.orangecast.shared.domain.model.PodcastDetails
 import dev.orangecast.shared.domain.model.PodcastEpisode
+import dev.orangecast.shared.domain.model.Genre
 import dev.orangecast.shared.domain.repository.PodcastRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.flowOf
+import io.github.aakira.napier.Napier
 
 class PodcastRepositoryImpl(
-    private val apiService: ITunesApiService,
+    private val apiService: ListenNotesApiService,
     private val rssFeedParser: RssFeedParser,
-    private val localStorageManager: LocalStorageManager,
     private val cacheManager: PodcastCacheManager,
     private val databaseRepository: DatabaseRepository
 ) : PodcastRepository {
@@ -43,11 +43,14 @@ class PodcastRepositoryImpl(
             
             Result.success(podcasts)
         } catch (e: Exception) {
+            Napier.e("Failed to search podcasts for query: $query", e, tag = "PodcastRepository")
             // Try to return cached results even if they're expired in case of network error
             val cachedResult = cacheManager.getSearchResults(query)
             if (cachedResult != null) {
+                Napier.i("Returning cached results for query: $query", tag = "PodcastRepository")
                 Result.success(cachedResult)
             } else {
+                Napier.e("No cached results available for query: $query", tag = "PodcastRepository")
                 Result.failure(e)
             }
         }
@@ -55,9 +58,7 @@ class PodcastRepositoryImpl(
 
     override suspend fun getPodcastDetails(podcastId: String): Result<PodcastDetails> {
         return try {
-            val response = apiService.lookupPodcast(podcastId)
-            val podcast = response.results.firstOrNull()?.toDomainModel()
-                ?: return Result.failure(Exception("Podcast not found"))
+            val podcast = apiService.lookupPodcast(podcastId).toDomainModel()
             
             val dbEntity = databaseRepository.getPodcastById(podcastId)
             val isSubscribed = dbEntity?.isSubscribed == 1L
@@ -71,10 +72,10 @@ class PodcastRepositoryImpl(
                 val episodesResult = getEpisodes(podcastId)
                 when {
                     episodesResult.isSuccess -> {
-                        episodesResult.getOrNull() ?: createFallbackEpisodes(podcast)
+                        episodesResult.getOrNull() ?: emptyList()
                     }
                     else -> {
-                        createFallbackEpisodes(podcast) // Create sample episodes if RSS fails
+                        emptyList() // Return empty list if RSS fails - no fake episodes
                     }
                 }
             }
@@ -91,15 +92,19 @@ class PodcastRepositoryImpl(
             
             Result.success(details)
         } catch (e: Exception) {
+            Napier.e("Failed to get podcast details for ID: $podcastId", e, tag = "PodcastRepository")
             val cachedDetails = cacheManager.getPodcastDetails(podcastId)
             if (cachedDetails != null) {
+                Napier.i("Returning cached details for podcast ID: $podcastId", tag = "PodcastRepository")
                 val isSubscribed = try {
                     databaseRepository.getPodcastById(podcastId)?.isSubscribed == 1L
                 } catch (ex: Exception) {
+                    Napier.e("Failed to get subscription status for podcast ID: $podcastId", ex, tag = "PodcastRepository")
                     cachedDetails.isSubscribed
                 }
                 Result.success(cachedDetails.copy(isSubscribed = isSubscribed))
             } else {
+                Napier.e("No cached details available for podcast ID: $podcastId", tag = "PodcastRepository")
                 Result.failure(e)
             }
         }
@@ -113,23 +118,29 @@ class PodcastRepositoryImpl(
                 return Result.success(cachedEpisodes)
             }
             
-            val podcastResponse = apiService.lookupPodcast(podcastId)
-            val podcast = podcastResponse.results.firstOrNull()
-                ?: return Result.failure(Exception("Podcast not found"))
+            val podcast = apiService.lookupPodcast(podcastId)
             
             // Generate fallback episodes to prevent OOM from RSS parsing
-            val fallbackEpisodes = createFallbackEpisodes(podcast.toDomainModel())
+            // Use real RSS parsing instead of fake episodes
+            val episodes = if (!podcast.rss.isNullOrBlank()) {
+                rssFeedParser.parseEpisodes(podcast.rss, podcast.id, podcast.title).getOrNull() ?: emptyList()
+            } else {
+                emptyList()
+            }
             
-            // Cache the fallback episodes
-            cacheManager.putEpisodes(podcastId, fallbackEpisodes)
+            // Cache the real episodes
+            cacheManager.putEpisodes(podcastId, episodes)
             
-            Result.success(fallbackEpisodes)
+            Result.success(episodes)
         } catch (e: Exception) {
+            Napier.e("Failed to get episodes for podcast ID: $podcastId", e, tag = "PodcastRepository")
             // Try to return cached episodes even if expired in case of network error
             val cachedEpisodes = cacheManager.getEpisodes(podcastId)
             if (cachedEpisodes != null) {
+                Napier.i("Returning cached episodes for podcast ID: $podcastId", tag = "PodcastRepository")
                 Result.success(cachedEpisodes)
             } else {
+                Napier.e("No cached episodes available for podcast ID: $podcastId", tag = "PodcastRepository")
                 Result.failure(e)
             }
         }
@@ -137,19 +148,26 @@ class PodcastRepositoryImpl(
 
     override suspend fun subscribeToPodcast(podcast: Podcast): Result<Unit> {
         return try {
-            val podcastEntity = podcast.toEntity(isSubscribed = true, rssUrl = "")
-            databaseRepository.insertPodcast(podcastEntity)
-            localStorageManager.subscribeToPodcast(podcast)
+            // First get full podcast details from API to get RSS URL
+            val fullPodcast = apiService.lookupPodcast(podcast.id)
+            val podcastEntity = podcast.toEntity(isSubscribed = true, rssUrl = fullPodcast.rss ?: "")
+            databaseRepository.insertPodcast(podcastEntity).getOrThrow()
             
-            val fallbackEpisodes = createFallbackEpisodes(podcast)
-            fallbackEpisodes.forEach { episode ->
+            // Use real RSS parsing instead of fake episodes  
+            val episodes = if (!fullPodcast.rss.isNullOrBlank()) {
+                rssFeedParser.parseEpisodes(fullPodcast.rss, podcast.id, podcast.title).getOrNull() ?: emptyList()
+            } else {
+                emptyList() 
+            }
+            episodes.forEach { episode ->
                 val episodeEntity = episode.toEntity(podcast.id)
-                databaseRepository.insertEpisode(episodeEntity)
+                databaseRepository.insertEpisode(episodeEntity).getOrThrow()
             }
             
             cacheManager.removePodcastDetails(podcast.id)
             Result.success(Unit)
         } catch (e: Exception) {
+            Napier.e("Failed to subscribe to podcast: ${podcast.title}", e, tag = "PodcastRepository")
             Result.failure(e)
         }
     }
@@ -157,16 +175,14 @@ class PodcastRepositoryImpl(
     override suspend fun unsubscribeFromPodcast(podcastId: String): Result<Unit> {
         return try {
             // Update subscription status in database
-            databaseRepository.updatePodcastSubscription(podcastId, false)
-            
-            // Also update local storage for compatibility
-            localStorageManager.unsubscribeFromPodcast(podcastId)
+            databaseRepository.updatePodcastSubscription(podcastId, false).getOrThrow()
             
             // Clear cache to ensure fresh subscription status
             cacheManager.removePodcastDetails(podcastId)
             
             Result.success(Unit)
         } catch (e: Exception) {
+            Napier.e("Failed to unsubscribe from podcast ID: $podcastId", e, tag = "PodcastRepository")
             Result.failure(e)
         }
     }
@@ -185,76 +201,74 @@ class PodcastRepositoryImpl(
                 return Result.success(cachedFeatured)
             }
             
-            // Get featured podcasts by searching popular categories
-            val response = apiService.searchPodcasts("featured podcast", 20)
-            val podcasts = response.results.map { it.toDomainModel() }
+            // Get featured podcasts from ListenNotes best podcasts
+            val response = apiService.getBestPodcasts()
+            val podcasts = response.podcasts.map { it.toDomainModel() }
             
             // Cache the results
             cacheManager.putFeaturedPodcasts(podcasts)
             
             Result.success(podcasts)
         } catch (e: Exception) {
+            Napier.e("Failed to get featured podcasts", e, tag = "PodcastRepository")
             // Try to return cached results even if expired in case of network error
             val cachedFeatured = cacheManager.getFeaturedPodcasts()
             if (cachedFeatured != null) {
+                Napier.i("Returning cached featured podcasts", tag = "PodcastRepository")
                 Result.success(cachedFeatured)
             } else {
+                Napier.e("No cached featured podcasts available", tag = "PodcastRepository")
                 Result.failure(e)
             }
         }
     }
 
-    override suspend fun getCategoriesPodcasts(category: String): Result<List<Podcast>> {
+    override suspend fun getGenres(): Result<List<Genre>> {
         return try {
-            // Check cache first
-            val cachedCategory = cacheManager.getCategoryPodcasts(category)
-            if (cachedCategory != null) {
-                return Result.success(cachedCategory)
+            val response = apiService.getGenres()
+            val genres = response.genres.map { genreDto ->
+                Genre(
+                    id = genreDto.id,
+                    name = genreDto.name,
+                    parentId = genreDto.parentId
+                )
+            }
+            Napier.d("Loaded ${genres.size} genres from API", tag = "PodcastRepository")
+            Result.success(genres)
+        } catch (e: Exception) {
+            Napier.e("Failed to load genres from API", e, tag = "PodcastRepository")
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getPodcastsByGenre(genreId: Int): Result<List<Podcast>> {
+        return try {
+            // Check cache first 
+            val cachedGenre = cacheManager.getCategoryPodcasts(genreId.toString())
+            if (cachedGenre != null) {
+                return Result.success(cachedGenre)
             }
             
-            val response = apiService.searchPodcasts(category, 15)
-            val podcasts = response.results
-                .filter { it.primaryGenreName?.contains(category, ignoreCase = true) == true }
-                .map { it.toDomainModel() }
+            val response = apiService.getBestPodcasts(genreId = genreId)
+            val podcasts = response.podcasts.map { it.toDomainModel() }
             
             // Cache the results
-            cacheManager.putCategoryPodcasts(category, podcasts)
+            cacheManager.putCategoryPodcasts(genreId.toString(), podcasts)
             
+            Napier.d("Found ${podcasts.size} podcasts for genre ID: $genreId", tag = "PodcastRepository")
             Result.success(podcasts)
         } catch (e: Exception) {
-            // Try to return cached results even if expired in case of network error
-            val cachedCategory = cacheManager.getCategoryPodcasts(category)
-            if (cachedCategory != null) {
-                Result.success(cachedCategory)
+            Napier.e("Failed to get podcasts for genre ID: $genreId", e, tag = "PodcastRepository")
+            // Try to return cached results even if expired
+            val cachedGenre = cacheManager.getCategoryPodcasts(genreId.toString())
+            if (cachedGenre != null) {
+                Napier.i("Returning cached podcasts for genre ID: $genreId", tag = "PodcastRepository")
+                Result.success(cachedGenre)
             } else {
+                Napier.e("No cached podcasts available for genre ID: $genreId", tag = "PodcastRepository")
                 Result.failure(e)
             }
         }
-    }
-
-    override suspend fun getAvailableCategories(): List<String> {
-        // iTunes podcast main categories based on Apple Podcasts documentation
-        return listOf(
-            "Arts",
-            "Business", 
-            "Comedy",
-            "Education",
-            "Fiction",
-            "Government",
-            "Health & Fitness",
-            "History",
-            "Kids & Family",
-            "Leisure",
-            "Music",
-            "News",
-            "Religion & Spirituality",
-            "Science",
-            "Society & Culture",
-            "Sports",
-            "Technology",
-            "True Crime",
-            "TV & Film"
-        )
     }
 
     private suspend fun tryAlternativeFeedSources(podcastName: String, artistName: String?): String? {
@@ -270,10 +284,10 @@ class PodcastRepositoryImpl(
                 podcastName
             }
             
-            val searchResponse = apiService.searchPodcasts(searchQuery, limit = 10)
+            val searchResponse = apiService.searchPodcasts(searchQuery, 10)
             searchResponse.results
-                .firstOrNull { it.feedUrl != null && it.trackName.contains(podcastName, ignoreCase = true) }
-                ?.feedUrl
+                .firstOrNull { it.rss != null && it.title.contains(podcastName, ignoreCase = true) }
+                ?.rss
         } catch (e: Exception) {
             null
         }
@@ -305,32 +319,31 @@ class PodcastRepositoryImpl(
     }
     
 
-    private fun ITunesPodcast.toDomainModel(): Podcast {
+    private fun ListenNotesPodcast.toDomainModel(): Podcast {
         return Podcast(
-            id = trackId.toString(),
-            title = trackName,
-            description = collectionName ?: "",
-            imageUrl = artworkUrl600 ?: artworkUrl100 ?: "",
-            author = artistName,
-            category = primaryGenreName ?: "",
-            language = languageCodesISO2A?.firstOrNull() ?: "en",
-            isExplicit = contentAdvisoryRating == "Explicit",
-            episodeCount = trackCount ?: 0,
+            id = id,
+            title = title,
+            description = description,
+            imageUrl = image,
+            author = publisher,
+            category = genreIds.firstOrNull()?.toString() ?: "",
+            language = language ?: "en",
+            isExplicit = explicitContent,
+            episodeCount = totalEpisodes,
             lastUpdated = System.currentTimeMillis()
         )
     }
 
     private suspend fun discoverRssUrl(podcastId: String): String {
         return try {
-            val podcastResponse = apiService.lookupPodcast(podcastId)
-            val podcast = podcastResponse.results.firstOrNull()
+            val podcast = apiService.lookupPodcast(podcastId)
             
-            // First try the feedUrl from iTunes API if available
-            var feedUrl = podcast?.feedUrl
+            // First try the RSS URL from ListenNotes API if available
+            var feedUrl = podcast.rss
             
-            // If iTunes feedUrl not available, try alternative sources
-            if (feedUrl == null && podcast != null) {
-                feedUrl = tryAlternativeFeedSources(podcast.trackName, podcast.artistName)
+            // If ListenNotes RSS not available, try alternative sources
+            if (feedUrl == null) {
+                feedUrl = tryAlternativeFeedSources(podcast.title, podcast.publisher)
             }
             
             feedUrl ?: ""
@@ -351,6 +364,9 @@ class PodcastRepositoryImpl(
             websiteUrl = null,
             language = language,
             genres = "[\"${category}\"]",
+            listenNotesId = id, // Use the same ID as ListenNotes ID
+            genreIds = "[\"${category}\"]", // Store category as genre IDs
+            episodeCount = episodeCount.toLong(),
             isSubscribed = if (isSubscribed) 1L else 0L,
             lastUpdated = timestamp,
             createdAt = timestamp
@@ -412,13 +428,17 @@ class PodcastRepositoryImpl(
             
             subscribedPodcasts.forEach { podcastEntity ->
                 try {
-                    // Generate fallback episodes instead of parsing RSS to prevent OOM
+                    // Use real RSS parsing instead of fake episodes
                     val podcast = podcastEntity.toDomainModel()
-                    val fallbackEpisodes = createFallbackEpisodes(podcast)
+                    val episodes = if (podcastEntity.rssUrl.isNotBlank()) {
+                        rssFeedParser.parseEpisodes(podcastEntity.rssUrl, podcastEntity.id, podcastEntity.title ?: "").getOrNull() ?: emptyList()
+                    } else {
+                        emptyList()
+                    }
                     
-                    fallbackEpisodes.forEach { episode ->
+                    episodes.forEach { episode ->
                         val episodeEntity = episode.toEntity(podcastEntity.id)
-                        databaseRepository.insertEpisode(episodeEntity)
+                        databaseRepository.insertEpisode(episodeEntity).getOrThrow()
                     }
                 } catch (e: Exception) {
                     // Continue with other podcasts if one fails  
@@ -427,6 +447,7 @@ class PodcastRepositoryImpl(
             
             Result.success(Unit)
         } catch (e: Exception) {
+            Napier.e("Failed to sync episodes for subscribed podcasts", e, tag = "PodcastRepository")
             Result.failure(e)
         }
     }
@@ -445,42 +466,4 @@ class PodcastRepositoryImpl(
         )
     }
 
-    private fun createFallbackEpisodes(podcast: Podcast): List<PodcastEpisode> {
-        val currentTime = Clock.System.now().toEpochMilliseconds()
-        return listOf(
-            PodcastEpisode(
-                id = "${podcast.id}_ep1",
-                title = "Episode 1: Introduction to ${podcast.title}",
-                description = "Welcome to ${podcast.title}. In this episode, we introduce the show and discuss what you can expect from future episodes.",
-                audioUrl = "https://example.com/audio1.mp3",
-                duration = 1800L, // 30 minutes
-                publishedAt = currentTime - (7 * 24 * 60 * 60 * 1000), // 1 week ago
-                thumbnailUrl = podcast.imageUrl,
-                podcastId = podcast.id,
-                podcastTitle = podcast.title
-            ),
-            PodcastEpisode(
-                id = "${podcast.id}_ep2",
-                title = "Episode 2: Getting Started",
-                description = "In this episode, we dive deeper into the core topics and explore what makes ${podcast.title} unique.",
-                audioUrl = "https://example.com/audio2.mp3",
-                duration = 2100L, // 35 minutes
-                publishedAt = currentTime - (3 * 24 * 60 * 60 * 1000), // 3 days ago
-                thumbnailUrl = podcast.imageUrl,
-                podcastId = podcast.id,
-                podcastTitle = podcast.title
-            ),
-            PodcastEpisode(
-                id = "${podcast.id}_ep3",
-                title = "Episode 3: Latest Updates",
-                description = "The newest episode featuring the latest developments and insights in ${podcast.category}.",
-                audioUrl = "https://example.com/audio3.mp3",
-                duration = 2700L, // 45 minutes
-                publishedAt = currentTime - (24 * 60 * 60 * 1000), // 1 day ago
-                thumbnailUrl = podcast.imageUrl,
-                podcastId = podcast.id,
-                podcastTitle = podcast.title
-            )
-        )
-    }
 }

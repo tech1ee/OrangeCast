@@ -1,6 +1,7 @@
 package dev.orangecast.shared.di
 
 import android.content.Context
+import dev.orangecast.shared.data.config.ApiKeyProvider
 import dev.orangecast.shared.data.database.DatabaseFactory
 import dev.orangecast.shared.domain.player.AudioPlayer
 import io.ktor.client.HttpClient
@@ -49,17 +50,22 @@ actual val platformModule = module {
                 exponentialDelay()
             }
             
-            // Production - no logging
-            // if (enableLogging) {
-            //     install(Logging) { level = LogLevel.INFO }
-            // }
+            // Enable HTTP client logging for debugging
+            install(io.ktor.client.plugins.logging.Logging) {
+                logger = object : io.ktor.client.plugins.logging.Logger {
+                    override fun log(message: String) {
+                        io.github.aakira.napier.Napier.d(message, tag = "HttpClient")
+                    }
+                }
+                level = io.ktor.client.plugins.logging.LogLevel.ALL
+            }
             
             defaultRequest {
                 header("Accept", "application/xml, application/rss+xml, text/xml, application/json, */*")
                 header("User-Agent", "OrangeCast/1.0 (compatible; podcast client)")
             }
             
-            expectSuccess = true
+            expectSuccess = false  // Handle errors manually for better debugging
         }
     }
     
@@ -68,4 +74,13 @@ actual val platformModule = module {
     
     // Database
     single { DatabaseFactory(androidContext()) }
+    
+    // API Key Provider
+    single<ApiKeyProvider> {
+        object : ApiKeyProvider {
+            override fun getListenNotesApiKey(): String = "f9cfc7b4369d4ecbb285a385da034fd0"
+            override fun getPodcastIndexApiKey(): String = ""
+            override fun getPodcastIndexApiSecret(): String = ""
+        }
+    }
 }

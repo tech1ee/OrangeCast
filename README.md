@@ -28,17 +28,17 @@ A modern, cross-platform podcast player built with Kotlin Multiplatform Mobile (
 | **Android** | ![Android Main](screenshots/android_main_current.png) |
 
 #### Current Features Demonstrated:
-- ✅ **Category-based Discovery** - Featured Podcasts, Arts, Business sections
-- ✅ **Grid Layout** - 2-column podcast display with proper aspect ratios
-- ✅ **Real Podcast Data** - Live iTunes API integration showing actual podcasts
-- ✅ **Search Functionality** - Working search bar (crash fixed)
-- ✅ **Navigation** - Discover, New Episodes, Library tabs functional
+- ✅ **Dynamic Genre Discovery** - Real genres loaded from ListenNotes API (no hardcoded categories)
+- ✅ **Genre-based Podcast Sections** - Podcasts organized by actual API genres  
+- ✅ **Real Podcast Data** - Live ListenNotes API integration showing actual podcast content
+- ✅ **Search Functionality** - Working search bar with real results
+- ✅ **Navigation** - Discover, New Episodes, Library tabs fully functional
 
 ### 📋 Current Status
 - ✅ **Cross-Platform Consistency**: 95% identical UI rendering across platforms
-- ✅ **Real Data Integration**: Shows actual podcast content from iTunes API
+- ✅ **Real Data Integration**: Shows actual podcast content from ListenNotes API with dynamic genres
 - ✅ **Navigation**: Fully functional tab-based navigation between screens
-- ✅ **Library Management**: Subscription system working with real data
+- ✅ **Dynamic Discovery**: Genre-based content loading without hardcoded categories
 - 🔄 **Audio Player**: UI complete, playback functionality in development
 
 ## 🛠️ Technical Architecture
@@ -57,8 +57,9 @@ A modern, cross-platform podcast player built with Kotlin Multiplatform Mobile (
 - **Napier** - Logging framework
 
 ### Data Sources
-- **iTunes API** - Primary podcast discovery
-- **Local SQLite** - Caching and offline access
+- **ListenNotes API** - Primary podcast discovery and genre data
+- **RSS Feed Parsing** - Episode content and metadata
+- **Local SQLite** - Caching and offline access  
 - **Secure Storage** - API keys and user preferences
 
 ## 🚀 Getting Started
@@ -127,8 +128,8 @@ The app uses secure environment-based configuration:
 
 1. **Environment Variables** (Recommended):
    ```bash
-   export ITUNES_API_KEY="your_key_here"
-   export PODCAST_INDEX_API_KEY="your_key_here"
+   export LISTENNOTES_API_KEY="your_key_here"
+   export PODCAST_INDEX_API_KEY="your_key_here"  
    ```
 
 2. **Secure Storage** - Keys are stored in platform-specific secure storage

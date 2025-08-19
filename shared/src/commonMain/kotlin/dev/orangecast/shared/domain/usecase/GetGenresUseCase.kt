@@ -1,32 +1,52 @@
 package dev.orangecast.shared.domain.usecase
 
+import dev.orangecast.shared.data.api.ListenNotesApiService
+import dev.orangecast.shared.data.api.model.ListenNotesGenre
+import dev.orangecast.shared.data.cache.PodcastCacheManager
 import dev.orangecast.shared.domain.model.Genre
-import dev.orangecast.shared.domain.repository.PodcastRepository
 
 class GetGenresUseCase(
-    private val repository: PodcastRepository
+    private val listenNotesApi: ListenNotesApiService,
+    private val cacheManager: PodcastCacheManager
 ) {
+    
+    suspend fun execute(): Result<List<Genre>> {
+        return try {
+            // Check cache first
+            val cachedGenres = cacheManager.getGenres()
+            if (cachedGenres != null && cachedGenres.isNotEmpty()) {
+                return Result.success(cachedGenres)
+            }
+            
+            // Fetch from ListenNotes API
+            val response = listenNotesApi.getGenres()
+            val genres = response.genres.map { it.toDomainModel() }
+            
+            // Cache the results
+            cacheManager.putGenres(genres)
+            
+            Result.success(genres)
+        } catch (e: Exception) {
+            // Return cached results if available
+            val cachedGenres = cacheManager.getGenres()
+            if (cachedGenres != null) {
+                Result.success(cachedGenres)
+            } else {
+                Result.failure(e)
+            }
+        }
+    }
+    
+    // Keep backward compatibility method
     suspend fun getGenres(): List<Genre> {
-        return listOf(
-            Genre(1, "Arts"),
-            Genre(2, "Business"), 
-            Genre(3, "Comedy"),
-            Genre(4, "Education"),
-            Genre(5, "Fiction"),
-            Genre(6, "Government"),
-            Genre(7, "Health & Fitness"),
-            Genre(8, "History"),
-            Genre(9, "Kids & Family"),
-            Genre(10, "Leisure"),
-            Genre(11, "Music"),
-            Genre(12, "News"),
-            Genre(13, "Religion & Spirituality"),
-            Genre(14, "Science"),
-            Genre(15, "Society & Culture"),
-            Genre(16, "Sports"),
-            Genre(17, "Technology"),
-            Genre(18, "True Crime"),
-            Genre(19, "TV & Film")
+        return execute().getOrNull() ?: emptyList()
+    }
+    
+    private fun ListenNotesGenre.toDomainModel(): Genre {
+        return Genre(
+            id = id,
+            name = name,
+            parentId = parentId
         )
     }
 }

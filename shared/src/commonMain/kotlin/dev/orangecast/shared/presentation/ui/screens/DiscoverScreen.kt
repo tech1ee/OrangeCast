@@ -14,26 +14,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.orangecast.shared.domain.model.Podcast
-import dev.orangecast.shared.domain.usecase.SearchPodcastsUseCase
-import dev.orangecast.shared.domain.usecase.GetGenresUseCase
+import dev.orangecast.shared.domain.model.GenreSection
 import dev.orangecast.shared.presentation.ui.components.PodcastCard
 import dev.orangecast.shared.presentation.ui.components.PodcastCardShimmer
 import dev.orangecast.shared.presentation.ui.components.PodcastCardLayoutStyle
 import dev.orangecast.shared.presentation.ui.theme.OrangeCastColors
-import kotlinx.coroutines.delay
+import dev.orangecast.shared.presentation.viewmodel.DiscoverViewModel
+import dev.orangecast.shared.presentation.viewmodel.ContentType
+import dev.orangecast.shared.presentation.viewmodel.DiscoverUiState
 import org.koin.compose.koinInject
-
-enum class ContentType {
-    POPULAR, RECOMMENDATIONS, NEW
-}
 
 @Composable
 fun DiscoverScreen(
     onPodcastClick: (Podcast) -> Unit,
-    searchUseCase: SearchPodcastsUseCase = koinInject(),
-    @Suppress("UNUSED_PARAMETER") genresUseCase: GetGenresUseCase = koinInject()
+    viewModel: DiscoverViewModel = koinInject()
 ) {
-    var selectedContentType by remember { mutableStateOf(ContentType.POPULAR) }
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -65,14 +61,14 @@ fun DiscoverScreen(
         }
 
         TabRow(
-            selectedTabIndex = selectedContentType.ordinal,
+            selectedTabIndex = uiState.selectedContentType.ordinal,
             modifier = Modifier.fillMaxWidth(),
             containerColor = OrangeCastColors.Light.Surface
         ) {
             ContentType.values().forEach { contentType ->
                 Tab(
-                    selected = selectedContentType == contentType,
-                    onClick = { selectedContentType = contentType },
+                    selected = uiState.selectedContentType == contentType,
+                    onClick = { viewModel.selectContentType(contentType) },
                     text = {
                         Text(
                             text = when (contentType) {
@@ -86,52 +82,85 @@ fun DiscoverScreen(
             }
         }
         
-        when (selectedContentType) {
-            ContentType.POPULAR -> PopularContent(onPodcastClick, searchUseCase)
-            ContentType.RECOMMENDATIONS -> RecommendationsContent(onPodcastClick)
-            ContentType.NEW -> NewContent(onPodcastClick)
+        uiState.errorMessage?.let { errorMessage ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer
+                )
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Error loading content",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                    Text(
+                        text = errorMessage,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                    TextButton(
+                        onClick = { viewModel.retry() },
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Text("Retry")
+                    }
+                }
+            }
+        }
+        
+        when (uiState.selectedContentType) {
+            ContentType.POPULAR -> PopularContent(uiState, onPodcastClick)
+            ContentType.RECOMMENDATIONS -> RecommendationsContent(uiState, onPodcastClick)
+            ContentType.NEW -> NewContent(uiState, onPodcastClick)
         }
     }
 }
 
 @Composable
 private fun PopularContent(
-    onPodcastClick: (Podcast) -> Unit,
-    searchUseCase: SearchPodcastsUseCase
+    uiState: DiscoverUiState,
+    onPodcastClick: (Podcast) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        item {
-            GenreSection(
-                title = "Health & Fitness",
-                onPodcastClick = onPodcastClick,
-                searchUseCase = searchUseCase
-            )
+        if (uiState.featuredPodcasts.isNotEmpty()) {
+            item {
+                GenreSection(
+                    title = "Featured",
+                    podcasts = uiState.featuredPodcasts,
+                    isLoading = uiState.isLoading,
+                    onPodcastClick = onPodcastClick
+                )
+            }
         }
         
-        item {
+        // Dynamic genre sections from API
+        items(uiState.genreSections) { genreSection ->
             GenreSection(
-                title = "Business",
-                onPodcastClick = onPodcastClick,
-                searchUseCase = searchUseCase
-            )
-        }
-        
-        item {
-            GenreSection(
-                title = "Technology",
-                onPodcastClick = onPodcastClick,
-                searchUseCase = searchUseCase
+                title = genreSection.genre.name,
+                podcasts = genreSection.podcasts,
+                isLoading = uiState.isLoading,
+                onPodcastClick = onPodcastClick
             )
         }
     }
 }
 
 @Composable
-private fun RecommendationsContent(onPodcastClick: (Podcast) -> Unit) {
+private fun RecommendationsContent(
+    uiState: DiscoverUiState,
+    onPodcastClick: (Podcast) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
@@ -147,14 +176,9 @@ private fun RecommendationsContent(onPodcastClick: (Podcast) -> Unit) {
         
         item {
             GenreSection(
-                title = "Similar to Your Favorites",
-                onPodcastClick = onPodcastClick
-            )
-        }
-        
-        item {
-            GenreSection(
-                title = "Trending in Your Interests",
+                title = "Recommended for You",
+                podcasts = uiState.featuredPodcasts,
+                isLoading = uiState.isLoading,
                 onPodcastClick = onPodcastClick
             )
         }
@@ -162,7 +186,10 @@ private fun RecommendationsContent(onPodcastClick: (Podcast) -> Unit) {
 }
 
 @Composable
-private fun NewContent(onPodcastClick: (Podcast) -> Unit) {
+private fun NewContent(
+    uiState: DiscoverUiState,
+    onPodcastClick: (Podcast) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
@@ -178,14 +205,9 @@ private fun NewContent(onPodcastClick: (Podcast) -> Unit) {
         
         item {
             GenreSection(
-                title = "This Week's New Shows",
-                onPodcastClick = onPodcastClick
-            )
-        }
-        
-        item {
-            GenreSection(
-                title = "Fresh Episodes",
+                title = "New Releases",
+                podcasts = uiState.featuredPodcasts,
+                isLoading = uiState.isLoading,
                 onPodcastClick = onPodcastClick
             )
         }
@@ -195,30 +217,10 @@ private fun NewContent(onPodcastClick: (Podcast) -> Unit) {
 @Composable
 private fun GenreSection(
     title: String,
-    onPodcastClick: (Podcast) -> Unit,
-    searchUseCase: SearchPodcastsUseCase = koinInject()
+    podcasts: List<Podcast>,
+    isLoading: Boolean,
+    onPodcastClick: (Podcast) -> Unit
 ) {
-    var podcasts by remember { mutableStateOf<List<Podcast>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-    
-    LaunchedEffect(title) {
-        try {
-            val searchQuery = when (title) {
-                "Health & Fitness" -> "health fitness"
-                "Business" -> "business entrepreneurship"
-                "Technology" -> "technology programming"
-                else -> title.lowercase()
-            }
-            
-            val result = searchUseCase(searchQuery)
-            podcasts = result.getOrElse { emptyList() }.take(6)
-        } catch (e: Exception) {
-            podcasts = emptyList()
-        } finally {
-            isLoading = false
-        }
-    }
-    
     Column {
         Text(
             text = title,
@@ -236,6 +238,28 @@ private fun GenreSection(
                         layoutStyle = PodcastCardLayoutStyle.Grid,
                         modifier = Modifier.width(160.dp)
                     )
+                }
+            } else if (podcasts.isEmpty()) {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .width(160.dp)
+                            .height(200.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "No content available",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 }
             } else {
                 items(podcasts) { podcast ->
